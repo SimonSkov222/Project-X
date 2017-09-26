@@ -39,6 +39,7 @@ public class MovementAI : MonoBehaviour
         //sphereCollider = GetComponent<SphereCollider>();
         startPoint = transform.position;
 
+
         var targetRange = new GameObject();
         targetRange.name = "TriggerRange";
         targetRange.layer = LayerMask.NameToLayer("Trigger");

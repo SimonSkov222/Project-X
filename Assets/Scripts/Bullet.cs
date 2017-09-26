@@ -5,7 +5,11 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
 
 
-    public Vector3 endPoint;
+    private string myText = "";
+
+    public string MyText { get; set; }
+
+    public Vector3 endPoint;                    // S
     public LayerMask ignoreCollision;
     public Vector3? oldPos;
 
@@ -22,7 +26,6 @@ public class Bullet : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-
     }
 	
 	// Update is called once per frame
