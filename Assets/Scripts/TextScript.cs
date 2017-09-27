@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  I denne klasse henter vi hp og ammo fra health 
+//  og weapon klasserne og gemmer dem i en string
+//  med noget text og udskriver dem i vores Ui/canvas
+//  
+//////////////////////////////////////////////////////
+
 public class TextScript : MonoBehaviour {
 
     ///////////////////////////////
