@@ -7,39 +7,46 @@ using UnityEngine;
 public class MovementAI : MonoBehaviour
 {
 
-    Animator anim;
-    int test1 = 0;
 
 
+
+    ///////////////////////////////
+    //      Public Fields
+    ///////////////////////////////
     public LayerMask followTarget;
     [Range(0f, 360f)]
     public float fieldOfViewDegrees;
     public float radius;
 
 
-
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
     private Vector3 startPoint;
     private Vector3 endPoint;
     private Vector3 lastPoint;
     private SphereCollider sphereCollider;
     private NavMeshAgent enemy;
-
-
-
+    private Animator anim;
+    private int test1 = 0;
     private bool isFollowTarget;
 
 
-    // Use this for initialization
+    ///////////////////////////////
+    //      Unity Events
+    ///////////////////////////////
+
+    /// <summary>
+    /// Sørger for at vi har noget vi kan bruge vores trigger på.
+    /// </summary>
     void Start()
     {
         anim = GetComponent<Animator>();
 
-
         enemy = gameObject.GetComponent<NavMeshAgent>();
-        //sphereCollider = GetComponent<SphereCollider>();
         startPoint = transform.position;
 
-
+        // Laver et gameobject som får en layer mask
         var targetRange = new GameObject();
         targetRange.name = "TriggerRange";
         targetRange.layer = LayerMask.NameToLayer("Trigger");
@@ -52,8 +59,6 @@ public class MovementAI : MonoBehaviour
 
         var targetTrigger = targetRange.AddComponent<ChildTriggerCollider>();
         targetTrigger.TriggerOnStay = TriggerOnStay;
-
-        //radius = sphereCollider.radius * GetHighestValue(transform.localScale);
 
     }
 
@@ -78,26 +83,19 @@ public class MovementAI : MonoBehaviour
             anim.SetInteger("Test1", 4);
         }
 
-
-
-
-
+        
         //if (lastPoint == transform.position || enemy.isStopped || endPoint == null
         //    || layerMask.value == 1 << LayerMask.NameToLayer("Main Player"))
         //{
-
         //    anim.SetInteger("Test1", 3);
         //}
 
-
-        Debug.Log("log1");
+        
         if (lastPoint == transform.position || enemy.isStopped || endPoint == null || Vector3.Distance(transform.position, endPoint) < 10)
         {
-            Debug.Log("log2");
             RandomMove();
             anim.SetInteger("Test1", 1);
         }
-        Debug.Log("log3");
         lastPoint = transform.position;
 
         //RaycastHit hit;
@@ -109,29 +107,35 @@ public class MovementAI : MonoBehaviour
         //    enemy.SetDestination(players[0].transform.position);
         //}
 
-
-
+        
     }
 
     void OnTriggerEnter(Collider col)
     {
-
-
         //if(col.gameObject.layer == LayerMask.NameToLayer("")
     }
 
-    Vector3 test = Vector3.zero;
+    ///////////////////////////////
+    //      Private Method
+    ///////////////////////////////
 
+    /// <summary>
+    /// Tjekker om der er noget inden for dens trigger cirkel, hvis ja skal den følge efter den
+    /// </summary>
+    /// <param name="col"></param>
     private void TriggerOnStay(Collider col)
     {
-
+        // Tjekker om layer mask er et match og om noget er foran den
         if ((followTarget.value & 1 << col.gameObject.layer) == (1 << col.gameObject.layer) && CanSeePlayer(col.gameObject))
-        {
-            test = col.transform.position;
             enemy.SetDestination(col.transform.position);
-        }
     }
 
+
+    /// <summary>
+    /// har en radom generator som får den til at gå forskellige steder hen
+    /// 
+    /// to do lave om
+    /// </summary>
     private void RandomMove()
     {
         NavMeshHit hit;
@@ -145,47 +149,33 @@ public class MovementAI : MonoBehaviour
         endPoint = hit.position;
     }
 
-    private void Attack()
-    {
 
-        NavMeshHit hit;
-
-        Vector3 player = Random.insideUnitSphere * radius;
-
-        player += startPoint;
-
-        NavMesh.SamplePosition(player, out hit, radius, 1);
-        enemy.SetDestination(hit.position);
-        endPoint = hit.position;
-    }
-
-
-    protected bool CanSeePlayer(GameObject gb)
+    /// <summary>
+    /// Sørger for at Ai's trigger kun virker foran den
+    /// </summary>
+    /// <param name="gb">Det object som skal blive set</param>
+    /// <returns>Returner true hvis noget er foran Ai</returns>
+    private bool CanSeePlayer(GameObject gb)
     {
         
         RaycastHit hit;
         Vector3 rayDirection = gb.transform.position - transform.position;
-
+        // Tjekker på om der er noget inden for den angle som vi laver
         if ((Vector3.Angle(rayDirection, transform.forward)) <= fieldOfViewDegrees * 0.5f)
-        {
-            // Detect if player is within the field of view
             if (Physics.Raycast(transform.position, rayDirection, out hit, radius))
-            {
                 return (hit.transform.CompareTag("Player"));
-            }
-        }
 
         return false;
     }
 
 
-    private float GetHighestValue(Vector3 value)
-    {
-        float c = value.x;
-        if (c < value.y) c = value.y;
-        if (c < value.z) c = value.z;
-        return c;
-    }
+    //private float GetHighestValue(Vector3 value)
+    //{
+    //    float c = value.x;
+    //    if (c < value.y) c = value.y;
+    //    if (c < value.z) c = value.z;
+    //    return c;
+    //}
 
 
 }

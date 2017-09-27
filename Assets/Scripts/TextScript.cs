@@ -4,14 +4,27 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class TextScript : MonoBehaviour {
-    
+
+    ///////////////////////////////
+    //      Public Fields
+    ///////////////////////////////
     public Text health_text;
     public Text ammo_text;
 
-    Health health;
-    Weapon ammo;
 
-    // Use this for initialization
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    private Health health;
+    private Weapon ammo;
+
+    ///////////////////////////////
+    //      Unity Events
+    ///////////////////////////////
+
+    /// <summary>
+    /// henter health og ammo fra de 2 andre scripts så vi ved hvor meget hp eller ammo vi har
+    /// </summary>
     void Start ()
     {
         health = GetComponentInParent<Health>();
@@ -19,7 +32,9 @@ public class TextScript : MonoBehaviour {
         
     }
 	
-	// Update is called once per frame
+	/// <summary>
+    /// laver 2 strings som vi så udskriver i en canvas
+    /// </summary>
 	void Update ()
     {
 
