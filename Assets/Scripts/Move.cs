@@ -91,6 +91,14 @@ public class Move : MonoBehaviour
         {
             IsMouseLocked(Cursor.visible);
         }
+        if (Input.GetKeyUp(KeyCode.P))
+        {
+            Time.timeScale = 0;
+        }
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            Time.timeScale = 1;
+        }
 
         //Debug.DrawLine(eyes.transform.position, eyes.transform.forward * 20f, Color.red);
 
