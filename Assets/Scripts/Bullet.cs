@@ -87,6 +87,8 @@ public class Bullet : MonoBehaviour
 
         // Opdater position
         lastPosition = transform.position;
+
+        
     }
 
     /// <summary>
