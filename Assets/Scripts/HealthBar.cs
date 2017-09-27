@@ -19,7 +19,7 @@ public class HealthBar : MonoBehaviour {
 	void Start ()
     {
         hp = GetComponent<Health>();
-        slider.maxValue = hp.HP;
+        slider.maxValue = hp.maxHP;
         //boxCollider = GetComponent<BoxCollider>();
     }
 
