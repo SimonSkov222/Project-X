@@ -73,9 +73,8 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         eyes = Camera.main;
-        currentShots = shots; 
-        currentAmmo = ammo;
-        ignoreMask = 1 << LayerMask.NameToLayer("Trigger");
+        CurrentShots = shots; 
+        CurrentAmmo = ammo;
     }
     
     /// <summary>
