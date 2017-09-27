@@ -10,6 +10,8 @@
 //   vi ramte.
 //  
 ////////////////////////////////////////////////////////////////////
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
 public class Bullet : MonoBehaviour
 {
 
@@ -31,7 +33,7 @@ public class Bullet : MonoBehaviour
     //      Private Fields
     ///////////////////////////////
     private Vector3 startPos;
-    private Vector3 endPos;
+    public Vector3 endPos;
     private LayerMask ignoreMask;
     private Vector3? lastPosition;
 
@@ -45,7 +47,9 @@ public class Bullet : MonoBehaviour
     /// Her laver vi en layermask der gør at vi kan ignore
     /// nogle collider så vores gameobject ikke bliver usynlig
     /// </summary>
-    void Start() { ignoreMask = 1 << LayerMask.NameToLayer("Trigger"); }
+    void Start() {
+       // ignoreMask = 1 << LayerMask.NameToLayer("Trigger") | 1 << LayerMask.NameToLayer("Bullet") | 1 << LayerMask.NameToLayer("Main Player");
+    }
 
     /// <summary>
     /// Når gameobjectet er synlig flytter vi det hent mod endPoint
@@ -68,7 +72,6 @@ public class Bullet : MonoBehaviour
         {
             // Gør gameObject usynlig
             gameObject.SetActive(false);
-            Debug.Log("Hit");
 
             // Hvis hit har Metoden OnGameObjectEnter() på sig i et
             //  script sender vi dette gameObject som parameter
@@ -97,7 +100,7 @@ public class Bullet : MonoBehaviour
     ///  gameobjectet usynlig bagefter
     /// </summary> 
     /// <param name="collision">Det object vores gameobject ramte</param>
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         // Vores gameobject skal være synlig så vi ikke kan kalde den dobbelt. (Kan kaldes fra Update())
         if (gameObject.activeSelf && (ignoreCollision.value & (1 << collision.gameObject.layer)) != (1 << collision.gameObject.layer))
@@ -143,9 +146,9 @@ public class Bullet : MonoBehaviour
 
         // Tjekker om der er et object foran vores skyd, hvis ja får vi af vide hvad, hvis nej flyver skydet bare lige ud
         RaycastHit hit;
-        bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreMask);
+        bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreCollision);
         endPos = hitTarget ? hit.point : rayOrigin + PlayerEyes.transform.forward * range;
-
+        if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
         //Gør synlig
         gameObject.SetActive(true);
     }
