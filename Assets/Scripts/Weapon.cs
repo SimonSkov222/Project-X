@@ -2,6 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  I denne klasse gør vi at vi kan skyde og at vores
+//  skyd rammer rigtigt iforhold til vores kamera.
+//  vi sørger også for at bruge de samme skyd som
+//  har været brugt eller lave nye hvis der ikke er
+//  flere at bruge, så vi ikke bruger ligeså meget
+//  resourse kraft
+//  Det er også her vi reloader våbent når man trykker
+//  (R) eller der ikke er flere skyd tilbage
+//  
+//////////////////////////////////////////////////////
+
 public class Weapon : MonoBehaviour
 {
 
@@ -62,7 +77,7 @@ public class Weapon : MonoBehaviour
         currentShots = shots; 
         currentAmmo = ammo;
         ignoreMask = 1 << LayerMask.NameToLayer("Trigger");
-}
+    }
     
     /// <summary>
     /// Vi giver spilleren mulighed for at reloade og

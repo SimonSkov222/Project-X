@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
 
+
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  Her inde har vi lavet en sphere collider som
+//  bruges med en trigger, triggeren bliver activeret
+//  når player kommer inden for dens række vide.
+//  Vi har lavet en metode som gør at man skal stå
+//  foran NPC'en før den begynder at følge efter
+//  playeren.
+//  Hvis der ikke er en player foran NPC'en og inden
+//  for dens sphere collider gå den rundt random.
+//////////////////////////////////////////////////////
+
 [RequireComponent(typeof(NavMeshAgent))]
 public class MovementAI : MonoBehaviour
 {
-
-
-
 
     ///////////////////////////////
     //      Public Fields
@@ -37,7 +48,7 @@ public class MovementAI : MonoBehaviour
     ///////////////////////////////
 
     /// <summary>
-    /// Sørger for at vi har noget vi kan bruge vores trigger på.
+    /// Sørger for at vi har noget vi kan bruge vores trigger med
     /// </summary>
     void Start()
     {
@@ -45,8 +56,8 @@ public class MovementAI : MonoBehaviour
 
         enemy = gameObject.GetComponent<NavMeshAgent>();
         startPoint = transform.position;
+        
 
-        // Laver et gameobject som får en layer mask
         var targetRange = new GameObject();
         targetRange.name = "TriggerRange";
         targetRange.layer = LayerMask.NameToLayer("Trigger");
@@ -56,9 +67,10 @@ public class MovementAI : MonoBehaviour
         var sphereCollider = targetRange.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = radius;
-
+        
         var targetTrigger = targetRange.AddComponent<ChildTriggerCollider>();
         targetTrigger.TriggerOnStay = TriggerOnStay;
+        
 
     }
 
@@ -108,11 +120,6 @@ public class MovementAI : MonoBehaviour
         //}
 
         
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        //if(col.gameObject.layer == LayerMask.NameToLayer("")
     }
 
     ///////////////////////////////

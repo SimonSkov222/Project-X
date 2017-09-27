@@ -2,18 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  Den her klasse sørger for at, det kun er
+//  udvalgte layers som kan give dmg til en collider
+//  Man kan også vægle hvor meget % dmg de skal tage
+//  
+//////////////////////////////////////////////////////
+
 [RequireComponent(typeof(Collider))]
 public class Hitbox : MonoBehaviour {
 
+    ///////////////////////////////
+    //      Public Delegate
+    ///////////////////////////////
     public delegate void TakeDamge(int dmg);
 
-    public float percent = 1;
-
+    ///////////////////////////////
+    //      Public Properties
+    ///////////////////////////////
     public TakeDamge OnTakeDamge { private get; set; }
 
+    ///////////////////////////////
+    //      Public Fields
+    ///////////////////////////////
+    public float percent = 1;
+
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
     private LayerMask CanGiveDamge;
 
-    // Use this for initialization
+
+    ///////////////////////////////
+    //      Unity Events
+    ///////////////////////////////
     void Start () { CanGiveDamge = 1 << LayerMask.NameToLayer("Bullet") | 1 << LayerMask.NameToLayer("Main Player");  }
 	
 	// Update is called once per frame
@@ -22,11 +48,13 @@ public class Hitbox : MonoBehaviour {
         //Debug.Log("Layer: " +  CanGiveDamge.value);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="gb"></param>
     void OnGameObjectEnter(GameObject gb)
     {
         //Debug.Log("Hit: " + gb.layer);
-        //
-
         if ((CanGiveDamge.value & (1 << gb.layer)) == (1 << gb.layer))
         {
             //Debug.Log("Hit: " + gb.activeSelf);
@@ -39,11 +67,6 @@ public class Hitbox : MonoBehaviour {
         }
 
     }
-    void OnCollisionEnter(Collision collision)
-    {
-        //Debug.Log("HitC: " + collision.collider.name);
-
-        //OnGameObjectEnter(collision.collider.gameObject);
-    }
+    
     
 }
