@@ -9,15 +9,15 @@ public class Weapon : MonoBehaviour
     ///////////////////////////////
     //      Public Properties
     ///////////////////////////////
-    public int currentAmmo { get; private set; }
-    public int currentShots { get; private set; }
+    public int CurrentAmmo { get; private set; }
+    public int CurrentShots { get; private set; }
 
 
     ///////////////////////////////
     //      Private Properties
     ///////////////////////////////
-    private bool HasShots { get { return currentShots > 0; } }
-    private bool CanReload { get { return currentShots != shots && currentAmmo > 0; } }
+    private bool HasShots { get { return CurrentShots > 0; } }
+    private bool CanReload { get { return CurrentShots != shots && CurrentAmmo > 0; } }
 
 
     ///////////////////////////////
@@ -39,7 +39,6 @@ public class Weapon : MonoBehaviour
     private LineRenderer laserLine;
     private Camera eyes;
     private WaitForSeconds shotDuration = new WaitForSeconds(0.07f);
-    private LayerMask ignoreMask;
     private float nextFire;
     private bool isReloading = false;
 
@@ -59,9 +58,8 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         eyes = Camera.main;
-        currentShots = shots; 
-        currentAmmo = ammo;
-        ignoreMask = 1 << LayerMask.NameToLayer("Trigger");
+        CurrentShots = shots; 
+        CurrentAmmo = ammo;
 }
     
     /// <summary>
@@ -70,7 +68,7 @@ public class Weapon : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (!isReloading && CanReload && (Input.GetButtonUp("Reload") || currentShots == 0))
+        if (!isReloading && CanReload && (Input.GetButtonUp("Reload") || CurrentShots == 0))
         {
             // Starter Reload() så den kan blive paused når som helst
             StartCoroutine(Reload());
@@ -91,9 +89,9 @@ public class Weapon : MonoBehaviour
             // Laver en begrænsning for hvornår man kan skyde igen
             nextFire = Time.time + fireRate;
 
-            //Debug.Log("shots " + currentShots);
-            Shoot();
-            currentShots--;
+            //Debug.Log("shots " + CurrentShots);
+            GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
+            CurrentShots--;
         }
     }
 
@@ -101,34 +99,7 @@ public class Weapon : MonoBehaviour
     ///////////////////////////////
     //      Public Method
     ///////////////////////////////
-
-    /// <summary>
-    /// Hver gang vi kalder metoden Shoot()
-    /// finder den ud af hvor kameraet er
-    /// og hvilken vej den kigger, også
-    /// skyder den vej.
-    /// </summary>
-    private void Shoot()
-    {
-        
-        
-        // Henter kameraes position ud fra "verden" og 
-        // Vector3 variablen gør at den tager fra midten af skærmen
-        Vector3 rayOrigin = eyes.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
-        
-        var bullet = GetBullet();
-        bullet.transform.position = gunEnd.position;
-        bullet.transform.rotation = eyes.transform.rotation;
-
-
-        // Tjekker om der er et object foran vores skyd, hvis ja får vi af vide hvad, hvis nej flyver skydet bare lige ud
-        RaycastHit hit;
-        bool hitTarget = Physics.Raycast(rayOrigin, eyes.transform.forward, out hit, weaponRange, ~ignoreMask);
-        bullet.GetComponent<Bullet>().endPoint = hitTarget ? hit.point : rayOrigin + eyes.transform.forward * weaponRange;
-        
-    }
-
-
+    
     /// <summary>
     /// Hvis der er et bullet som er deaktiveret i spillet,
     /// bliver det genbrugt, og hvis der ikke er noget deaktiveret
@@ -146,7 +117,8 @@ public class Weapon : MonoBehaviour
 
         
         var newBullet = Instantiate(bulletTemplate);
-        newBullet.GetComponent<Bullet>().range = weaponRange;
+        newBullet.GetComponent<Bullet>().PlayerEyes = eyes;
+        //newBullet.GetComponent<Bullet>().range = weaponRange;
         // Sørger for at collideren på vores bullet og våben ikke kan ramme ind i hinanden
         Physics.IgnoreCollision(newBullet.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         bullets.Add(newBullet);
@@ -168,23 +140,23 @@ public class Weapon : MonoBehaviour
         // laver en time på 2 sek
         yield return new WaitForSeconds(2f);
 
-        int cAmmo = currentAmmo;
-        int cShots = currentShots;
+        int cAmmo = CurrentAmmo;
+        int cShots = CurrentShots;
 
         // sørger for at vi får fuld reload hvis der er nok skyd til det eller giver os det som er tilbage
-        if (currentAmmo + currentShots - shots > 0)
+        if (CurrentAmmo + CurrentShots - shots > 0)
         {
-            currentAmmo = currentAmmo + currentShots - shots;
-            currentShots = shots;
+            CurrentAmmo = CurrentAmmo + CurrentShots - shots;
+            CurrentShots = shots;
         }
         else
         {
-            currentShots = currentAmmo + currentShots;
-            currentAmmo = 0;
+            CurrentShots = CurrentAmmo + CurrentShots;
+            CurrentAmmo = 0;
         }
 
-        //Debug.Log("shot " + currentShots);
-        //Debug.Log("ammo " + currentAmmo);
+        //Debug.Log("shot " + CurrentShots);
+        //Debug.Log("ammo " + CurrentAmmo);
         isReloading = false;
     }
 
