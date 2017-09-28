@@ -103,8 +103,6 @@ public class Weapon : MonoBehaviour
         {
             // Laver en begrænsning for hvornår man kan skyde igen
             nextFire = Time.time + fireRate;
-
-            //Debug.Log("shots " + CurrentShots);
             GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
             CurrentShots--;
         }
@@ -125,15 +123,14 @@ public class Weapon : MonoBehaviour
     {
 
         // Her ser vi om der er et usynligt bullet, hvis ja sender vi det tilbage
-        //foreach (var bullet in bullets)
-        //    if (!bullet.activeSelf)
-        //        return bullet;
-        
+        foreach (var bullet in bullets)
+            if (!bullet.activeSelf)
+                return bullet;
 
-        
+
+
         var newBullet = Instantiate(bulletTemplate);
         newBullet.GetComponent<Bullet>().PlayerEyes = eyes;
-        //newBullet.GetComponent<Bullet>().range = weaponRange;
         // Sørger for at collideren på vores bullet og våben ikke kan ramme ind i hinanden
         Physics.IgnoreCollision(newBullet.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         bullets.Add(newBullet);

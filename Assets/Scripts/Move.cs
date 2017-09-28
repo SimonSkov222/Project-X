@@ -106,11 +106,7 @@ public class Move : MonoBehaviour
         player.Move(movement * Time.deltaTime);
     }
 
-    private void IsMouseLocked(bool val) {
 
-        Cursor.visible = !val;
-        Cursor.lockState = val ? CursorLockMode.Locked : CursorLockMode.None;
-    }
 
     ///////////////////////////////
     //      Private Method
@@ -231,6 +227,13 @@ public class Move : MonoBehaviour
                 return false;
         }
         return true;
+    }
+
+    private void IsMouseLocked(bool val)
+    {
+
+        Cursor.visible = !val;
+        Cursor.lockState = val ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
 
