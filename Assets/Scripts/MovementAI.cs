@@ -39,7 +39,6 @@ public class MovementAI : MonoBehaviour
     private SphereCollider sphereCollider;
     private NavMeshAgent enemy;
     private Animator anim;
-    private int test1 = 0;
     private bool isFollowTarget;
 
 

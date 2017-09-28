@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
     //      Private Fields
     ///////////////////////////////
     private Vector3 startPoint;
-    public Vector3 endPoint;
+    private Vector3 endPoint;
     private LayerMask ignoreMask;
     private Vector3? lastPosition;
 
