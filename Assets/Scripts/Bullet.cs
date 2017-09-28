@@ -44,14 +44,6 @@ public class Bullet : MonoBehaviour
     ///////////////////////////////
 
     /// <summary>
-    /// Her laver vi en layermask der gør at vi kan ignore
-    /// nogle collider så vores gameobject ikke bliver usynlig
-    /// </summary>
-    void Start() {
-       // ignoreMask = 1 << LayerMask.NameToLayer("Trigger") | 1 << LayerMask.NameToLayer("Bullet") | 1 << LayerMask.NameToLayer("Main Player");
-    }
-
-    /// <summary>
     /// Når gameobjectet er synlig flytter vi det hent mod endPoint
     ///  hvis gameobjectet rammer noget på vejen kalder vi
     ///  OnGameObjectEnter() på det object vi ramte
@@ -120,7 +112,6 @@ public class Bullet : MonoBehaviour
         startPos = transform.position;
         lastPosition = transform.position;
         hasHitTarget = false;
-        //Debug.DrawLine(transform.position, endPoint, Color.blue, 10f);
         
     }
 
@@ -149,6 +140,7 @@ public class Bullet : MonoBehaviour
         bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreCollision);
         endPos = hitTarget ? hit.point : rayOrigin + PlayerEyes.transform.forward * range;
         if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
+
         //Gør synlig
         gameObject.SetActive(true);
     }
