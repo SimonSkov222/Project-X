@@ -32,8 +32,8 @@ public class Bullet : MonoBehaviour
     ///////////////////////////////
     //      Private Fields
     ///////////////////////////////
-    private Vector3 startPos;
-    public Vector3 endPos;
+    private Vector3 startPoint;
+    public Vector3 endPoint;
     private LayerMask ignoreMask;
     private Vector3? lastPosition;
 
@@ -52,6 +52,8 @@ public class Bullet : MonoBehaviour
     /// </summary>
     void Update ()
     {
+
+
         // Så længe gameObject ikke er synlig skal vi ikke gøre noget
         if (!gameObject.activeSelf) return;
         
@@ -71,13 +73,15 @@ public class Bullet : MonoBehaviour
         }
         
         // Flyt skudet/Sæt ny position 
-        Vector3 heading = endPos - startPos;
-        float distanceThisFrame = speed * Time.deltaTime;
-        transform.Translate(heading.normalized * distanceThisFrame, Space.World);
+        Vector3 heading = endPoint - startPoint;
+        Vector3 direction = heading / heading.magnitude;
 
+        float distanceThisFrame = speed * Time.deltaTime;
+        //transform.Translate(direction.normalized * distanceThisFrame, Space.World);
+        transform.position += direction * speed * Time.deltaTime;
 
         // Gør gameObject usynlig hvis den er ude af range
-        if (Vector3.Distance(startPos, transform.position) > range)
+        if (Vector3.Distance(startPoint, transform.position) > range)
             gameObject.SetActive(false);
 
         // Opdater position
@@ -109,8 +113,8 @@ public class Bullet : MonoBehaviour
     /// </summary>
     void OnEnable()
     {
-        startPos = transform.position;
-        lastPosition = transform.position;
+        //startPoint = transform.position;
+        lastPosition = startPoint;
         hasHitTarget = false;
         
     }
@@ -127,9 +131,11 @@ public class Bullet : MonoBehaviour
     /// <param name="startPos">(gunend) Hvor "bullet" skal starte fra</param>
     public void Fire(Vector3 startPos)
     {
-        //Sæt start position
-        transform.position = startPos;
 
+        
+        //Sæt start position
+        startPoint = startPos;
+        transform.position = startPoint;
         // Henter kameraes position ud fra "verden" og 
         // Vector3 variablen gør at den tager fra midten af skærmen
         Vector3 rayOrigin = PlayerEyes.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
@@ -138,10 +144,12 @@ public class Bullet : MonoBehaviour
         // Tjekker om der er et object foran vores skyd, hvis ja får vi af vide hvad, hvis nej flyver skydet bare lige ud
         RaycastHit hit;
         bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreCollision);
-        endPos = hitTarget ? hit.point : rayOrigin + PlayerEyes.transform.forward * range;
+        endPoint = hitTarget ? hit.point : rayOrigin + PlayerEyes.transform.forward * range;
         if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
 
         //Gør synlig
         gameObject.SetActive(true);
+
+
     }
 }
