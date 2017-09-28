@@ -125,9 +125,9 @@ public class Weapon : MonoBehaviour
     {
 
         // Her ser vi om der er et usynligt bullet, hvis ja sender vi det tilbage
-        foreach (var bullet in bullets)
-            if (!bullet.activeSelf)
-                return bullet;
+        //foreach (var bullet in bullets)
+        //    if (!bullet.activeSelf)
+        //        return bullet;
         
 
         
