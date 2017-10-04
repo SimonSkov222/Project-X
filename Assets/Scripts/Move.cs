@@ -93,7 +93,7 @@ public class Move : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.P))
         {
-            Time.timeScale = 0;
+            Time.timeScale = 0.1f;
         }
         if (Input.GetKeyUp(KeyCode.O))
         {
