@@ -46,7 +46,7 @@ public class TextScript : MonoBehaviour {
     /// </summary>
 	void Update ()
     {
-
+        return;
         string allHealth = health.currentHP.ToString() + "/" + health.maxHP.ToString();
         health_text.text = allHealth;
         string allAmmo = ammo.CurrentShots.ToString() + "/" + ammo.CurrentAmmo.ToString();
