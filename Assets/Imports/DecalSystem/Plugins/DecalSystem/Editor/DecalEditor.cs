@@ -95,20 +95,25 @@ namespace _Decal {
 
             Vector3 scale = decal.transform.localScale;
             Sprite sprite = decal.sprite;
-            if (sprite != null) {
-                float ratio = sprite.rect.width / sprite.rect.height;
+            //if (sprite != null) {
+            //    float ratio = sprite.rect.width / sprite.rect.height;
 
-                if (!Mathf.Approximately( oldScale.x, scale.x )) {
-                    scale.y = scale.x / ratio;
-                }
-                if (!Mathf.Approximately( oldScale.y, scale.y )) {
-                    scale.x = scale.y * ratio;
-                }
+            //    //if (!Mathf.Approximately( oldScale.x, scale.x )) {
+            //    //    //Debug.Log("Scale: X");
+            //    //    //scale.y = scale.x / ratio;
+            //    //}
+            //    //if (!Mathf.Approximately( oldScale.y, scale.y ))
+            //    //{
+            //    //    //Debug.Log("Scale: Y");
+            //    //    //scale.x = scale.y * ratio;
+            //    //}
 
-                if (!Mathf.Approximately( scale.x / scale.y, ratio )) {
-                    scale.x = scale.y * ratio;
-                }
-            }
+            //    //if (!Mathf.Approximately( scale.x / scale.y, ratio ))
+            //    //{
+            //    //    //Debug.Log("Scale: X/Y");
+            //    //    //scale.x = scale.y * ratio;
+            //    //}
+            //}
             decal.transform.localScale = scale;
             oldScale = scale;
 
