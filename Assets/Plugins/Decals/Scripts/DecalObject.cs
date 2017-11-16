@@ -9,7 +9,7 @@ public class DecalObject : MonoBehaviour {
     private new MeshRenderer renderer;
 
     public Sprite image;
-    public float offset;
+    public float offset = 0.01f;
 
     public void BuildDecal()
     {

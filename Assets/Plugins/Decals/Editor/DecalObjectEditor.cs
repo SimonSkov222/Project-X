@@ -67,7 +67,9 @@ public class DecalObjectEditor : Editor
 
                 //Sæt position
                 moveMe.transform.position = hit.point;
+
                 moveMe.transform.forward = hit.normal;
+
             }
         }
         
