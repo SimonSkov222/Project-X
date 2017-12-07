@@ -122,7 +122,7 @@ public class Move : MonoBehaviour
 
         movement = new Vector3(moveLR, movement.y, moveFB);
         // Gør at tasterne passer iforhold til hvor vi kigger
-        movement = transform.rotation * movement; 
+        movement = transform.rotation * movement;
     }
 
     /// <summary>
