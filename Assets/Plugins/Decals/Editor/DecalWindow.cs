@@ -41,6 +41,8 @@ public class DecalWindow : EditorWindow
         decalObj.image = decal;
         decalObj.BuildDecal();
 
+        decalObj.offset = 1f;
+
         Selection.activeGameObject = go;
     }
 }
