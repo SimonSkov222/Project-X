@@ -1,158 +1,261 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  Dette er et plugin til unity som ikke har noget med spilet at gøre.
+//  Denne klasse gør at vi kan placere mange 
+//  prefabs på en engang istedet for at placer 1 af gangen
+//  Når man holder musen nede bliver der placeret 
+//  prefabs inden for den radius man har valgt
+//  Man vælger selv prefabs
+//  
+//////////////////////////////////////////////////////
+
 public class PrefabsPlacerWindow : EditorWindow {
+    
 
-    int radius = 25;
-    float prefabsFill = 0.50f;
-    bool isEnabled = false;
-    bool isMouseDown = false;
-    List<int> prefabIds = new List<int>();
-    GameObject parent;
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    private int radius = 25;
+    private float space = 4f;
+    private bool isEnabled = false;
+    private bool isMouseDown = false;
+    private GameObject parent;
+    private GameObject ground;
+    private GameObject ground2;
+    private List<Bounds?> prefabsBounds = new List<Bounds?>();
+    private List<Vector3?> prefabsPlus = new List<Vector3?>();
+    private int prefabsSize = 1;
+    private GameObject[] prefabs;
+    private GameObject undoParent;
 
-    int prefabsSize = 1;
-    GameObject[] prefabs;
+
+    ///////////////////////////////
+    //      Public Static Methods
+    ///////////////////////////////
 
 
+    /// <summary>
+    /// MenuItem gør at man kan finde den i værktøjslinien.
+    /// Methoden åbener fanen.
+    /// </summary>
     [MenuItem("Window/Prefabs Placer")]
     public static void ShowWindow()
     {
         GetWindow<PrefabsPlacerWindow>().Show();
-        //SceneView.onSceneGUIDelegate += 
 
     }
 
+    ///////////////////////////////
+    //      Unity Events
+    ///////////////////////////////
+
+
+    /// <summary>
+    /// Tilføjer tingene der bliver vist i editor siden
+    /// </summary>
     void OnGUI()
     {
         EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
         isEnabled = EditorGUILayout.Toggle("Is Enabled", isEnabled);
-
-        //radius = GUILayout.HorizontalSlider(radius, 25, 100);
-        //Debug.Log(radius);
 
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
         radius = EditorGUILayout.IntSlider("Radius", radius, 5, 100);
-        prefabsFill = EditorGUILayout.Slider("Fill", prefabsFill, 0.01f, radius);
+        space = EditorGUILayout.Slider("Space Between Prefabs", space, 4f, radius);
 
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
-        
+
+        ground2 = (GameObject)EditorGUILayout.ObjectField("Ground", ground2, typeof(GameObject), true);
+
+        parent = (GameObject)EditorGUILayout.ObjectField("Container", parent, typeof(GameObject), true);
+
+        EditorGUILayout.Separator();
+
         prefabsSize = EditorGUILayout.IntSlider("Number Of Prefabs" ,prefabsSize, 1, 25);
-        prefabs = ObjectFieldArray<GameObject>(prefabsSize, prefabs);
+        prefabs = ObjectFieldArray<GameObject>("Prefab", prefabsSize, prefabs);
 
-        parent = (GameObject)EditorGUILayout.ObjectField("Parent", parent, typeof(GameObject), true);
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
 
+        EditorGUILayout.HelpBox("Prefabs need a collider", MessageType.Info);
+
+
+        if (GUI.Button(new Rect(5,5, 100, 32), "Reset Ground"))
+        {
+            ground2 = null;
+        }
+        
+        if (GUI.changed)
+        {
+            //ground = null;
+            ValidatePrefabs();
+        }
     }
 
-    bool debug = false;
+
+    void OnFocus()
+    {
+        SceneView.onSceneGUIDelegate += OnSceneView;
+    }
+    
+
+    ///////////////////////////////
+    //      Private Event
+    ///////////////////////////////
     private void OnSceneView(SceneView scene)
     {
         if (isEnabled)
         {
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
-            if (Event.current.button == 0 && Event.current.type == EventType.MouseDown)
+            if (Event.current.button == 0 && Event.current.type == EventType.MouseDown && !isMouseDown)
             {
+                undoParent = new GameObject("Prefabs Group");
+                
+                if (parent == null)
+                {
+                    parent = new GameObject("Prefabs");
+                    Undo.RegisterCreatedObjectUndo(parent, "Undo Prefabs");
+                }
+                else
+                {
+                    Undo.RegisterCreatedObjectUndo(undoParent, "Undo Prefabs Group");
+                }
+                undoParent.transform.parent = parent.transform;
                 isMouseDown = true;
-                debug = true;
             }
 
             if ((Event.current.button == 0 && Event.current.type == EventType.MouseUp) || Event.current.type == EventType.Ignore)
             {
-                prefabIds.Clear();
+                ground = null;
                 isMouseDown = false;
+
+                if (undoParent != null && undoParent.transform.childCount == 0)
+                {
+                    DestroyImmediate(undoParent);
+                }
+
             }
 
+            RaycastHit hit;
             Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
 
-            RaycastHit[] hits = Physics.RaycastAll(ray);
-
-            for (int i = 0; i < hits.Length; i++)
+            if (Physics.Raycast(ray, out hit))
             {
-                if (hits[i].collider.gameObject.tag != "pp")
+                Handles.DrawWireDisc(hit.point, Vector3.up, radius);
+                HandleUtility.Repaint();
+                
+                if (isMouseDown)
                 {
-                    Handles.DrawWireDisc(hits[i].point, Vector3.up, radius);
-                    HandleUtility.Repaint();
-
-                    if (isMouseDown)
+                    if (ground == null)
                     {
-                        test(hits[i].point);
-                        debug = false;
+                        ground = hit.collider.gameObject;
                     }
-
-                    break;
+                    BegindInstantiateGameObject(hit.point);
                 }
             }
         }
     }
+    
 
-    private void test(Vector3 center)
+    ///////////////////////////////
+    //      Private Methods
+    ///////////////////////////////
+    private bool HasCollider(GameObject item)
     {
-        
-        
-        Vector3 plus;
-        Bounds? bounds = GetBounds(prefabs[0], out plus, null);
+        if (item.GetComponent<Collider>() != null)
+            return true;
+
+        for (int i = 0; i < item.transform.childCount; i++)
+            if (HasCollider(item.transform.GetChild(i).gameObject))
+                return true;
+
+        return false;
+    }
+
+    private void BegindInstantiateGameObject(Vector3 center)
+    {
+
+        var prefabList = prefabs.Where(m => m != null).ToArray();
+        var plusList = prefabsPlus.Where(m => m != null).ToArray();
+        var boundsList = prefabsBounds.Where(m => m != null).ToArray();
+
+        int id = Random.Range(0, prefabList.Length);
         
         Vector2 g = new Vector2(center.x, center.z);
-        if (parent == null)
-        {
-            parent = new GameObject("prefab");
-        }
-        PlacePrefab(prefabs[0], bounds.Value, center, plus);
-        float radius = prefabsFill;
+        
+        PlacePrefab(prefabList[id], boundsList[id].Value, center, plusList[id].Value);
+        float radius = space;
         while (radius < this.radius)
         {
-            int? degrees = GetDegree(center, radius, prefabsFill);
+            int? degrees = GetDegree(center, radius, space);
 
             if (degrees.HasValue)
             {
                 for (int i = 0; i < 360; i += degrees.Value)
                 {
-                    PlacePrefab(prefabs[0], bounds.Value, GetPosition(center, radius, i), plus);
+                    id = Random.Range(0, prefabList.Length);
+                    PlacePrefab(prefabList[id], boundsList[id].Value, GetPosition(center, radius, i), plusList[id].Value);
                 }
             }
-            radius += prefabsFill;
+            radius += space;
         }
-        
-        
-        
+    }
+
+
+    private void ValidatePrefabs()
+    {
+        prefabsPlus.Clear();
+        prefabsBounds.Clear();
+        for (int i = 0; i < prefabs.Length; i++)
+        {
+            GameObject item = prefabs[i];
+            if (item != null && HasCollider(item))
+            {
+                Vector3 plus;
+                prefabsBounds.Add(GetBounds(item, out plus, null));
+                prefabsPlus.Add(plus);
+            }
+            else
+            {
+                prefabs[i] = null;
+                prefabsBounds.Add(null);
+                prefabsPlus.Add(null);
+            }
+        }
     }
 
 
     private void PlacePrefab(GameObject prefab, Bounds bounds ,Vector3 position, Vector3 plus)
     {
+        GameObject mainGround = ground2 != null ? ground2 : ground;
 
         RaycastHit hit;
         bool canCreate = true;
         float maxSize = bounds.size.x > bounds.size.z ? bounds.size.x : bounds.size.z;
-
-        if (Physics.Raycast(position, Vector3.down, out hit, 50))
+        if (Physics.Raycast(position + Vector3.up, Vector3.down, out hit, 50))
         {
-            if (!prefabIds.Contains(hit.collider.gameObject.GetInstanceID()))
-            {
-                position.y = hit.point.y;
-                canCreate = true;
-            }
-            else
-            {
-                canCreate = false;
-            }
+            position.y = hit.point.y;
+            canCreate = hit.collider.gameObject.GetInstanceID() == mainGround.GetInstanceID();
         }
-        else if (Physics.Raycast(position, Vector3.up, out hit, 50))
+        else if (Physics.Raycast(position + Vector3.down, Vector3.up, out hit, 50))
         {
-            if (!prefabIds.Contains(hit.collider.gameObject.GetInstanceID()))
-            {
-                position.y = hit.point.y;
-                canCreate = true;
-            }
-            else
-            {
-                canCreate = false;
-            }
+            position.y = hit.point.y;
+            canCreate = hit.collider.gameObject.GetInstanceID() == mainGround.GetInstanceID();
         }
         else
         {
@@ -161,10 +264,10 @@ public class PrefabsPlacerWindow : EditorWindow {
 
         if (canCreate)
         {
-            Collider[] cols = Physics.OverlapSphere(position, prefabsFill - maxSize / 2 - 2);
+            Collider[] cols = Physics.OverlapSphere(position, space - maxSize / 2 - 2);
             foreach (var item in cols)
             {
-                if (prefabIds.Contains(item.gameObject.GetInstanceID()))
+                if (item.gameObject.GetInstanceID() != mainGround.GetInstanceID())
                 {
                     canCreate = false;
                     break;
@@ -175,21 +278,12 @@ public class PrefabsPlacerWindow : EditorWindow {
         
         if (canCreate)
         {
-
-            
             GameObject go2 = Instantiate(prefab, position + plus, Quaternion.identity);
             var rotation = go2.transform.rotation;
             rotation *= Quaternion.Euler(0, Random.Range(0, 359), 0); // this adds a 90 degrees Y rotation
             go2.transform.rotation = rotation;
-
-            go2.transform.parent = parent.transform;
-            prefabIds.Add(go2.GetInstanceID());
+            go2.transform.parent = undoParent.transform;
         }
-
-        Handles.color = Color.red;
-        Handles.DrawWireDisc(position, Vector3.up, prefabsFill - maxSize / 2 - 2);
-
-        HandleUtility.Repaint();
     }
     
     private Vector3 GetPosition(Vector3 center, float radius, float degree)
@@ -228,8 +322,6 @@ public class PrefabsPlacerWindow : EditorWindow {
         
         Vector3 max = new Vector3();
         Vector3 min = new Vector3();
-
-        
 
         Bounds? bounds = null;
         Renderer renderer = main.GetComponent<Renderer>();
@@ -285,13 +377,10 @@ public class PrefabsPlacerWindow : EditorWindow {
     }
 
 
-    void OnFocus()
-    {
-        SceneView.onSceneGUIDelegate += OnSceneView;
-    }
+    
 
 
-    public static T[] ObjectFieldArray<T>(int size, T[] objs) where T : UnityEngine.Object
+    public static T[] ObjectFieldArray<T>(string label, int size, T[] objs) where T : UnityEngine.Object
     {
 
 
@@ -322,7 +411,7 @@ public class PrefabsPlacerWindow : EditorWindow {
             for (int i = 0; i < size; i++)
             {
 
-                objs[i] = EditorGUILayout.ObjectField("Element " + i, objs[i], typeof(T), true) as T;
+                objs[i] = EditorGUILayout.ObjectField(label+ " " + i, objs[i], typeof(T), true) as T;
 
             }
             EditorGUI.indentLevel--;
