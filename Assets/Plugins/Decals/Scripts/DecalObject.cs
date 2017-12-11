@@ -11,6 +11,17 @@ public class DecalObject : MonoBehaviour {
     public Sprite image;
     public float offset = 0.01f;
 
+    #if (UNITY_EDITOR)
+    void OnEnable()
+    {
+        if (Application.isEditor && !Application.isPlaying)
+        {
+            BuildDecal();
+        }
+    }
+    #endif
+
+
     public void BuildDecal()
     {
 
