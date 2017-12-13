@@ -7,7 +7,7 @@ using UnityEditor;
 public class PrefabChangerWindow : EditorWindow {
 
 
-    private List<object[]> prefabList = new List<object[]>();
+    private List<PrefabOption> prefabList = new List<PrefabOption>();
     private GameObject prefab;
     private Vector2 imageSize = new Vector2(100,100);
 
@@ -21,12 +21,13 @@ public class PrefabChangerWindow : EditorWindow {
 
     void OnGUI()
     {
-        prefab = (GameObject)EditorGUI.ObjectField(new Rect(new Vector2(5, 150), new Vector2(100, 100)), prefab, typeof(GameObject), true);
+        //prefab = (GameObject)EditorGUI.ObjectField(new Rect(new Vector2(5, 150), new Vector2(100, 100)), prefab, typeof(GameObject), true);
+        prefabList.Add(new PrefabOption());
+
 
         foreach (var item in prefabList)
         {
-            ((ButtonInfo)item[1]).Display();
-            ((ButtonInfo)item[2]).Display();
+            item.Display();
         }
 
         InsertPrefabOption(0, prefab);
@@ -39,7 +40,7 @@ public class PrefabChangerWindow : EditorWindow {
     }
 
 
-    struct PrefabOption
+    class PrefabOption
     {
         public GameObject prefab;
 
@@ -68,7 +69,7 @@ public class PrefabChangerWindow : EditorWindow {
         }
     }
 
-    struct ButtonInfo
+    class ButtonInfo
     {
         public delegate void OnClickDelegate(object sender);
 
