@@ -28,13 +28,14 @@ public class DecalObjectEditor : Editor
         EditorGUILayout.Slider(offsetProp, 0.01f, 0.1f, new GUIContent("Offset"));
 
         serializedObject.ApplyModifiedProperties();
-
         if (GUI.changed)
         {
             foreach (var item in serializedObject.targetObjects)
             {
                 ((DecalObject)item).BuildDecal();
+                EditorUtility.SetDirty(((DecalObject)item));
             }
+
         }
 
     }
@@ -69,6 +70,8 @@ public class DecalObjectEditor : Editor
                 moveMe.transform.position = hit.point;
 
                 moveMe.transform.forward = hit.normal;
+
+                EditorUtility.SetDirty(moveMe);
 
             }
         }
