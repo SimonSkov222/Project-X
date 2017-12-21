@@ -1,10 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [ExecuteInEditMode]
 public class DecalObject : MonoBehaviour {
 
+    private static Dictionary<string, Material> sharedMaterials = new Dictionary<string, Material>();
     private MeshFilter filter;
     private new MeshRenderer renderer;
 
@@ -19,8 +21,16 @@ public class DecalObject : MonoBehaviour {
             BuildDecal();
         }
     }
-    #endif
+#endif
 
+    public void UseSharedMaterials()
+    {
+        if (!sharedMaterials.ContainsKey(image.name))
+        {
+            sharedMaterials.Add(image.name, GetComponent<Renderer>().sharedMaterial);
+        }
+        GetComponent<Renderer>().sharedMaterial=  sharedMaterials[image.name];
+    }
 
     public void BuildDecal()
     {
