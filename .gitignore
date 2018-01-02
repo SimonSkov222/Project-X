@@ -5,9 +5,6 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 
-
-/Assets/Scenes/Map Simon.unity
-
 # Visual Studio 2015 cache directory
 /.vs/
 
@@ -28,8 +25,7 @@ ExportedObj/
 
 # Unity3D generated meta files
 *.pidb.meta
-#*.meta
-
+*.meta
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
@@ -37,4 +33,3 @@ sysinfo.txt
 *.apk
 *.unitypackage
 /Assets/Scenes/Map Simon.unity
-/Assets/Scenes/Map Simon.unity.meta
