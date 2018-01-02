@@ -264,7 +264,7 @@ public class PrefabsPlacerWindow : EditorWindow {
 
         if (canCreate)
         {
-            Collider[] cols = Physics.OverlapSphere(position, space - maxSize / 2 - 2);
+            Collider[] cols = Physics.OverlapSphere(position, space - (maxSize / 2)/*-2*/);
             foreach (var item in cols)
             {
                 if (item.gameObject.GetInstanceID() != mainGround.GetInstanceID())

@@ -1,22 +1,27 @@
 fileFormatVersion: 2
-guid: 1781cf62c8250a34898710866931451c
-timeCreated: 1507887798
-licenseType: Free
+guid: 64dc356beb7865a4abfecea6c755e380
+timeCreated: 1456494859
+licenseType: Store
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 19
   fileIDToRecycleName:
-    100000: Cylinder001
-    100002: Object004
-    100004: //RootNode
-    400000: Cylinder001
-    400002: Object004
-    400004: //RootNode
+    100000: //RootNode
+    100002: Cylinder001
+    100004: Object004
+    100006: Tree_L
+    400000: //RootNode
+    400002: Cylinder001
+    400004: Object004
+    400006: Tree_L
     2300000: Cylinder001
     2300002: Object004
+    2300004: Tree_L
     3300000: Cylinder001
     3300002: Object004
+    3300004: Tree_L
     4300000: Cylinder001
     4300002: Object004
+    4300004: Tree_L
   materials:
     importMaterials: 1
     materialName: 0
@@ -24,11 +29,9 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleCurves: 1
+    resampleRotations: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -39,7 +42,6 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -47,12 +49,9 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 1
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
@@ -66,11 +65,9 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-    normalCalculationMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -81,10 +78,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
-    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
   humanoidOversampling: 1

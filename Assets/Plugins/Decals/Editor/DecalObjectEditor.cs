@@ -38,6 +38,15 @@ public class DecalObjectEditor : Editor
 
         }
 
+        if (GUILayout.Button("Test"))
+        {
+            foreach (var item in serializedObject.targetObjects)
+            {
+                ((DecalObject)item).UseSharedMaterials();
+                EditorUtility.SetDirty(((DecalObject)item));
+            }
+        }
+
     }
     
 
