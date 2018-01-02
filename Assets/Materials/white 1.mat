@@ -47,9 +47,41 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DecalTex02:
-        m_Texture: {fileID: 10904, guid: 0000000000000000f000000000000000, type: 0}
+        m_Texture: {fileID: 2800000, guid: 7cc6676dd726f8e47a3aa894b96230a2, type: 3}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex03:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DecalTex04:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex05:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex06:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex07:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex08:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex09:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex10:
+        m_Texture: {fileID: 2800000, guid: 2f65710febe0b9b4baf1e90ff884bb5f, type: 3}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: -1, y: 0}
     - _DecalTex2:
         m_Texture: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 5, y: 5}
@@ -155,11 +187,21 @@ Material:
     - num: 9
     m_Colors:
     - _Color: {r: 0.2827586, g: 1, b: 0, a: 1}
+    - _Color01: {r: 1, g: 1, b: 1, a: 1}
+    - _Color02: {r: 1, g: 1, b: 1, a: 1}
+    - _Color03: {r: 1, g: 1, b: 1, a: 0}
+    - _Color04: {r: 1, g: 1, b: 1, a: 0}
+    - _Color05: {r: 1, g: 1, b: 1, a: 0}
+    - _Color06: {r: 1, g: 1, b: 1, a: 0}
+    - _Color07: {r: 1, g: 1, b: 1, a: 0}
+    - _Color08: {r: 1, g: 1, b: 1, a: 0}
+    - _Color09: {r: 1, g: 1, b: 1, a: 0.553}
     - _Color1: {r: 1, g: 1, b: 1, a: 1}
+    - _Color10: {r: 1, g: 1, b: 1, a: 1}
     - _Color2: {r: 0.36353964, g: 0.78676474, b: 0.19669119, a: 1}
     - _Color3: {r: 0, g: 0, b: 1, a: 1}
     - _Color4: {r: 0.25735295, g: 0.10975346, b: 0.10975346, a: 0}
-    - _ColorMain: {r: 0.63235295, g: 0.07904412, b: 0.07904412, a: 1}
+    - _ColorMain: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _tint1: {r: 1, g: 1, b: 1, a: 0}
