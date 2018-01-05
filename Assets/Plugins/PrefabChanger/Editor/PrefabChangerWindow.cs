@@ -56,6 +56,7 @@ public class PrefabChangerWindow : EditorWindow {
     {
         if (prefabList.Count(m => m.index == ((ButtonInfo)sender).index) > 0)
         {
+            var selections = new UnityEngine.Object[Selection.objects.Length + 1];
             GameObject replacement = prefabList.First(m => m.index == ((ButtonInfo)sender).index).prefab;
             //Selection.activeGameObject = GameObject.Instantiate<GameObject>(replacement);
             for (int i = Selection.gameObjects.Length - 1; i >= 0; i--)
@@ -77,8 +78,11 @@ public class PrefabChangerWindow : EditorWindow {
                 go.transform.position = tfPosition;
                 go.transform.rotation = tfRotation;
                 go.transform.localScale = tfLocalScale;
-                    
+
+                selections[i] = go;                
             }
+
+            Selection.objects = selections;
         }
     }
     private void Button_OnRemove(object sender)
@@ -128,11 +132,22 @@ public class PrefabChangerWindow : EditorWindow {
             var picRect = new Rect(5, 5, 100, 100);
             if (prefab != null)
             {
-                EditorGUI.DrawPreviewTexture(picRect, AssetPreview.GetAssetPreview(prefab));
+                //Debug.Log("--> " + picRect == null);
+                //EditorGUI.DrawTextureAlpha(picRect, AssetPreview.GetAssetPreview(prefab));
+                GUI.DrawTexture(picRect, AssetPreview.GetMiniThumbnail(prefab));
+                //try
+                //{
+                    //EditorGUI.DrawPreviewTexture(picRect, AssetPreview.GetAssetPreview(prefab)., null, ScaleMode.StretchToFill);
+                //}
+                //catch (Exception)
+                //{
+
+                //    EditorGUI.DrawRect(picRect, Color.white);
+                //}
             }
             else
             {
-                EditorGUI.DrawRect(picRect, Color.white); ;
+                EditorGUI.DrawRect(picRect, Color.white);
             }
             //this.makeChange.isEnabled = prefab != null;
             //this.remove.isEnabled = prefab != null;

@@ -15,7 +15,8 @@ namespace FreakLibEditor.SelectParent
 	/// Editor class for enabling the Select Parent function
 	/// </summary>
 	[InitializeOnLoad]
-	public class SelectParent : Editor
+    [CustomEditor(typeof(GameObject))]
+    public class SelectParent : Editor
 	{
 		/// <summary>
 		/// Key used to store settings in EditorPrefs.
@@ -147,11 +148,63 @@ namespace FreakLibEditor.SelectParent
 				{
 					if (t.parent != null)
 					{
-						Selection.activeTransform = t.parent;
-					}
+                       
+
+                        if (allowMultiSelection)
+                        {
+                            bool doNotAdd = false;
+                            var selections = new Object[Selection.objects.Length +1];
+                            for (int i = 0; i < Selection.objects.Length; i++)
+                            {
+                                var obj = Selection.objects[i];
+                                if (obj is GameObject && ((GameObject)obj).GetInstanceID() == t.gameObject.GetInstanceID())
+                                {
+                                    continue;
+                                }
+                                //if (obj is GameObject && ((GameObject)obj).GetInstanceID() == t.parent.gameObject.GetInstanceID())
+                                //{
+                                //    doNotAdd = true;
+                                //    continue;
+
+                                //}
+
+                                //if (!doNotAdd)
+                                    selections[i] = Selection.objects[i];
+                            }
+                            selections[Selection.objects.Length] = t.parent.gameObject;
+                            Selection.objects = selections;
+
+                        }
+                        else
+                        {
+                            Selection.activeTransform = t.parent;
+                        }
+                        //Selection.activeTransform = t.parent;
+                    }
 				}
 			}
 		}
-	}
+
+        private static bool allowMultiSelection = false;
+
+
+        void OnSceneGUI()
+        {
+            Event e = Event.current;
+            switch (Event.current.keyCode)
+            {
+                case KeyCode.LeftShift:
+                case KeyCode.RightShift:
+                case KeyCode.LeftControl:
+                case KeyCode.RightControl:
+                    if (e.type == EventType.KeyDown)
+                        allowMultiSelection = true;
+                    else if (e.type == EventType.KeyUp)
+                        allowMultiSelection = false;
+                    break;
+            }
+            
+        }
+    }
 }
 #endif // UNITY_EDITOR
