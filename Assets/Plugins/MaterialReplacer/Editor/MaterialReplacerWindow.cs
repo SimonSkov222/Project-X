@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class ExtMaterialReplacer : EditorWindow {
+public class MaterialReplacerWindow : EditorWindow {
 
     List<Material> m_find;
     List<Material> m_replace;
@@ -15,10 +15,10 @@ public class ExtMaterialReplacer : EditorWindow {
     bool child;
     int count = 1;
 
-    [MenuItem("Window/Ext Material Replacer")]
+    [MenuItem("Window/Material Replacer")]
     public static void ShownWindow()
     {
-        GetWindow<ExtMaterialReplacer>().Show();
+        GetWindow<MaterialReplacerWindow>().Show();
     }
 
 
@@ -60,15 +60,7 @@ public class ExtMaterialReplacer : EditorWindow {
             {
                 foreach (var go in Selection.gameObjects)
                 {
-                    ReplaceMaterial(go, m_find[a], m_replace[a]);
-                    if (child)
-                    {
-                        for (int i = 0; i < go.transform.childCount; i++)
-                        {
-                            GameObject child = go.transform.GetChild(i).gameObject;
-                            ReplaceMaterial(child, m_find[a], m_replace[a]);
-                        }
-                    }
+                    ReplaceMaterial(go, m_find[a], m_replace[a], child);
 
                 }
             }
@@ -103,8 +95,22 @@ public class ExtMaterialReplacer : EditorWindow {
 
     }
 
+    public static void ReplaceMaterial(GameObject go, Material find, Material replace, bool includeChild = true)
+    {
+        
+        SetReplaceMaterial(go, find, replace);
+        if (includeChild)
+        {
+            for (int i = 0; i < go.transform.childCount; i++)
+            {
+                GameObject child = go.transform.GetChild(i).gameObject;
+                SetReplaceMaterial(child, find, replace);
+            }
+        }
 
-    private Material GetMaterial(GameObject gameObject)
+    }
+
+    private static Material GetMaterial(GameObject gameObject)
     {
         if (gameObject.GetComponent<Renderer>() != null)
         {
@@ -113,12 +119,12 @@ public class ExtMaterialReplacer : EditorWindow {
         return null;
     }
 
-    private bool HasMaterial(GameObject go, Material material)
+    private static bool HasMaterial(GameObject go, Material material)
     {
         return GetMaterial(go) == material;
     }
 
-    private void ReplaceMaterial(GameObject go, Material find, Material replace)
+    private static void SetReplaceMaterial(GameObject go, Material find, Material replace)
     {
         if (HasMaterial(go, find))
         {
