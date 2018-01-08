@@ -36,7 +36,6 @@ public class ExtMaterialReplacer : EditorWindow {
         {
             if (a == m_find.Count)
             {
-
                 m_find.Add(null);
                 m_replace.Add(null);
             }
