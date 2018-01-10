@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -32,13 +32,13 @@ public class MaterialReplacerWindow : EditorWindow {
         
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
-        for (int a = 0; a < count; a++)
+        for (int a = 0; a < m_find.Count; a++)
         {
-            if (a == m_find.Count)
-            {
-                m_find.Add(null);
-                m_replace.Add(null);
-            }
+            //if (a == m_find.Count)
+            //{
+            //    m_find.Add(null);
+            //    m_replace.Add(null);
+            //}
 
             EditorGUILayout.Separator();
             EditorGUILayout.Separator();
@@ -87,7 +87,8 @@ public class MaterialReplacerWindow : EditorWindow {
 
         if (GUILayout.Button("Add"))
         {
-            count++;
+            m_find.Add(null);
+            m_replace.Add(null);
         }
 
 

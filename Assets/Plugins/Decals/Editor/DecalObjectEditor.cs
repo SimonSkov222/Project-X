@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(DecalObject))]
+//[CustomEditor(typeof(DecalObject))]
 public class DecalObjectEditor : Editor
 {
     SerializedProperty imageProp;
