@@ -236,6 +236,8 @@ public class Move : MonoBehaviour
         Cursor.lockState = val ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
+    
+
 
 
 }
