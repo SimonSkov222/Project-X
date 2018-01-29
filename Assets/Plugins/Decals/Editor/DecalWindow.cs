@@ -1,25 +1,53 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 
+////////////////////////////////////////////////////////////////////////////////
+//                      Beskrivelse
+//  
+//  ##!! Bruges ikke mere. Se DecalObject.cs beskrivelse                    !!##
+//  
+//  Et editor vindue der g�r det nemt at oprette nye decals
+//
+////////////////////////////////////////////////////////////////////////////////
 public class DecalWindow : EditorWindow
 {
 
-    static DecalWindow win;
+    ///////////////////////////////
+    //      Public Static Methods
+    ///////////////////////////////
+    #region
 
-    string btnCreate = "Add Decal To Scene";
-    
-    Sprite decal;
-
-
+    /// <summary>
+    /// �bner vores vindue
+    /// </summary>
     [MenuItem("Window/Decals")]
-    public static void ShowWindow() {
-        win = GetWindow<DecalWindow>();
-        win.Show();
+    public static void ShowWindow()
+    {
+        GetWindow<DecalWindow>().Show();
     }
-    
+
+    #endregion
+
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    #region
+
+    private string btnCreate = "Add Decal To Scene";
+    private Sprite decal;
+
+    #endregion
+
+    ///////////////////////////////
+    //      Unity Event
+    ///////////////////////////////
+    #region
+
+    /// <summary>
+    /// Udseende for vores vindue
+    /// </summary>
     void OnGUI()
     {
-
         float marginLeft = this.position.width / 2 - 100 / 2;
         decal = (Sprite)EditorGUI.ObjectField(new Rect(marginLeft, 5, 100, 100), decal, typeof(Sprite), true);
 
@@ -27,10 +55,21 @@ public class DecalWindow : EditorWindow
         if (GUILayout.Button(btnCreate))
             Button_CreateDecal_Click();
         GUILayout.EndArea();
-                
-    }
-    
 
+    }
+
+    #endregion
+
+    ///////////////////////////////
+    //      Private Methods
+    ///////////////////////////////    
+    #region
+
+    /// <summary>
+    /// N�r man klikker p� "Add Decal To Scene" knappen
+    /// laver vi et nyt gameobject giver den de Component den skal have
+    /// og kalder .BuildDecal() fra DecalObject.cs
+    /// </summary>
     private void Button_CreateDecal_Click()
     {        
         GameObject go = new GameObject("Decal");
@@ -45,4 +84,7 @@ public class DecalWindow : EditorWindow
 
         Selection.activeGameObject = go;
     }
+    
+    #endregion
+
 }

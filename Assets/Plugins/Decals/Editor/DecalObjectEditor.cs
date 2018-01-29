@@ -1,13 +1,39 @@
 using UnityEngine;
 using UnityEditor;
 
+////////////////////////////////////////////////////////////////////////////////
+//                      Beskrivelse
+//  
+//  ##!! Bruges ikke mere. Se DecalObject.cs beskrivelse                    !!##
+//
+//  Vi har lavet dettet CustomEditor så vi nemt kan flytte decal (CTRL + Klik)
+//  og så vi se et billedet af decalet og at vi kan ændre flere på en gang
+//
+////////////////////////////////////////////////////////////////////////////////
 [CanEditMultipleObjects]
 [CustomEditor(typeof(DecalObject))]
 public class DecalObjectEditor : Editor
 {
-    SerializedProperty imageProp;
-    SerializedProperty offsetProp;
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    #region
 
+    private SerializedProperty imageProp;
+    private SerializedProperty offsetProp;
+
+    #endregion
+
+    ///////////////////////////////
+    //      Unity Event
+    ///////////////////////////////
+    #region
+
+    /// <summary>
+    /// Når scriptet bliver aktiv finder vi de properties
+    /// der skal kunne blive ændres og gemmer dem så vi ikke 
+    /// skal bruge resources på at findes dem hele tiden.
+    /// </summary>
     void OnEnable()
     {
         // Setup the SerializedProperties.
@@ -15,32 +41,11 @@ public class DecalObjectEditor : Editor
         offsetProp = serializedObject.FindProperty("offset");
     }
 
-
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-
-        //DecalObject decal = (DecalObject)target;
-        //decal.image = (Sprite)EditorGUILayout.ObjectField("Image", decal.image, typeof(Sprite), false);        
-        //decal.offset = EditorGUILayout.Slider("Offset", decal.offset, 0.01f, 0.1f);
-
-        imageProp.objectReferenceValue = EditorGUILayout.ObjectField("Image", imageProp.objectReferenceValue, typeof(Sprite), false);
-        EditorGUILayout.Slider(offsetProp, 0.01f, 0.1f, new GUIContent("Offset"));
-
-        serializedObject.ApplyModifiedProperties();
-        if (GUI.changed)
-        {
-            foreach (var item in serializedObject.targetObjects)
-            {
-                ((DecalObject)item).BuildDecal();
-                EditorUtility.SetDirty(((DecalObject)item));
-            }
-
-        }
-
-    }
-    
-
+    /// <summary>
+    /// # Flyt decal #
+    /// Vælg gameobjecet med dettet script(DecalObject), hold CTRL nede og klik et sted i secene view hvorefter
+    /// gameobjecet vil flytte sig hent til der hvor man klikket
+    /// </summary>
     void OnSceneGUI()
     {
 
@@ -78,5 +83,34 @@ public class DecalObjectEditor : Editor
         
     }
 
-   
+    /// <summary>
+    /// Her ændre vi udseende for DecalObject scripet i Inspector vinduet
+    /// Vi gør dette i et CustomEditor scirpet så vi kan se billedet af
+    /// decalet.
+    /// </summary>
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        //DecalObject decal = (DecalObject)target;
+        //decal.image = (Sprite)EditorGUILayout.ObjectField("Image", decal.image, typeof(Sprite), false);        
+        //decal.offset = EditorGUILayout.Slider("Offset", decal.offset, 0.01f, 0.1f);
+
+        imageProp.objectReferenceValue = EditorGUILayout.ObjectField("Image", imageProp.objectReferenceValue, typeof(Sprite), false);
+        EditorGUILayout.Slider(offsetProp, 0.01f, 0.1f, new GUIContent("Offset"));
+
+        serializedObject.ApplyModifiedProperties();
+        if (GUI.changed)
+        {
+            foreach (var item in serializedObject.targetObjects)
+            {
+                ((DecalObject)item).BuildDecal();
+                EditorUtility.SetDirty(((DecalObject)item));
+            }
+
+        }
+
+    }
+    
+    #endregion
 }
