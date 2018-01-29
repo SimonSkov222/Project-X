@@ -6,7 +6,7 @@ using UnityEditor;
 //  
 //  ##!! Bruges ikke mere. Se DecalObject.cs beskrivelse                    !!##
 //  
-//  Et editor vindue der g�r det nemt at oprette nye decals
+//  Et editor vindue der gør det nemt at oprette nye decals
 //
 ////////////////////////////////////////////////////////////////////////////////
 public class DecalWindow : EditorWindow
@@ -18,7 +18,7 @@ public class DecalWindow : EditorWindow
     #region
 
     /// <summary>
-    /// �bner vores vindue
+    /// Åbner vores vindue
     /// </summary>
     [MenuItem("Window/Decals")]
     public static void ShowWindow()
@@ -66,7 +66,7 @@ public class DecalWindow : EditorWindow
     #region
 
     /// <summary>
-    /// N�r man klikker p� "Add Decal To Scene" knappen
+    /// Når man klikker på "Add Decal To Scene" knappen
     /// laver vi et nyt gameobject giver den de Component den skal have
     /// og kalder .BuildDecal() fra DecalObject.cs
     /// </summary>
