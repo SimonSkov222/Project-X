@@ -61,6 +61,8 @@ public class PrefabsPlacerWindow : EditorWindow {
     /// </summary>
     void OnGUI()
     {
+
+        // Laver mellemrum i editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
@@ -68,6 +70,8 @@ public class PrefabsPlacerWindow : EditorWindow {
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
+
+        // Checkbox som ændre på en bool som hedder isEnabled
         isEnabled = EditorGUILayout.Toggle("Is Enabled", isEnabled);
 
         EditorGUILayout.Separator();
@@ -175,31 +179,47 @@ public class PrefabsPlacerWindow : EditorWindow {
     ///////////////////////////////
     //      Private Methods
     ///////////////////////////////
+
+
+    /// <summary>
+    /// Checker om de gameobjecter som vi bruger har en collider
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns> bool </returns>
     private bool HasCollider(GameObject item)
     {
         if (item.GetComponent<Collider>() != null)
             return true;
 
+        // Checker om der er et child i objectet som har en collider
         for (int i = 0; i < item.transform.childCount; i++)
             if (HasCollider(item.transform.GetChild(i).gameObject))
                 return true;
 
         return false;
     }
-
+    
+    /// <summary>
+    /// Her placere vi de valgte prefabs og checker på om de er for tæt på hinanden
+    /// </summary>
+    /// <param name="center"></param>
     private void BegindInstantiateGameObject(Vector3 center)
     {
 
+        // Vi checker variablerne igennem for null
         var prefabList = prefabs.Where(m => m != null).ToArray();
         var plusList = prefabsPlus.Where(m => m != null).ToArray();
         var boundsList = prefabsBounds.Where(m => m != null).ToArray();
-
+        
         int id = Random.Range(0, prefabList.Length);
         
         Vector2 g = new Vector2(center.x, center.z);
         
+        // sætter et prefab
         PlacePrefab(prefabList[id], boundsList[id].Value, center, plusList[id].Value);
         float radius = space;
+
+        // checker på om de er for tæt på hinanden
         while (radius < this.radius)
         {
             int? degrees = GetDegree(center, radius, space);
@@ -286,17 +306,31 @@ public class PrefabsPlacerWindow : EditorWindow {
         }
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="radius"></param>
+    /// <param name="degree"></param>
+    /// <returns></returns>
     private Vector3 GetPosition(Vector3 center, float radius, float degree)
     {
         float a = degree * Mathf.PI / 180;
 
         float x = center.x + radius * Mathf.Cos(a);
         float z = center.z + radius * Mathf.Sin(a);
-
+        
         return new Vector3(x, center.y ,z); 
     }
 
-
+    /// <summary>
+    /// Checker om der er nogle box colliders inde for den radius som vi har sat
+    /// inden den placere prefaben
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="radius"></param>
+    /// <param name="space"></param>
+    /// <returns></returns>
     private int? GetDegree(Vector3 center, float radius, float space)
     {
         Vector3 start = GetPosition(center, radius, 0);

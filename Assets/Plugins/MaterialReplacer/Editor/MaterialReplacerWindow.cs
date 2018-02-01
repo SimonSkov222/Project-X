@@ -3,33 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  Den her klasse gør det muligt for os at
+//  ændre materialer på mange forskellige objecter
+//  på samme tid og på en nem måde.
+//  
+//////////////////////////////////////////////////////
 public class MaterialReplacerWindow : EditorWindow {
 
-    List<Material> m_find;
-    List<Material> m_replace;
-
-    List<int> m_id;
-
-    Vector2 scrollPos = new Vector2(0,0);
-
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    private List<Material> m_find;
+    private List<Material> m_replace;
+    private List<int> m_id;
+    private Vector2 scrollPos = new Vector2(0,0);
     bool child;
     int count = 1;
 
+
+    /// <summary>
+    /// Viser vinduet.
+    /// Vi fortæller også hvor knappen som åbner vinduet skal sidde
+    /// </summary>
     [MenuItem("Window/Material Replacer")]
     public static void ShownWindow()
     {
         GetWindow<MaterialReplacerWindow>().Show();
     }
 
-
+    /// <summary>
+    /// Her laver vi layout på vores vindue
+    /// og fotæller hvad de forskellige ting skal gøre
+    /// </summary>
     void OnGUI()
     {
         
-
+        // Laver et lille mellemrum
         EditorGUILayout.Separator();
 
+        // Er en checkbox som checker om vi skal have children med
         child = GUILayout.Toggle(child, "Child");
         
+
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
         for (int a = 0; a < m_find.Count; a++)
