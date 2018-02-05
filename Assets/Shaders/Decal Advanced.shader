@@ -1,9 +1,20 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
+////////////////////////////////////////////////////////////////////////////////
+//                      Beskrivelse
+//
+//		Denne shader gør at vi kan kombinere flere billeder i et materiale
+//		Hvis kan også flytte hvor de forskellige billeder skal starte fra
+//
+//		#NOTE
+//		Vi er ikke eksperter i shader og hvordan de bliver kodet. 
+//		Vi fandt nogle andre shader på nettet og prøvet os frem til vi 
+//		fik dette resultat.
+//
+////////////////////////////////////////////////////////////////////////////////
 Shader "Custom/Decal Advanced"{
 	Properties {
+
+		//Farve overlay
 		_ColorMain ("Color Main", Color) = (1,1,1,0.5)
 		_Color01 ("Color Decal 01", Color) = (1,1,1,0)
 		_Color02("Color Decal 02", Color) = (1,1,1,0)
@@ -16,6 +27,7 @@ Shader "Custom/Decal Advanced"{
 		_Color09("Color Decal 09", Color) = (1,1,1,0)
 		_Color10("Color Decal 10", Color) = (1,1,1,0)
 
+		//Billedet
 		_MainTex ("Main", 2D) = "white" { }
 		_DecalTex01 ("Decal 01", 2D) = "white" { }
 		_DecalTex02("Decal 02", 2D) = "white" { }
@@ -35,6 +47,7 @@ Shader "Custom/Decal Advanced"{
 				#pragma vertex vert
 				#pragma fragment frag
 				#include "UnityCG.cginc"
+
 				//Link properties to the shader
 				float4 _ColorMain;
 				float4 _Color01;
@@ -59,6 +72,9 @@ Shader "Custom/Decal Advanced"{
 				sampler2D _DecalTex09;
 				sampler2D _DecalTex10;
       
+				///
+				/// Noget med hvor billederne skal side
+				///
 				struct v2f 
 				{
 					float4  pos : SV_POSITION;
@@ -74,7 +90,11 @@ Shader "Custom/Decal Advanced"{
 					float2  uv9 : TEXCOORD9;
 					float2  uv10 : TEXCOORD10;
 				};
-      
+
+				///
+				/// Noget med hvor billederne skal side
+				/// Hvis disse ikke er der bliver billederne ikke flyttet
+				///
 				float4 _MainTex_ST; //?? skal være der
 				float4 _DecalTex01_ST; //?? skal være der
 				float4 _DecalTex02_ST; //?? skal være der
@@ -87,7 +107,9 @@ Shader "Custom/Decal Advanced"{
 				float4 _DecalTex09_ST; //?? skal være der
 				float4 _DecalTex10_ST; //?? skal være der
 
-      
+				///
+				/// Giver billederne deres plads/Definere det
+				///
 				v2f vert (appdata_base v)
 				{
 					v2f o;
@@ -105,9 +127,14 @@ Shader "Custom/Decal Advanced"{
 					o.uv10 = TRANSFORM_TEX(v.texcoord, _DecalTex10); //Prepare the vertex uv
 					return o;
 				}
-      
+				
+
+				///
+				/// Her kombinere vi billederne og farverne
+				///
 				half4 frag (v2f i) : COLOR
 				{
+					//Hent billederne
 					float4 texcol = tex2D (_MainTex, i.uv); //base texture
 					float4 deccol01 = tex2D (_DecalTex01, i.uv1); //decal texture
 					float4 deccol02 = tex2D(_DecalTex02, i.uv2); //decal texture
@@ -120,7 +147,7 @@ Shader "Custom/Decal Advanced"{
 					float4 deccol09 = tex2D(_DecalTex09, i.uv9); //decal texture
 					float4 deccol10 = tex2D (_DecalTex10, i.uv10); //decal texture
 
-
+					//Giver billederne farve
 					float4 temp00 = _ColorMain * _ColorMain.a * texcol;
 					float4 temp01 = _Color01 * _Color01.a * deccol01;
 					float4 temp02 = _Color02 * _Color02.a * deccol02;
@@ -133,6 +160,7 @@ Shader "Custom/Decal Advanced"{
 					float4 temp09 = _Color09 * _Color09.a * deccol09;
 					float4 temp10 = _Color10 * _Color10.a * deccol10;
 
+					//Kombinere billederne
 					temp01 = lerp(temp01, temp02, temp02.a);
 					temp01 = lerp(temp01, temp03, temp03.a);
 					temp01 = lerp(temp01, temp04, temp04.a);
@@ -142,7 +170,7 @@ Shader "Custom/Decal Advanced"{
 					temp01 = lerp(temp01, temp08, temp08.a);
 					temp01 = lerp(temp01, temp09, temp09.a);
 					temp01 = lerp(temp01, temp10, temp10.a);
-					
+
 					return lerp(temp00, temp01, temp01.a);
 				}
       
