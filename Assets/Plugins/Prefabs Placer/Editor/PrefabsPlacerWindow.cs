@@ -110,16 +110,25 @@ public class PrefabsPlacerWindow : EditorWindow {
         }
     }
 
-
+    /// <summary>
+    /// Vi tilføjer et event til sceneview.
+    /// </summary>
     void OnFocus()
     {
         SceneView.onSceneGUIDelegate += OnSceneView;
     }
-    
+
 
     ///////////////////////////////
     //      Private Event
     ///////////////////////////////
+
+
+    /// <summary>
+    /// Vi opretter en mulighed for at kunne fortryde(undo).
+    /// Hvis man klikker på et object, begynder vi at placere prefabs.
+    /// </summary>
+    /// <param name="scene"></param>
     private void OnSceneView(SceneView scene)
     {
         if (isEnabled)
@@ -158,7 +167,7 @@ public class PrefabsPlacerWindow : EditorWindow {
                     {
                         ground = hit.collider.gameObject;
                     }
-                    BegindInstantiateGameObject(hit.point);
+                    BegindInstantiateGameObjects(hit.point);
                 }
             }
         }
@@ -193,14 +202,14 @@ public class PrefabsPlacerWindow : EditorWindow {
     }
 
     /// <summary>
-    /// Checker om de gameobjecter som vi bruger har en collider
+    /// Tjekker om gameobjectet og dens child har en collider.
     /// </summary>
     private bool HasCollider(GameObject item)
     {
         if (item.GetComponent<Collider>() != null)
             return true;
 
-        // Checker om der er et child i objectet som har en collider
+        // Tjekker om der er et child i objectet som har en collider
         for (int i = 0; i < item.transform.childCount; i++)
             if (HasCollider(item.transform.GetChild(i).gameObject))
                 return true;
@@ -211,7 +220,7 @@ public class PrefabsPlacerWindow : EditorWindow {
     /// <summary>
     /// Her placere vi de valgte prefabs og checker på om de er for tæt på hinanden
     /// </summary>
-    private void BegindInstantiateGameObject(Vector3 center)
+    private void BegindInstantiateGameObjects(Vector3 center)
     {
 
         // Vi checker variablerne igennem for null
@@ -245,8 +254,8 @@ public class PrefabsPlacerWindow : EditorWindow {
     }
 
     /// <summary>
-    /// Checker listen med prefabs i gennem om de har
-    /// coliders og om de ikke er null.
+    /// Tjekker listen med prefabs igennem om de har
+    /// colliders og at de ikke er null.
     /// </summary>
     private void ValidatePrefabs()
     {
@@ -335,7 +344,7 @@ public class PrefabsPlacerWindow : EditorWindow {
     }
 
     /// <summary>
-    /// Checker om der er nogle box colliders inde for den radius som vi har sat
+    /// Tjekker om der er nogle box colliders inde for den radius som vi har sat
     /// inden den placere prefaben
     /// </summary>
     private int? GetDegree(Vector3 center, float radius, float space)
@@ -353,7 +362,10 @@ public class PrefabsPlacerWindow : EditorWindow {
         return null;
     }
 
-
+    /// <summary>
+    /// Finder størrelsen på det valgte gameobject
+    /// og hvor meget vi kan tilføje for at den er over jorden.
+    /// </summary>
     private Bounds? GetBounds(GameObject main, out Vector3 plus, Vector3? worldPosition)
     {
         bool isFirst = !worldPosition.HasValue;
@@ -418,9 +430,11 @@ public class PrefabsPlacerWindow : EditorWindow {
     }
 
 
-    
 
 
+    /// <summary>
+    /// Array version af EditorGUILayout.ObjectField.
+    /// </summary>
     public static T[] ObjectFieldArray<T>(string label, int size, T[] objs) where T : UnityEngine.Object
     {
 
@@ -429,7 +443,7 @@ public class PrefabsPlacerWindow : EditorWindow {
         {
             if (objs == null)
                 objs = new T[size];
-
+            
 
             if (size != objs.Length)//resize the array
             {

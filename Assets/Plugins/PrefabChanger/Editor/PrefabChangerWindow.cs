@@ -142,7 +142,7 @@ public class PrefabChangerWindow : EditorWindow {
     }
 
     /// <summary>
-    /// Fjnerner valgte option fra listen
+    /// Fjerner valgte option fra listen
     /// </summary>
     private void Button_OnRemove(object sender)
     {
@@ -153,7 +153,7 @@ public class PrefabChangerWindow : EditorWindow {
     }
 
     /// <summary>
-    /// Tilf�jer en nye option til listen
+    /// Tilf�jer en ny option til listen
     /// </summary>
     private void InsertPrefabOption()
     {

@@ -2,10 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+////////////////////////////////////////////////////////////////////
+//                  Beskrivelse
+//
+//      Tilføjer en knap til gameobject som har RandomHouseColorParent component,
+//      når man trykke på knappen skifter den farverne.
+//
+////////////////////////////////////////////////////////////////////
 
 [CustomEditor(typeof(RandomHouseColorParent))]
 public class RandomHouseColorEditor : Editor {
 
+    /// <summary>
+    /// Tilføjer en knap, når man trykker på den skifter den farverne.
+    /// </summary>
     public override void OnInspectorGUI()
     {
         var controller = target as RandomHouseColorParent;
@@ -24,7 +34,7 @@ public class RandomHouseColorEditor : Editor {
         {
 
             Debug.Log("hej");
-            ((RandomHouseColorParent)target).NoName();
+            ((RandomHouseColorParent)target).ChangeColorByRandom();
 
         }
         

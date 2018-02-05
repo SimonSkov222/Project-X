@@ -49,7 +49,7 @@ public class DecalObject : MonoBehaviour {
     #region
 
     /// <summary>
-    /// Opdatere decal når man starter unity editor
+    /// Opdatere decal når man starter unity editor.
     /// 
     /// Der er en fjel der gør at den også bliver kaldt
     /// Når man bare testet spillet
@@ -76,7 +76,7 @@ public class DecalObject : MonoBehaviour {
     /// hvis den er tæt på et andet gameobject vil den tegne billede på det andet gameobject
     /// (Der er et problem med størrelsesforholdet)
     /// 
-    /// denne metode bliver at fra et scripts(DecalWindow.cs, DecalObjectEditor.cs)
+    /// Denne metode bliver kaldt fra et andet scripts(DecalWindow.cs, DecalObjectEditor.cs)
     /// </summary>
     public void BuildDecal()
     {
@@ -121,11 +121,7 @@ public class DecalObject : MonoBehaviour {
     #region
 
     /// <summary>
-    /// 
-    /// Lavet en firkant mesh der gør det muligt at 
-    /// hvis man tilføjet mesh til et gameobject og 
-    /// giver gameobject et materiale vil man
-    /// kunne materialet
+    /// Laver en firkantet mesh der gør det muligt at se gameobjectets materiale.
     /// </summary>
     private Mesh CreateMesh(float width, float height)
     {

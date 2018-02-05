@@ -27,7 +27,6 @@ public class MaterialReplacerWindow : EditorWindow {
 
     /// <summary>
     /// Viser vinduet.
-    /// Vi fortæller også hvor knappen som åbner vinduet skal sidde
     /// </summary>
     [MenuItem("Window/Material Replacer")]
     public static void ShownWindow()
@@ -37,7 +36,7 @@ public class MaterialReplacerWindow : EditorWindow {
 
     /// <summary>
     /// Her laver vi layout på vores vindue
-    /// og fotæller hvad de forskellige ting skal gøre
+    /// og fortæller hvad de forskellige ting skal gøre
     /// </summary>
     void OnGUI()
     {
@@ -114,7 +113,10 @@ public class MaterialReplacerWindow : EditorWindow {
 
 
     }
-
+    /// <summary>
+    /// Leder efter et material og udskifter den med noget andet material.
+    /// Man kan vælge at den også skal tjekke child igennem.
+    /// </summary>
     public static void ReplaceMaterial(GameObject go, Material find, Material replace, bool includeChild = true)
     {
         
@@ -124,12 +126,16 @@ public class MaterialReplacerWindow : EditorWindow {
             for (int i = 0; i < go.transform.childCount; i++)
             {
                 GameObject child = go.transform.GetChild(i).gameObject;
-                SetReplaceMaterial(child, find, replace);
+                ReplaceMaterial(child, find, replace, includeChild);
+
             }
         }
 
     }
 
+    /// <summary>
+    /// Henter material fra gameobject.
+    /// </summary>
     private static Material GetMaterial(GameObject gameObject)
     {
         if (gameObject.GetComponent<Renderer>() != null)
@@ -139,11 +145,17 @@ public class MaterialReplacerWindow : EditorWindow {
         return null;
     }
 
+    /// <summary>
+    /// Tjekker om gameobjectet har et material.
+    /// </summary>
     private static bool HasMaterial(GameObject go, Material material)
     {
         return GetMaterial(go) == material;
     }
 
+    /// <summary>
+    /// Leder efter et material og udskifter den med noget andet material.
+    /// </summary>
     private static void SetReplaceMaterial(GameObject go, Material find, Material replace)
     {
         if (HasMaterial(go, find))
