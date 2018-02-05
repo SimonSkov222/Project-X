@@ -9,7 +9,9 @@ public class RandomHouseColorParent : MonoBehaviour {
 
 
     
-
+    /// <summary>
+    /// ændre farve 
+    /// </summary>
     public void NoName()
     {
         if (m_colors.Length == 0)
@@ -52,6 +54,10 @@ public class RandomHouseColorParent : MonoBehaviour {
 
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
     public static void ReplaceMaterial(GameObject go, Material find, Material replace, bool includeChild = true)
     {
 

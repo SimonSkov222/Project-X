@@ -65,10 +65,8 @@ public class Weapon : MonoBehaviour
 
 
     /// <summary>
-    /// Vi henter spillerens øjne så vi ved hvor 
-    /// vi skal sende skydne hen
-    /// 
-    /// Giver spilleren fuld ammonition
+    /// Vi henter kameraet, så vi ved hvor vi skal sende skydende hen.
+    /// Giver spilleren fuld ammunition.
     /// </summary>
     void Start()
     {
@@ -76,10 +74,10 @@ public class Weapon : MonoBehaviour
         CurrentShots = shots; 
         CurrentAmmo = ammo;
     }
-    
+
     /// <summary>
-    /// Vi giver spilleren mulighed for at reloade og
-    /// tvinger til at reloade når han løber tør
+    /// Vi giver spilleren mulighed for at reloade
+    /// og tvinger ham til at reloade når han løber tør.
     /// </summary>
     void Update()
     {
@@ -110,13 +108,13 @@ public class Weapon : MonoBehaviour
 
 
     ///////////////////////////////
-    //      Public Method
+    //      Private Method
     ///////////////////////////////
-    
+
     /// <summary>
     /// Hvis der er et bullet som er deaktiveret i spillet,
-    /// bliver det genbrugt, og hvis der ikke er noget deaktiveret
-    /// bullet, bliver der lavet et nyt.
+    /// bliver den genbrugt, og hvis der ikke er nogen deaktiveret bullets,
+    /// bliver der lavet et nyt.
     /// </summary>
     /// <returns>Sender et usynligt bullet tilbage</returns>
     private GameObject GetBullet()
@@ -140,8 +138,7 @@ public class Weapon : MonoBehaviour
 
 
     /// <summary>
-    /// Efter 2 sek så får spilleren full reload,
-    /// eller det antal skyd de har tilbage
+    /// Efter 2 sekunder får spilleren fuld ammunition, eller det antal skyd de har tilbage.
     /// </summary>
     /// <returns>Returner om vi er igang med at reloade eller ej</returns>
     private IEnumerator Reload()

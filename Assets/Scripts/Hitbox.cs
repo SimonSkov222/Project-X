@@ -40,6 +40,10 @@ public class Hitbox : MonoBehaviour {
     ///////////////////////////////
     //      Unity Events
     ///////////////////////////////
+
+    /// <summary>
+    /// Her definere hvad der kan give skade til gameobjectet.
+    /// </summary>
     void Start () { CanGiveDamge = 1 << LayerMask.NameToLayer("Bullet") | 1 << LayerMask.NameToLayer("Main Player");  }
 	
 	// Update is called once per frame
@@ -48,11 +52,18 @@ public class Hitbox : MonoBehaviour {
         //Debug.Log("Layer: " +  CanGiveDamge.value);
     }
 
+    ///////////////////////////////
+    //      Private Method
+    ///////////////////////////////
+
+
     /// <summary>
-    /// 
+    /// Denne metode skal blive kaldt fra et andet script.
+    /// Hvis vi bliver ramt af et gameobject som kan give os skade,
+    /// tager vi skade.
     /// </summary>
     /// <param name="gb"></param>
-    void OnGameObjectEnter(GameObject gb)
+    private void OnGameObjectEnter(GameObject gb)
     {
         //Debug.Log("Hit: " + gb.layer);
         if ((CanGiveDamge.value & (1 << gb.layer)) == (1 << gb.layer))
