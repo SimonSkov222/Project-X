@@ -50,13 +50,13 @@ public class Bullet : MonoBehaviour
     ///  
     /// Når gameobjecet rammer noget gør vi gameobjecet usynlig 
     /// </summary>
-    void Update ()
+    void Update()
     {
 
 
         // Så længe gameObject ikke er synlig skal vi ikke gøre noget
         if (!gameObject.activeSelf) return;
-        
+
 
         // Da vores gameobject kan "teleport"(hvis den har meget speed) bliver vi nød til 
         //  at tjekke om vi ville have ramt noget i mellem den gamle
@@ -71,7 +71,7 @@ public class Bullet : MonoBehaviour
             //  script sender vi dette gameObject som parameter
             hit.collider.SendMessage("OnGameObjectEnter", gameObject, SendMessageOptions.DontRequireReceiver);
         }
-        
+
         // Flyt skudet/Sæt ny position 
         Vector3 heading = endPoint - startPoint;
         Vector3 direction = heading / heading.magnitude;
@@ -87,7 +87,7 @@ public class Bullet : MonoBehaviour
         // Opdater position
         lastPosition = transform.position;
 
-        
+
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ public class Bullet : MonoBehaviour
         //startPoint = transform.position;
         lastPosition = startPoint;
         hasHitTarget = false;
-        
+
     }
 
 
@@ -132,7 +132,7 @@ public class Bullet : MonoBehaviour
     public void Fire(Vector3 startPos)
     {
 
-        
+
         //Sæt start position
         startPoint = startPos;
         transform.position = startPoint;

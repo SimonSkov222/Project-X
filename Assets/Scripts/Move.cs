@@ -17,7 +17,7 @@ using UnityEngine;
 
 public class Move : MonoBehaviour
 {
-    
+
     ///////////////////////////////
     //      Public Fields
     ///////////////////////////////
@@ -122,7 +122,7 @@ public class Move : MonoBehaviour
 
         movement = new Vector3(moveLR, movement.y, moveFB);
         // Gør at tasterne passer iforhold til hvor vi kigger
-        movement = transform.rotation * movement; 
+        movement = transform.rotation * movement;
     }
 
     /// <summary>
@@ -200,7 +200,7 @@ public class Move : MonoBehaviour
         player.center = center;
     }
 
-    
+
     /// <summary>
     /// Sørger for at vi kun kan rejse os op når der ikke er noget oven over os
     /// Vi laver max 4 raycast som tjekker hvert hjørne af character controller om der er noget over den

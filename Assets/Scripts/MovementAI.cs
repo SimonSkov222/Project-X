@@ -55,7 +55,7 @@ public class MovementAI : MonoBehaviour
 
         enemy = gameObject.GetComponent<NavMeshAgent>();
         startPoint = transform.position;
-        
+
 
         var targetRange = new GameObject();
         targetRange.name = "TriggerRange";
@@ -66,10 +66,10 @@ public class MovementAI : MonoBehaviour
         var sphereCollider = targetRange.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = radius;
-        
+
         var targetTrigger = targetRange.AddComponent<ChildTriggerCollider>();
         targetTrigger.TriggerOnStay = TriggerOnStay;
-        
+
 
     }
 
@@ -94,14 +94,14 @@ public class MovementAI : MonoBehaviour
             anim.SetInteger("Test1", 4);
         }
 
-        
+
         //if (lastPoint == transform.position || enemy.isStopped || endPoint == null
         //    || layerMask.value == 1 << LayerMask.NameToLayer("Main Player"))
         //{
         //    anim.SetInteger("Test1", 3);
         //}
 
-        
+
         if (lastPoint == transform.position || enemy.isStopped || endPoint == null || Vector3.Distance(transform.position, endPoint) < 10)
         {
             RandomMove();
@@ -118,7 +118,7 @@ public class MovementAI : MonoBehaviour
         //    enemy.SetDestination(players[0].transform.position);
         //}
 
-        
+
     }
 
     ///////////////////////////////
@@ -163,7 +163,7 @@ public class MovementAI : MonoBehaviour
     /// <returns>Returner true hvis noget er foran Ai</returns>
     private bool CanSeePlayer(GameObject gb)
     {
-        
+
         RaycastHit hit;
         Vector3 rayDirection = gb.transform.position - transform.position;
         // Tjekker på om der er noget inden for den angle som vi laver

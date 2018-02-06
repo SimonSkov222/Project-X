@@ -48,9 +48,9 @@ public class Health : MonoBehaviour
     void Start()
     {
         currentHP = maxHP;
-        
+
         for (int i = 0; i < hitboxs.Length; i++)
-            hitboxs[i].GetComponent<Hitbox>().OnTakeDamge  = TakeDamage;
+            hitboxs[i].GetComponent<Hitbox>().OnTakeDamge = TakeDamage;
 
         if (UseHealthBar)
         {
@@ -61,13 +61,13 @@ public class Health : MonoBehaviour
             healthBarSlider.maxValue = maxHP;
             healthBarSlider.value = currentHP;
         }
-        
+
     }
-    
+
     /// <summary>
     /// Når gameobjectet dør vil vi gør den usynlig
     /// </summary>
-    void Update() { if (!IsAlive && gameObject.activeSelf)  gameObject.SetActive(false);  }
+    void Update() { if (!IsAlive && gameObject.activeSelf) gameObject.SetActive(false); }
 
 
     ///////////////////////////////

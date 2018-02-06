@@ -45,7 +45,7 @@ public class Weapon : MonoBehaviour
     public int ammo = 1000;
     public float reloadSpeed;
     public float fireRate = 0.25f;
-    
+
 
     ///////////////////////////////
     //      Private Fields
@@ -73,10 +73,10 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         eyes = Camera.main;
-        CurrentShots = shots; 
+        CurrentShots = shots;
         CurrentAmmo = ammo;
     }
-    
+
     /// <summary>
     /// Vi giver spilleren mulighed for at reloade og
     /// tvinger til at reloade når han løber tør
@@ -112,7 +112,7 @@ public class Weapon : MonoBehaviour
     ///////////////////////////////
     //      Public Method
     ///////////////////////////////
-    
+
     /// <summary>
     /// Hvis der er et bullet som er deaktiveret i spillet,
     /// bliver det genbrugt, og hvis der ikke er noget deaktiveret
@@ -134,7 +134,7 @@ public class Weapon : MonoBehaviour
         // Sørger for at collideren på vores bullet og våben ikke kan ramme ind i hinanden
         Physics.IgnoreCollision(newBullet.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         bullets.Add(newBullet);
-        
+
         return newBullet;
     }
 
@@ -148,7 +148,7 @@ public class Weapon : MonoBehaviour
     {
         isReloading = true;
         //Debug.Log("Reload ");
-        
+
         // laver en time på 2 sek
         yield return new WaitForSeconds(2f);
 

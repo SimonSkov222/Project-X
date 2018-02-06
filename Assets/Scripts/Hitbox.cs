@@ -14,7 +14,8 @@ using UnityEngine;
 //////////////////////////////////////////////////////
 
 [RequireComponent(typeof(Collider))]
-public class Hitbox : MonoBehaviour {
+public class Hitbox : MonoBehaviour
+{
 
     ///////////////////////////////
     //      Public Delegate
@@ -40,10 +41,13 @@ public class Hitbox : MonoBehaviour {
     ///////////////////////////////
     //      Unity Events
     ///////////////////////////////
-    void Start () { CanGiveDamge = 1 << LayerMask.NameToLayer("Bullet") | 1 << LayerMask.NameToLayer("Main Player");  }
-	
-	// Update is called once per frame
-	void Update ()
+    void Start()
+    {
+        CanGiveDamge = 1 << LayerMask.NameToLayer("Bullet") | 1 << LayerMask.NameToLayer("Main Player");
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         //Debug.Log("Layer: " +  CanGiveDamge.value);
     }
@@ -67,6 +71,6 @@ public class Hitbox : MonoBehaviour {
         }
 
     }
-    
-    
+
+
 }

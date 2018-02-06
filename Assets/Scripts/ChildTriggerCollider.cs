@@ -14,25 +14,25 @@
 ////////////////////////////////////////////////////////////////////
 public class ChildTriggerCollider : MonoBehaviour
 {    
-    ///////////////////////////////
-    //      Public Deletages
-    ///////////////////////////////
-    public delegate void OnTrigger(Collider collider);
+///////////////////////////////
+//      Public Deletages
+///////////////////////////////
+public delegate void OnTrigger(Collider collider);
     
 
-    ///////////////////////////////
-    //      Public Properties
-    ///////////////////////////////
-    public OnTrigger TriggerOnEnter { private get; set; }
-    public OnTrigger TriggerOnStay { private get; set; }
-    public OnTrigger TriggerOnExit { private get; set; }
+///////////////////////////////
+//      Public Properties
+///////////////////////////////
+public OnTrigger TriggerOnEnter { private get; set; }
+public OnTrigger TriggerOnStay { private get; set; }
+public OnTrigger TriggerOnExit { private get; set; }
 
 
-    ///////////////////////////////
-    //      Unity Event
-    ///////////////////////////////
-    void OnTriggerEnter(Collider collider)  { if (TriggerOnEnter != null)   TriggerOnEnter(collider);   }
-    void OnTriggerStay(Collider collider)   { if (TriggerOnStay != null)    TriggerOnStay(collider);    }
-    void OnTriggerExit(Collider collider)   { if (TriggerOnExit != null)    TriggerOnExit(collider);    }
+///////////////////////////////
+//      Unity Event
+///////////////////////////////
+void OnTriggerEnter(Collider collider)  { if (TriggerOnEnter != null)   TriggerOnEnter(collider);   }
+void OnTriggerStay(Collider collider)   { if (TriggerOnStay != null)    TriggerOnStay(collider);    }
+void OnTriggerExit(Collider collider)   { if (TriggerOnExit != null)    TriggerOnExit(collider);    }
 
 }
