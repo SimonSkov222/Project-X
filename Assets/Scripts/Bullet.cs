@@ -5,7 +5,7 @@ using UnityEngine;
 //      Beskrivelse
 //  
 //  Denne klasse bruges til at flytte "Bullet"(gameobject).
-//  Når "Bullet"(gamepbject) rammer et andet object
+//  Når "Bullet"(gameobject) rammer et andet object
 //   kalder vi metoden OnGameObjectEnter() på det object
 //   vi ramte.
 //  
@@ -91,9 +91,9 @@ public class Bullet : MonoBehaviour
     }
 
     /// <summary>
-    /// Tjekker om vi kalde OnGameObjectEnter
-    ///  på det object den vi ramte og gør 
-    ///  gameobjectet usynlig bagefter
+    /// Tjekker om vi kalder OnGameObjectEnter
+    /// på det object den vi ramte og gør 
+    /// gameobjectet usynlig bagefter
     /// </summary> 
     /// <param name="collision">Det object vores gameobject ramte</param>
     void OnTriggerEnter(Collider collision)
@@ -107,7 +107,7 @@ public class Bullet : MonoBehaviour
     }
 
     /// <summary>
-    /// Kaldes nå vores gameobject bliver synlig
+    /// Vi nulstiller bullet/gameobject når det bliver aktiveret.
     /// 
     /// 
     /// </summary>

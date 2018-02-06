@@ -6,7 +6,7 @@ using UnityEditor;
 //  
 //  ##!! Bruges ikke mere. Se DecalObject.cs beskrivelse                    !!##
 //
-//  Vi har lavet dettet CustomEditor så vi nemt kan flytte decal (CTRL + Klik)
+//  Vi har lavet dette CustomEditor så vi nemt kan flytte decal (CTRL + Klik)
 //  og så vi se et billedet af decalet og at vi kan ændre flere på en gang
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -42,9 +42,8 @@ public class DecalObjectEditor : Editor
     }
 
     /// <summary>
-    /// # Flyt decal #
-    /// Vælg gameobjecet med dettet script(DecalObject), hold CTRL nede og klik et sted i secene view hvorefter
-    /// gameobjecet vil flytte sig hent til der hvor man klikket
+    /// Tjekker om man holder ctrl nede og klikker på en overflade,
+    /// hvis man gør det flytter vi decal der hen.
     /// </summary>
     void OnSceneGUI()
     {
@@ -54,7 +53,7 @@ public class DecalObjectEditor : Editor
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
         //Flyt decal hent til det vi trykket på og vend den rigtigt
-        if (Event.current.control  && Event.current.type == EventType.MouseDown)
+        if (Event.current.control && Event.current.type == EventType.MouseDown)
         {
             DecalObject decal = (DecalObject)target;
             Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
@@ -80,7 +79,7 @@ public class DecalObjectEditor : Editor
 
             }
         }
-        
+
     }
 
     /// <summary>
@@ -111,6 +110,6 @@ public class DecalObjectEditor : Editor
         }
 
     }
-    
+
     #endregion
 }

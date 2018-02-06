@@ -1,42 +1,33 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////
 //      Beskrivelse
 //  
-//  Denne klasse bruges til at flytte "Bullet"(gameobject).
-//  NÃ¥r "Bullet"(gamepbject) rammer et andet object
-//   kalder vi metoden OnGameObjectEnter() pÃ¥ det object
-//   vi ramte.
+//  Den her klasse gør det muligt for os at
+//  ændre materialer på mange forskellige objecter
+//  på samme tid og på en nem måde.
 //  
-////////////////////////////////////////////////////////////////////
-public class MaterialReplacerWindow : EditorWindow {
+//////////////////////////////////////////////////////
+public class MaterialReplacerWindow : EditorWindow
+{
 
     ///////////////////////////////
     //      Private Fields
     ///////////////////////////////
-    #region
-
     private List<Material> m_find;
     private List<Material> m_replace;
-
     private List<int> m_id;
+    private Vector2 scrollPos = new Vector2(0, 0);
+    bool child;
+    int count = 1;
 
-    private Vector2 scrollPos = new Vector2(0,0);
-
-    private bool child;
-    private int count = 1;
-
-    #endregion
-
-    ///////////////////////////////
-    //      Public Static Methods
-    ///////////////////////////////
-    #region
 
     /// <summary>
-    /// Ã…bner vores vindue
+    /// Viser vinduet.
     /// </summary>
     [MenuItem("Window/Material Replacer")]
     public static void ShownWindow()
@@ -45,76 +36,28 @@ public class MaterialReplacerWindow : EditorWindow {
     }
 
     /// <summary>
-    /// 
+    /// Her laver vi layout på vores vindue
+    /// og fortæller hvad de forskellige ting skal gøre
     /// </summary>
-    public static void ReplaceMaterial(GameObject go, Material find, Material replace, bool includeChild = true)
-    {
-
-        SetReplaceMaterial(go, find, replace);
-        if (includeChild)
-        {
-            for (int i = 0; i < go.transform.childCount; i++)
-            {
-                GameObject child = go.transform.GetChild(i).gameObject;
-                ReplaceMaterial(child, find, replace);
-            }
-        }
-
-    }
-    #endregion
-
-    ///////////////////////////////
-    //      Private Static Methods
-    ///////////////////////////////
-    #region
-
-
-    private static Material GetMaterial(GameObject gameObject)
-    {
-        if (gameObject.GetComponent<Renderer>() != null)
-        {
-            return gameObject.GetComponent<Renderer>().sharedMaterial;
-        }
-        return null;
-    }
-
-    private static bool HasMaterial(GameObject go, Material material)
-    {
-        return GetMaterial(go) == material;
-    }
-
-    private static void SetReplaceMaterial(GameObject go, Material find, Material replace)
-    {
-        if (HasMaterial(go, find))
-        {
-            go.GetComponent<Renderer>().sharedMaterial = replace;
-        }
-    }
-
-    #endregion
-
-    ///////////////////////////////
-    //      Unity Events
-    ///////////////////////////////
-    #region
-
     void OnGUI()
     {
-        
 
+        // Laver et lille mellemrum
         EditorGUILayout.Separator();
 
+        // Er en checkbox som checker om vi skal have children med
         child = GUILayout.Toggle(child, "Child");
-        
+
+
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
-        for (int a = 0; a < count; a++)
+        for (int a = 0; a < m_find.Count; a++)
         {
-            if (a == m_find.Count)
-            {
-                m_find.Add(null);
-                m_replace.Add(null);
-            }
+            //if (a == m_find.Count)
+            //{
+            //    m_find.Add(null);
+            //    m_replace.Add(null);
+            //}
 
             EditorGUILayout.Separator();
             EditorGUILayout.Separator();
@@ -163,14 +106,63 @@ public class MaterialReplacerWindow : EditorWindow {
 
         if (GUILayout.Button("Add"))
         {
-            count++;
+            m_find.Add(null);
+            m_replace.Add(null);
         }
 
 
 
 
     }
+    /// <summary>
+    /// Leder efter et material og udskifter den med noget andet material.
+    /// Man kan vælge at den også skal tjekke child igennem.
+    /// </summary>
+    public static void ReplaceMaterial(GameObject go, Material find, Material replace, bool includeChild = true)
+    {
 
-    #endregion
+        SetReplaceMaterial(go, find, replace);
+        if (includeChild)
+        {
+            for (int i = 0; i < go.transform.childCount; i++)
+            {
+                GameObject child = go.transform.GetChild(i).gameObject;
+                ReplaceMaterial(child, find, replace, includeChild);
+
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Henter material fra gameobject.
+    /// </summary>
+    private static Material GetMaterial(GameObject gameObject)
+    {
+        if (gameObject.GetComponent<Renderer>() != null)
+        {
+            return gameObject.GetComponent<Renderer>().sharedMaterial;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Tjekker om gameobjectet har et material.
+    /// </summary>
+    private static bool HasMaterial(GameObject go, Material material)
+    {
+        return GetMaterial(go) == material;
+    }
+
+    /// <summary>
+    /// Leder efter et material og udskifter den med noget andet material.
+    /// </summary>
+    private static void SetReplaceMaterial(GameObject go, Material find, Material replace)
+    {
+        if (HasMaterial(go, find))
+        {
+            go.GetComponent<Renderer>().sharedMaterial = replace;
+        }
+    }
 
 }

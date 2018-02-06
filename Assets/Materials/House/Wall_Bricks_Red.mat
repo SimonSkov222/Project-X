@@ -25,7 +25,7 @@ Material:
     - _DecalTex01:
         m_Texture: {fileID: 2800000, guid: 2f65710febe0b9b4baf1e90ff884bb5f, type: 3}
         m_Scale: {x: 1.63, y: 1.11}
-        m_Offset: {x: 1.28, y: 0.58}
+        m_Offset: {x: 1.28, y: 0.61}
     - _DecalTex02:
         m_Texture: {fileID: 2800000, guid: e449419400ce87a41bc361b93e974389, type: 3}
         m_Scale: {x: 2.12, y: 1.4}

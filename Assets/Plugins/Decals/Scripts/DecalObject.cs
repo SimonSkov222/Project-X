@@ -20,7 +20,8 @@ using Assets.Plugins.Decals.Scripts;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [ExecuteInEditMode]
-public class DecalObject : MonoBehaviour {
+public class DecalObject : MonoBehaviour
+{
 
     ///////////////////////////////
     //      Public Fields
@@ -49,7 +50,7 @@ public class DecalObject : MonoBehaviour {
     #region
 
     /// <summary>
-    /// Opdatere decal når man starter unity editor
+    /// Opdatere decal når man starter unity editor.
     /// 
     /// Der er en fjel der gør at den også bliver kaldt
     /// Når man bare testet spillet
@@ -76,7 +77,7 @@ public class DecalObject : MonoBehaviour {
     /// hvis den er tæt på et andet gameobject vil den tegne billede på det andet gameobject
     /// (Der er et problem med størrelsesforholdet)
     /// 
-    /// denne metode bliver at fra et scripts(DecalWindow.cs, DecalObjectEditor.cs)
+    /// Denne metode bliver kaldt fra et andet scripts(DecalWindow.cs, DecalObjectEditor.cs)
     /// </summary>
     public void BuildDecal()
     {
@@ -121,11 +122,7 @@ public class DecalObject : MonoBehaviour {
     #region
 
     /// <summary>
-    /// 
-    /// Lavet en firkant mesh der gør det muligt at 
-    /// hvis man tilføjet mesh til et gameobject og 
-    /// giver gameobject et materiale vil man
-    /// kunne materialet
+    /// Laver en firkantet mesh der gør det muligt at se gameobjectets materiale.
     /// </summary>
     private Mesh CreateMesh(float width, float height)
     {
@@ -137,18 +134,18 @@ public class DecalObject : MonoBehaviour {
         m.name = "Decal";
         //definere hjørnerne
         m.vertices = new Vector3[] {
-            new Vector3(width, height, offset),    
-            new Vector3(-width, height,offset),    
-            new Vector3(-width, -height, offset),  
-            new Vector3(width, -height, offset)              
-        };
+        new Vector3(width, height, offset),
+        new Vector3(-width, height,offset),
+        new Vector3(-width, -height, offset),
+        new Vector3(width, -height, offset)
+    };
         // hvordan materialet skal sidde
         m.uv = new Vector2[] {
-            new Vector2 (0, 1),
-            new Vector2 (1, 1),
-            new Vector2(1, 0),
-            new Vector2 (0, 0)
-        };
+        new Vector2 (0, 1),
+        new Vector2 (1, 1),
+        new Vector2(1, 0),
+        new Vector2 (0, 0)
+    };
 
         m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
         m.RecalculateNormals();

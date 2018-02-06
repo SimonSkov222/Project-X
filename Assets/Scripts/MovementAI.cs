@@ -47,7 +47,9 @@ public class MovementAI : MonoBehaviour
     ///////////////////////////////
 
     /// <summary>
-    /// Sørger for at vi har noget vi kan bruge vores trigger med
+    /// Her gemmer vi components til senere brug.
+    /// Så laver vi et nyt child gameobject med en SphereCollider og ChildTriggerCollider,
+    /// så når en spillet kommer tæt på så ved vi det.
     /// </summary>
     void Start()
     {
@@ -73,7 +75,9 @@ public class MovementAI : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Hvis vores gameobject ikke har nogen destination, så får den en ny tilfældig destination.
+    /// </summary>
     void Update()
     {
 
@@ -138,8 +142,7 @@ public class MovementAI : MonoBehaviour
 
 
     /// <summary>
-    /// har en radom generator som får den til at gå forskellige steder hen
-    /// 
+    /// Har en random generator som får den til at gå forskellige steder hen
     /// to do lave om
     /// </summary>
     private void RandomMove()
@@ -157,7 +160,7 @@ public class MovementAI : MonoBehaviour
 
 
     /// <summary>
-    /// Sørger for at Ai's trigger kun virker foran den
+    /// Sørger for at AI's trigger kun virker foran den
     /// </summary>
     /// <param name="gb">Det object som skal blive set</param>
     /// <returns>Returner true hvis noget er foran Ai</returns>

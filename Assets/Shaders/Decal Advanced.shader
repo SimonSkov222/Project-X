@@ -12,11 +12,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 Shader "Custom/Decal Advanced"{
-	Properties {
+	Properties{
 
 		//Farve overlay
-		_ColorMain ("Color Main", Color) = (1,1,1,0.5)
-		_Color01 ("Color Decal 01", Color) = (1,1,1,0)
+		_ColorMain("Color Main", Color) = (1,1,1,0.5)
+		_Color01("Color Decal 01", Color) = (1,1,1,0)
 		_Color02("Color Decal 02", Color) = (1,1,1,0)
 		_Color03("Color Decal 03", Color) = (1,1,1,0)
 		_Color04("Color Decal 04", Color) = (1,1,1,0)
@@ -28,8 +28,8 @@ Shader "Custom/Decal Advanced"{
 		_Color10("Color Decal 10", Color) = (1,1,1,0)
 
 		//Billedet
-		_MainTex ("Main", 2D) = "white" { }
-		_DecalTex01 ("Decal 01", 2D) = "white" { }
+		_MainTex("Main", 2D) = "white" { }
+		_DecalTex01("Decal 01", 2D) = "white" { }
 		_DecalTex02("Decal 02", 2D) = "white" { }
 		_DecalTex03("Decal 03", 2D) = "white" { }
 		_DecalTex04("Decal 04", 2D) = "white" { }
@@ -38,10 +38,10 @@ Shader "Custom/Decal Advanced"{
 		_DecalTex07("Decal 07", 2D) = "white" { }
 		_DecalTex08("Decal 08", 2D) = "white" { }
 		_DecalTex09("Decal 09", 2D) = "white" { }
-		_DecalTex10 ("Decal 10", 2D) = "white" { }
+		_DecalTex10("Decal 10", 2D) = "white" { }
 	}
-	SubShader {
- 
+		SubShader{
+
 		Pass {
 			CGPROGRAM //Shader Start, Vertex Shader named vert, Fragment shader named frag
 				#pragma vertex vert
@@ -71,11 +71,11 @@ Shader "Custom/Decal Advanced"{
 				sampler2D _DecalTex08;
 				sampler2D _DecalTex09;
 				sampler2D _DecalTex10;
-      
+
 				///
 				/// Noget med hvor billederne skal side
 				///
-				struct v2f 
+				struct v2f
 				{
 					float4  pos : SV_POSITION;
 					float2  uv : TEXCOORD0;
@@ -110,12 +110,12 @@ Shader "Custom/Decal Advanced"{
 				///
 				/// Giver billederne deres plads/Definere det
 				///
-				v2f vert (appdata_base v)
+				v2f vert(appdata_base v)
 				{
 					v2f o;
-					o.pos = UnityObjectToClipPos (v.vertex); //Transform the vertex position
-					o.uv = TRANSFORM_TEX (v.texcoord, _MainTex); //Prepare the vertex uv
-					o.uv1 = TRANSFORM_TEX (v.texcoord, _DecalTex01); //Prepare the vertex uv
+					o.pos = UnityObjectToClipPos(v.vertex); //Transform the vertex position
+					o.uv = TRANSFORM_TEX(v.texcoord, _MainTex); //Prepare the vertex uv
+					o.uv1 = TRANSFORM_TEX(v.texcoord, _DecalTex01); //Prepare the vertex uv
 					o.uv2 = TRANSFORM_TEX(v.texcoord, _DecalTex02); //Prepare the vertex uv
 					o.uv3 = TRANSFORM_TEX(v.texcoord, _DecalTex03); //Prepare the vertex uv
 					o.uv4 = TRANSFORM_TEX(v.texcoord, _DecalTex04); //Prepare the vertex uv
@@ -127,16 +127,16 @@ Shader "Custom/Decal Advanced"{
 					o.uv10 = TRANSFORM_TEX(v.texcoord, _DecalTex10); //Prepare the vertex uv
 					return o;
 				}
-				
+
 
 				///
 				/// Her kombinere vi billederne og farverne
 				///
-				half4 frag (v2f i) : COLOR
+				half4 frag(v2f i) : COLOR
 				{
 					//Hent billederne
-					float4 texcol = tex2D (_MainTex, i.uv); //base texture
-					float4 deccol01 = tex2D (_DecalTex01, i.uv1); //decal texture
+					float4 texcol = tex2D(_MainTex, i.uv); //base texture
+					float4 deccol01 = tex2D(_DecalTex01, i.uv1); //decal texture
 					float4 deccol02 = tex2D(_DecalTex02, i.uv2); //decal texture
 					float4 deccol03 = tex2D(_DecalTex03, i.uv3); //decal texture
 					float4 deccol04 = tex2D(_DecalTex04, i.uv4); //decal texture
@@ -145,7 +145,7 @@ Shader "Custom/Decal Advanced"{
 					float4 deccol07 = tex2D(_DecalTex07, i.uv7); //decal texture
 					float4 deccol08 = tex2D(_DecalTex08, i.uv8); //decal texture
 					float4 deccol09 = tex2D(_DecalTex09, i.uv9); //decal texture
-					float4 deccol10 = tex2D (_DecalTex10, i.uv10); //decal texture
+					float4 deccol10 = tex2D(_DecalTex10, i.uv10); //decal texture
 
 					//Giver billederne farve
 					float4 temp00 = _ColorMain * _ColorMain.a * texcol;
@@ -173,7 +173,7 @@ Shader "Custom/Decal Advanced"{
 
 					return lerp(temp00, temp01, temp01.a);
 				}
-      
+
 			ENDCG //Shader End
 		}
 	}

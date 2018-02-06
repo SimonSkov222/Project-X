@@ -13,7 +13,8 @@ using Assets.Plugins.PrefabChanger.Scripts;
 //      i listen
 //
 ////////////////////////////////////////////////////////////////////
-public class PrefabChangerWindow : EditorWindow {
+public class PrefabChangerWindow : EditorWindow
+{
 
 
     ///////////////////////////////
@@ -65,7 +66,7 @@ public class PrefabChangerWindow : EditorWindow {
         clearBtn.Display(position.width);
 
         //information der skal ses i vinduet
-        EditorGUI.HelpBox(new Rect(5,27, position.width- 10, 30), "Click 'Apply' to change selected Gameobjects.", MessageType.Info);
+        EditorGUI.HelpBox(new Rect(5, 27, position.width - 10, 30), "Click 'Apply' to change selected Gameobjects.", MessageType.Info);
         EditorGUI.HelpBox(new Rect(5, 59, position.width - 10, 30), "Components will also be changed", MessageType.Warning);
 
         //G�r at de st�r lige efter hinanden ogs� hvis man fjerner en i midten
@@ -75,20 +76,20 @@ public class PrefabChangerWindow : EditorWindow {
         }
 
         //Start scroll box
-        scrollPosition = GUI.BeginScrollView(new Rect(0, 90, position.width, position.height-90), scrollPosition, new Rect(0, 0, 220, 100* prefabList.Count));
+        scrollPosition = GUI.BeginScrollView(new Rect(0, 90, position.width, position.height - 90), scrollPosition, new Rect(0, 0, 220, 100 * prefabList.Count));
 
         // Lav en midlertidig liste at da den rigtige kan midste sine option ved at de bliver fjernet
         // hvilket kan f� et for loop til at g� i stykker
         var tempPrefabsList = new List<PrefabOption>();
         tempPrefabsList.AddRange(prefabList);
-        
+
         foreach (var item in tempPrefabsList)
         {
             item.Display(position.width);
         }
 
         GUI.EndScrollView();
-        
+
     }
 
     #endregion
@@ -116,11 +117,11 @@ public class PrefabChangerWindow : EditorWindow {
                 //Gamle v�rdier der skal tilf�jes til det nye gameobject(prefab)
                 var oldTransform = Selection.gameObjects[i].transform;
 
-                var oldName         = Selection.gameObjects[i].name;
-                var tfParent         = oldTransform.parent;
-                var tfPosition       = oldTransform.position;
-                var tfRotation       = oldTransform.rotation;
-                var tfLocalScale     = oldTransform.localScale;
+                var oldName = Selection.gameObjects[i].name;
+                var tfParent = oldTransform.parent;
+                var tfPosition = oldTransform.position;
+                var tfRotation = oldTransform.rotation;
+                var tfLocalScale = oldTransform.localScale;
 
                 // var oldComponents = Selection.gameObjects[i].GetComponents<Component>();
                 //    Selection.gameObjects[i] = GameObject.Instantiate<GameObject>(replacement);
@@ -136,13 +137,13 @@ public class PrefabChangerWindow : EditorWindow {
                 go.transform.position = tfPosition;
                 go.transform.rotation = tfRotation;
                 go.transform.localScale = tfLocalScale;
-                    
+
             }
         }
     }
 
     /// <summary>
-    /// Fjnerner valgte option fra listen
+    /// Fjerner valgte option fra listen
     /// </summary>
     private void Button_OnRemove(object sender)
     {
@@ -153,7 +154,7 @@ public class PrefabChangerWindow : EditorWindow {
     }
 
     /// <summary>
-    /// Tilf�jer en nye option til listen
+    /// Tilf�jer en ny option til listen
     /// </summary>
     private void InsertPrefabOption()
     {
