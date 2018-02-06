@@ -2,15 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+////////////////////////////////////////////////////////////////////
+//                  Beskrivelse
+//
+//      Klassen tilføjes til de gameobjecter som skal skifte 
+//      farve når man er i CustomEditor og klikker på en knap.
+//
+////////////////////////////////////////////////////////////////////
+
 [ExecuteInEditMode]
 public class RandomHouseColorParent : MonoBehaviour {
 
     public Material[] m_colors;
 
 
-    
 
-    public void NoName()
+    /// <summary>
+    /// Giver gameobjectet en tilfældig farve fra vores liste af farver.
+    /// </summary>
+    public void ChangeColorByRandom()
     {
         if (m_colors.Length == 0)
         {
@@ -52,6 +62,10 @@ public class RandomHouseColorParent : MonoBehaviour {
 
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
     public static void ReplaceMaterial(GameObject go, Material find, Material replace, bool includeChild = true)
     {
 
@@ -61,7 +75,7 @@ public class RandomHouseColorParent : MonoBehaviour {
             for (int i = 0; i < go.transform.childCount; i++)
             {
                 GameObject child = go.transform.GetChild(i).gameObject;
-                SetReplaceMaterial(child, find, replace);
+                ReplaceMaterial(child, find, replace);
             }
         }
 

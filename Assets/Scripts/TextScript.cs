@@ -8,7 +8,7 @@ using UnityEngine;
 //  
 //  I denne klasse henter vi hp og ammo fra health 
 //  og weapon klasserne og gemmer dem i en string
-//  med noget text og udskriver dem i vores Ui/canvas
+//  med noget tekst og udskriver dem i vores Ui/canvas
 //  
 //////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@ public class TextScript : MonoBehaviour {
     ///////////////////////////////
 
     /// <summary>
-    /// henter health og ammo fra de 2 andre scripts så vi ved hvor meget hp eller ammo vi har
+    /// Henter Health og Weapon components fra parent, så vi ved hvor meget HP eller ammo vi har.
     /// </summary>
     void Start ()
     {

@@ -61,6 +61,8 @@ public class PrefabsPlacerWindow : EditorWindow {
     /// </summary>
     void OnGUI()
     {
+
+        // Laver mellemrum i editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
@@ -68,6 +70,8 @@ public class PrefabsPlacerWindow : EditorWindow {
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
+
+        // Checkbox som ændre på en bool som hedder isEnabled
         isEnabled = EditorGUILayout.Toggle("Is Enabled", isEnabled);
 
         EditorGUILayout.Separator();
@@ -106,16 +110,25 @@ public class PrefabsPlacerWindow : EditorWindow {
         }
     }
 
-
+    /// <summary>
+    /// Vi tilføjer et event til sceneview.
+    /// </summary>
     void OnFocus()
     {
         SceneView.onSceneGUIDelegate += OnSceneView;
     }
-    
+
 
     ///////////////////////////////
     //      Private Event
     ///////////////////////////////
+
+
+    /// <summary>
+    /// Vi opretter en mulighed for at kunne fortryde(undo).
+    /// Hvis man klikker på et object, begynder vi at placere prefabs.
+    /// </summary>
+    /// <param name="scene"></param>
     private void OnSceneView(SceneView scene)
     {
         if (isEnabled)
@@ -124,18 +137,7 @@ public class PrefabsPlacerWindow : EditorWindow {
 
             if (Event.current.button == 0 && Event.current.type == EventType.MouseDown && !isMouseDown)
             {
-                undoParent = new GameObject("Prefabs Group");
-                
-                if (parent == null)
-                {
-                    parent = new GameObject("Prefabs");
-                    Undo.RegisterCreatedObjectUndo(parent, "Undo Prefabs");
-                }
-                else
-                {
-                    Undo.RegisterCreatedObjectUndo(undoParent, "Undo Prefabs Group");
-                }
-                undoParent.transform.parent = parent.transform;
+                RegisterUndo();
                 isMouseDown = true;
             }
 
@@ -165,41 +167,76 @@ public class PrefabsPlacerWindow : EditorWindow {
                     {
                         ground = hit.collider.gameObject;
                     }
-                    BegindInstantiateGameObject(hit.point);
+                    BegindInstantiateGameObjects(hit.point);
                 }
             }
         }
     }
+
+
     
 
     ///////////////////////////////
     //      Private Methods
     ///////////////////////////////
+
+
+    /// <summary>
+    /// ctrl + z
+    /// den her metode gør at vi kan lave undo og redo.
+    /// </summary>
+    private void RegisterUndo()
+    {
+        undoParent = new GameObject("Prefabs Group");
+
+        if (parent == null)
+        {
+            parent = new GameObject("Prefabs");
+            Undo.RegisterCreatedObjectUndo(parent, "Undo Prefabs");
+        }
+        else
+        {
+            Undo.RegisterCreatedObjectUndo(undoParent, "Undo Prefabs Group");
+        }
+        undoParent.transform.parent = parent.transform;
+    }
+
+    /// <summary>
+    /// Tjekker om gameobjectet og dens child har en collider.
+    /// </summary>
     private bool HasCollider(GameObject item)
     {
         if (item.GetComponent<Collider>() != null)
             return true;
 
+        // Tjekker om der er et child i objectet som har en collider
         for (int i = 0; i < item.transform.childCount; i++)
             if (HasCollider(item.transform.GetChild(i).gameObject))
                 return true;
 
         return false;
     }
-
-    private void BegindInstantiateGameObject(Vector3 center)
+    
+    /// <summary>
+    /// Her placere vi de valgte prefabs og checker på om de er for tæt på hinanden
+    /// </summary>
+    private void BegindInstantiateGameObjects(Vector3 center)
     {
 
+        // Vi checker variablerne igennem for null
         var prefabList = prefabs.Where(m => m != null).ToArray();
         var plusList = prefabsPlus.Where(m => m != null).ToArray();
         var boundsList = prefabsBounds.Where(m => m != null).ToArray();
-
+        
         int id = Random.Range(0, prefabList.Length);
         
         Vector2 g = new Vector2(center.x, center.z);
         
+        // sætter et prefab
         PlacePrefab(prefabList[id], boundsList[id].Value, center, plusList[id].Value);
         float radius = space;
+
+        // checker på om de er for tæt på hinanden
         while (radius < this.radius)
         {
             int? degrees = GetDegree(center, radius, space);
@@ -216,7 +253,10 @@ public class PrefabsPlacerWindow : EditorWindow {
         }
     }
 
-
+    /// <summary>
+    /// Tjekker listen med prefabs igennem om de har
+    /// colliders og at de ikke er null.
+    /// </summary>
     private void ValidatePrefabs()
     {
         prefabsPlus.Clear();
@@ -239,9 +279,12 @@ public class PrefabsPlacerWindow : EditorWindow {
         }
     }
 
-
+    /// <summary>
+    /// tjekker om prefabs kan blive placeret der hvor musen er
+    /// </summary>
     private void PlacePrefab(GameObject prefab, Bounds bounds ,Vector3 position, Vector3 plus)
     {
+        // checker hvor prefabs skal sætte på.
         GameObject mainGround = ground2 != null ? ground2 : ground;
 
         RaycastHit hit;
@@ -286,17 +329,24 @@ public class PrefabsPlacerWindow : EditorWindow {
         }
     }
     
+    /// <summary>
+    /// Tager center point og tilføjer radius og drejer den
+    /// rundt om center point, med det angivet degree
+    /// </summary>
     private Vector3 GetPosition(Vector3 center, float radius, float degree)
     {
         float a = degree * Mathf.PI / 180;
 
         float x = center.x + radius * Mathf.Cos(a);
         float z = center.z + radius * Mathf.Sin(a);
-
+        
         return new Vector3(x, center.y ,z); 
     }
 
-
+    /// <summary>
+    /// Tjekker om der er nogle box colliders inde for den radius som vi har sat
+    /// inden den placere prefaben
+    /// </summary>
     private int? GetDegree(Vector3 center, float radius, float space)
     {
         Vector3 start = GetPosition(center, radius, 0);
@@ -312,7 +362,10 @@ public class PrefabsPlacerWindow : EditorWindow {
         return null;
     }
 
-
+    /// <summary>
+    /// Finder størrelsen på det valgte gameobject
+    /// og hvor meget vi kan tilføje for at den er over jorden.
+    /// </summary>
     private Bounds? GetBounds(GameObject main, out Vector3 plus, Vector3? worldPosition)
     {
         bool isFirst = !worldPosition.HasValue;
@@ -377,9 +430,11 @@ public class PrefabsPlacerWindow : EditorWindow {
     }
 
 
-    
 
 
+    /// <summary>
+    /// Array version af EditorGUILayout.ObjectField.
+    /// </summary>
     public static T[] ObjectFieldArray<T>(string label, int size, T[] objs) where T : UnityEngine.Object
     {
 
@@ -388,7 +443,7 @@ public class PrefabsPlacerWindow : EditorWindow {
         {
             if (objs == null)
                 objs = new T[size];
-
+            
 
             if (size != objs.Length)//resize the array
             {

@@ -9,9 +9,9 @@ using UnityEngine;
 //  
 //  Denne klasse gør at vi kan bevæge os rundt med tastatur
 //  og kigge rundt med mus, den sørger også for at vi ikke
-//  kan dreje hovedet hele vejen rundt på x og z aksen
+//  kan dreje hovedet hele vejen rundt på x og z aksen.
 //  Vi kan også dykke os.
-//  Man kan fjerne cursoren på i og få den frem igen på i
+//  Man kan fjerne musen på ’i’ og få den frem igen på ’i’.
 //
 //////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ public class Move : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// Vi gemmer nogle components og kameraet på gameobjectet.
     /// </summary>
     void Start()
     {
@@ -65,7 +65,7 @@ public class Move : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Her er hvordan kontrol over gameobjectet bliver udført.
     /// </summary>
     void Update()
     {
@@ -150,7 +150,7 @@ public class Move : MonoBehaviour
     }
 
     /// <summary>
-    /// Gør at vi kan dykke os når vi trykker på ctrl
+    /// Gør at vi kan dukke os når vi trykker på ctrl
     /// </summary>
     private void StartCrouching()
     {
@@ -176,7 +176,7 @@ public class Move : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Gør at vi stopper med at dukke, når vi giver slip på ’ctrl’
     /// </summary>
     private void StopCrouching()
     {
@@ -202,8 +202,9 @@ public class Move : MonoBehaviour
 
     
     /// <summary>
-    /// Sørger for at vi kun kan rejse os op når der ikke er noget oven over os
-    /// Vi laver max 4 raycast som tjekker hvert hjørne af character controller om der er noget over den
+    /// Sørger for at vi kun kan rejse os op når der ikke er noget oven over os.
+    /// Vi laver max 4 raycast som tjekker hvert hjørne af 
+    /// character controller om der er noget over den
     /// </summary>
     /// <returns>Returner true eller false, kommer an på om der er noget over os</returns>
     private bool CanStand()
@@ -229,12 +230,18 @@ public class Move : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Her kan vi køre musen synlig eller usynlig.
+    /// </summary>
+    /// <param name="val"></param>
     private void IsMouseLocked(bool val)
     {
 
         Cursor.visible = !val;
         Cursor.lockState = val ? CursorLockMode.Locked : CursorLockMode.None;
     }
+
+    
 
 
 
