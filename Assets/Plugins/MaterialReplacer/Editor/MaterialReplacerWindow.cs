@@ -12,7 +12,8 @@ using UnityEditor;
 //  på samme tid og på en nem måde.
 //  
 //////////////////////////////////////////////////////
-public class MaterialReplacerWindow : EditorWindow {
+public class MaterialReplacerWindow : EditorWindow
+{
 
     ///////////////////////////////
     //      Private Fields
@@ -20,7 +21,7 @@ public class MaterialReplacerWindow : EditorWindow {
     private List<Material> m_find;
     private List<Material> m_replace;
     private List<int> m_id;
-    private Vector2 scrollPos = new Vector2(0,0);
+    private Vector2 scrollPos = new Vector2(0, 0);
     bool child;
     int count = 1;
 
@@ -40,13 +41,13 @@ public class MaterialReplacerWindow : EditorWindow {
     /// </summary>
     void OnGUI()
     {
-        
+
         // Laver et lille mellemrum
         EditorGUILayout.Separator();
 
         // Er en checkbox som checker om vi skal have children med
         child = GUILayout.Toggle(child, "Child");
-        
+
 
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
@@ -119,7 +120,7 @@ public class MaterialReplacerWindow : EditorWindow {
     /// </summary>
     public static void ReplaceMaterial(GameObject go, Material find, Material replace, bool includeChild = true)
     {
-        
+
         SetReplaceMaterial(go, find, replace);
         if (includeChild)
         {
@@ -163,11 +164,5 @@ public class MaterialReplacerWindow : EditorWindow {
             go.GetComponent<Renderer>().sharedMaterial = replace;
         }
     }
-
-
-    
-
-
-
 
 }

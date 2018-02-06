@@ -71,12 +71,12 @@ public class DecalWindow : EditorWindow
     /// og kalder .BuildDecal() fra DecalObject.cs
     /// </summary>
     private void Button_CreateDecal_Click()
-    {        
+    {
         GameObject go = new GameObject("Decal");
         go.AddComponent<MeshFilter>();
         go.AddComponent<MeshRenderer>();
         var decalObj = go.GetComponent<DecalObject>() ?? go.AddComponent<DecalObject>();
-        
+
         decalObj.image = decal;
         decalObj.BuildDecal();
 
@@ -84,7 +84,7 @@ public class DecalWindow : EditorWindow
 
         Selection.activeGameObject = go;
     }
-    
+
     #endregion
 
 }

@@ -15,8 +15,9 @@ using UnityEngine;
 //  
 //////////////////////////////////////////////////////
 
-public class PrefabsPlacerWindow : EditorWindow {
-    
+public class PrefabsPlacerWindow : EditorWindow
+{
+
 
     ///////////////////////////////
     //      Private Fields
@@ -89,7 +90,7 @@ public class PrefabsPlacerWindow : EditorWindow {
 
         EditorGUILayout.Separator();
 
-        prefabsSize = EditorGUILayout.IntSlider("Number Of Prefabs" ,prefabsSize, 1, 25);
+        prefabsSize = EditorGUILayout.IntSlider("Number Of Prefabs", prefabsSize, 1, 25);
         prefabs = ObjectFieldArray<GameObject>("Prefab", prefabsSize, prefabs);
 
         EditorGUILayout.Separator();
@@ -98,11 +99,11 @@ public class PrefabsPlacerWindow : EditorWindow {
         EditorGUILayout.HelpBox("Prefabs need a collider", MessageType.Info);
 
 
-        if (GUI.Button(new Rect(5,5, 100, 32), "Reset Ground"))
+        if (GUI.Button(new Rect(5, 5, 100, 32), "Reset Ground"))
         {
             ground2 = null;
         }
-        
+
         if (GUI.changed)
         {
             //ground = null;
@@ -160,7 +161,7 @@ public class PrefabsPlacerWindow : EditorWindow {
             {
                 Handles.DrawWireDisc(hit.point, Vector3.up, radius);
                 HandleUtility.Repaint();
-                
+
                 if (isMouseDown)
                 {
                     if (ground == null)
@@ -174,7 +175,7 @@ public class PrefabsPlacerWindow : EditorWindow {
     }
 
 
-    
+
 
     ///////////////////////////////
     //      Private Methods
@@ -216,7 +217,7 @@ public class PrefabsPlacerWindow : EditorWindow {
 
         return false;
     }
-    
+
     /// <summary>
     /// Her placere vi de valgte prefabs og checker på om de er for tæt på hinanden
     /// </summary>
@@ -227,11 +228,11 @@ public class PrefabsPlacerWindow : EditorWindow {
         var prefabList = prefabs.Where(m => m != null).ToArray();
         var plusList = prefabsPlus.Where(m => m != null).ToArray();
         var boundsList = prefabsBounds.Where(m => m != null).ToArray();
-        
+
         int id = Random.Range(0, prefabList.Length);
-        
+
         Vector2 g = new Vector2(center.x, center.z);
-        
+
         // sætter et prefab
         PlacePrefab(prefabList[id], boundsList[id].Value, center, plusList[id].Value);
         float radius = space;
@@ -282,7 +283,7 @@ public class PrefabsPlacerWindow : EditorWindow {
     /// <summary>
     /// tjekker om prefabs kan blive placeret der hvor musen er
     /// </summary>
-    private void PlacePrefab(GameObject prefab, Bounds bounds ,Vector3 position, Vector3 plus)
+    private void PlacePrefab(GameObject prefab, Bounds bounds, Vector3 position, Vector3 plus)
     {
         // checker hvor prefabs skal sætte på.
         GameObject mainGround = ground2 != null ? ground2 : ground;
@@ -318,7 +319,7 @@ public class PrefabsPlacerWindow : EditorWindow {
             }
         }
 
-        
+
         if (canCreate)
         {
             GameObject go2 = Instantiate(prefab, position + plus, Quaternion.identity);
@@ -328,7 +329,7 @@ public class PrefabsPlacerWindow : EditorWindow {
             go2.transform.parent = undoParent.transform;
         }
     }
-    
+
     /// <summary>
     /// Tager center point og tilføjer radius og drejer den
     /// rundt om center point, med det angivet degree
@@ -339,8 +340,8 @@ public class PrefabsPlacerWindow : EditorWindow {
 
         float x = center.x + radius * Mathf.Cos(a);
         float z = center.z + radius * Mathf.Sin(a);
-        
-        return new Vector3(x, center.y ,z); 
+
+        return new Vector3(x, center.y, z);
     }
 
     /// <summary>
@@ -372,7 +373,7 @@ public class PrefabsPlacerWindow : EditorWindow {
 
         Vector3 position = main.transform.position;
         worldPosition = position;
-        
+
         Vector3 max = new Vector3();
         Vector3 min = new Vector3();
 
@@ -410,7 +411,7 @@ public class PrefabsPlacerWindow : EditorWindow {
                 if (childBounds.Value.min.z < min.z) min.z = childBounds.Value.min.z;
             }
         }
-        
+
         if (isMaxMinSet)
         {
             Bounds defineBounds = new Bounds();
@@ -443,7 +444,7 @@ public class PrefabsPlacerWindow : EditorWindow {
         {
             if (objs == null)
                 objs = new T[size];
-            
+
 
             if (size != objs.Length)//resize the array
             {
@@ -466,7 +467,7 @@ public class PrefabsPlacerWindow : EditorWindow {
             for (int i = 0; i < size; i++)
             {
 
-                objs[i] = EditorGUILayout.ObjectField(label+ " " + i, objs[i], typeof(T), true) as T;
+                objs[i] = EditorGUILayout.ObjectField(label + " " + i, objs[i], typeof(T), true) as T;
 
             }
             EditorGUI.indentLevel--;

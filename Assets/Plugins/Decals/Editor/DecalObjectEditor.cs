@@ -53,7 +53,7 @@ public class DecalObjectEditor : Editor
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
         //Flyt decal hent til det vi trykket på og vend den rigtigt
-        if (Event.current.control  && Event.current.type == EventType.MouseDown)
+        if (Event.current.control && Event.current.type == EventType.MouseDown)
         {
             DecalObject decal = (DecalObject)target;
             Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
@@ -79,7 +79,7 @@ public class DecalObjectEditor : Editor
 
             }
         }
-        
+
     }
 
     /// <summary>
@@ -110,6 +110,6 @@ public class DecalObjectEditor : Editor
         }
 
     }
-    
+
     #endregion
 }

@@ -20,7 +20,8 @@ using Assets.Plugins.Decals.Scripts;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [ExecuteInEditMode]
-public class DecalObject : MonoBehaviour {
+public class DecalObject : MonoBehaviour
+{
 
     ///////////////////////////////
     //      Public Fields
@@ -133,18 +134,18 @@ public class DecalObject : MonoBehaviour {
         m.name = "Decal";
         //definere hjørnerne
         m.vertices = new Vector3[] {
-            new Vector3(width, height, offset),    
-            new Vector3(-width, height,offset),    
-            new Vector3(-width, -height, offset),  
-            new Vector3(width, -height, offset)              
-        };
+        new Vector3(width, height, offset),
+        new Vector3(-width, height,offset),
+        new Vector3(-width, -height, offset),
+        new Vector3(width, -height, offset)
+    };
         // hvordan materialet skal sidde
         m.uv = new Vector2[] {
-            new Vector2 (0, 1),
-            new Vector2 (1, 1),
-            new Vector2(1, 0),
-            new Vector2 (0, 0)
-        };
+        new Vector2 (0, 1),
+        new Vector2 (1, 1),
+        new Vector2(1, 0),
+        new Vector2 (0, 0)
+    };
 
         m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
         m.RecalculateNormals();

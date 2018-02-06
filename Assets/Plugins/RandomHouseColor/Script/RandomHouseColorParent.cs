@@ -11,7 +11,8 @@ using UnityEngine;
 ////////////////////////////////////////////////////////////////////
 
 [ExecuteInEditMode]
-public class RandomHouseColorParent : MonoBehaviour {
+public class RandomHouseColorParent : MonoBehaviour
+{
 
     public Material[] m_colors;
 
@@ -37,7 +38,7 @@ public class RandomHouseColorParent : MonoBehaviour {
 
         foreach (var house in houses)
         {
-            
+
             Material replace = m_colors[Random.Range(0, m_colors.Length)];
 
             foreach (var find in m_colors)
@@ -57,7 +58,7 @@ public class RandomHouseColorParent : MonoBehaviour {
             //    }
             //    break;
             //}
-            
+
         }
 
     }
