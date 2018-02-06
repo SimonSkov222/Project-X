@@ -1,0 +1,183 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Wall_Bricks_Red
+  m_Shader: {fileID: 4800000, guid: a67aedc955f9f9b42a26709e55eb3466, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex01:
+        m_Texture: {fileID: 2800000, guid: 2f65710febe0b9b4baf1e90ff884bb5f, type: 3}
+        m_Scale: {x: 1.63, y: 1.11}
+        m_Offset: {x: 1.28, y: 0.58}
+    - _DecalTex02:
+        m_Texture: {fileID: 2800000, guid: e449419400ce87a41bc361b93e974389, type: 3}
+        m_Scale: {x: 2.12, y: 1.4}
+        m_Offset: {x: -0.48, y: 0.21}
+    - _DecalTex03:
+        m_Texture: {fileID: 2800000, guid: e449419400ce87a41bc361b93e974389, type: 3}
+        m_Scale: {x: 2.12, y: 1.4}
+        m_Offset: {x: -3.21, y: 0.21}
+    - _DecalTex04:
+        m_Texture: {fileID: 2800000, guid: e449419400ce87a41bc361b93e974389, type: 3}
+        m_Scale: {x: 2.12, y: 1.4}
+        m_Offset: {x: -5.89, y: 0.21}
+    - _DecalTex05:
+        m_Texture: {fileID: 2800000, guid: e449419400ce87a41bc361b93e974389, type: 3}
+        m_Scale: {x: 2.12, y: 1.4}
+        m_Offset: {x: -7.88, y: 0.21}
+    - _DecalTex06:
+        m_Texture: {fileID: 2800000, guid: 6cfd96c73d49f4d4eba3a59985907650, type: 3}
+        m_Scale: {x: 1, y: 3.5}
+        m_Offset: {x: 0, y: 2.74}
+    - _DecalTex07:
+        m_Texture: {fileID: 2800000, guid: 78fd3e2898c56fd469ea28503b13af72, type: 3}
+        m_Scale: {x: 1, y: 30}
+        m_Offset: {x: 0, y: -21.6}
+    - _DecalTex08:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex09:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex10:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fresnel:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: a5148b21e2dfed246bd01c2f8f4e30a5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ReflectionTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ReflectiveColor:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RefractionTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _t1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _t2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _t3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _t4:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _t5:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _ReflDistort: 0.44
+    - _RefrDistort: 0.4
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _WaveScale: 0.063
+    - _ZWrite: 1
+    - _ac: 0
+    - _acm: 0
+    - _rb: 0
+    - _rc: 0
+    - _rg: 0
+    - num: 5
+    m_Colors:
+    - WaveSpeed: {r: 19, g: 9, b: -16, a: -7}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color01: {r: 1, g: 1, b: 1, a: 1}
+    - _Color02: {r: 1, g: 1, b: 1, a: 1}
+    - _Color03: {r: 1, g: 1, b: 1, a: 1}
+    - _Color04: {r: 1, g: 1, b: 1, a: 1}
+    - _Color05: {r: 1, g: 1, b: 1, a: 1}
+    - _Color06: {r: 1, g: 1, b: 1, a: 1}
+    - _Color07: {r: 1, g: 1, b: 1, a: 1}
+    - _Color08: {r: 1, g: 1, b: 1, a: 0}
+    - _Color09: {r: 1, g: 1, b: 1, a: 0}
+    - _Color1: {r: 1, g: 1, b: 1, a: 0.5019608}
+    - _Color10: {r: 1, g: 1, b: 1, a: 0}
+    - _Color101: {r: 1, g: 1, b: 1, a: 1}
+    - _Color2: {r: 1, g: 1, b: 1, a: 0}
+    - _Color3: {r: 1, g: 1, b: 1, a: 0}
+    - _ColorMain: {r: 1, g: 1, b: 1, a: 0.741}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HorizonColor: {r: 0.172, g: 0.463, b: 0.435, a: 1}
+    - _RefrColor: {r: 0.34, g: 0.85, b: 0.92, a: 1}
+    - _tint1: {r: 1, g: 1, b: 1, a: 0}
+    - _tint2: {r: 1, g: 1, b: 1, a: 0}
+    - _tint3: {r: 1, g: 1, b: 1, a: 0}
+    - _tint5: {r: 1, g: 1, b: 1, a: 0}
