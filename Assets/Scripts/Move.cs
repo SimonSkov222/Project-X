@@ -69,7 +69,6 @@ public class Move : MonoBehaviour
     /// </summary>
     void Update()
     {
-
         RotateView();
         CalculateMovement();
 
