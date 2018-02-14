@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour {
         RotateView();
         CalculateMovement();
 
-        if (player.isGrounded && Input.GetButton("Jump"))
+        if (player.isGrounded && Input.GetButtonDown("Jump"))
         {
             movement.y = jumpSpeed;
         }
@@ -100,8 +100,11 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         //Debug.DrawLine(eyes.transform.position, eyes.transform.forward * 20f, Color.red);
-
-        movement.y -= gravity * Time.deltaTime;
+        //Debug.Log("2"+movement.y);
+        if (!player.isGrounded)
+        {
+            movement.y -= gravity * Time.deltaTime;
+        }
         player.Move(movement * Time.deltaTime);
     }
 
