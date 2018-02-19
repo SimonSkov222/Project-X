@@ -140,8 +140,7 @@ public class Bullet : MonoBehaviour
     /// <param name="startPos">(gunend) Hvor "bullet" skal starte fra</param>
     public void Fire(Vector3 startPos)
     {
-
-
+        
         //Sæt start position
         startPoint = startPos;
         transform.position = startPoint;
@@ -155,7 +154,11 @@ public class Bullet : MonoBehaviour
         RaycastHit hit;
         bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreCollision);
         endPoint = hitTarget ? hit.point : rayOrigin + PlayerEyes.transform.forward * range;
-        Debug.Log(endPoint);
+
+        var firingVector = transform.forward;
+        var axis = Vector3.Cross(firingVector, Vector3.down);
+        firingVector = Quaternion.AngleAxis(0.05f, axis) * firingVector;
+
         if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
 
         //Gør synlig

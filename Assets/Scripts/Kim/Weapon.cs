@@ -148,26 +148,26 @@ public class Weapon : MonoBehaviour
     /// </summary>
     void LateUpdate()
     {
-        //Debug.Log("second");
-        //Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
-        //if (Input.GetButton("Fire1") && !isReloading && Time.time > nextFire && HasShots)
+        Debug.Log("second");
+        Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
+        if (Input.GetButton("Fire1") && !isReloading && Time.time > nextFire && HasShots)
+        {
+            //Debug.Log("first");
+            // Laver en begrænsning for hvornår man kan skyde igen
+            nextFire = Time.time + fireRate;
+            GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
+            CurrentShots--;
+        }
+
+        //if (Input.GetButtonDown("Fire1"))
         //{
-        //    //Debug.Log("first");
-        //    // Laver en begrænsning for hvornår man kan skyde igen
-        //    nextFire = Time.time + fireRate;
-        //    GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
-        //    CurrentShots--;
+        //    SwordAttack();
+        //}
+        //else if (Input.GetButtonUp("Fire1"))
+        //{
+        //    anim.SetBool("Attack", false);
         //}
 
-        if (Input.GetButtonDown("Fire1"))
-        {
-            SwordAttack();
-        }
-        else if (Input.GetButtonUp("Fire1"))
-        {
-            anim.SetBool("Attack", false);
-        }
-        
     }
 
 
