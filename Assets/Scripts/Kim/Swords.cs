@@ -14,8 +14,5 @@ public class Swords : ScriptableObject {
     public float dmg;
     public float range;
 
-
-
-
-	
+    
 }

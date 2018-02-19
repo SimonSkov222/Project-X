@@ -80,10 +80,18 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         eyes = Camera.main;
-        anim = GetComponent<Animator>();
+        anim = eyes.transform.GetChild(0).transform.GetComponent<Animator>();
 
         if (gun != null)
         {
+
+            var iGun = Instantiate(gun.gun);
+            
+            iGun.transform.position = eyes.transform.GetChild(0).transform.position;
+            iGun.transform.parent = eyes.transform.GetChild(0).transform;
+            iGun.transform.rotation = eyes.transform.GetChild(0).transform.rotation;
+            
+
             weaponRange = gun.wWeaponRange;
             shots = gun.wShots;
             ammo = gun.wAmmo;
@@ -99,14 +107,13 @@ public class Weapon : MonoBehaviour
             var iSword = Instantiate(sword.sword);
 
             iSword.transform.position = eyes.transform.GetChild(0).transform.position;
-
             iSword.transform.parent = eyes.transform.GetChild(0).transform;
+            iSword.transform.rotation = eyes.transform.GetChild(0).transform.rotation;
 
-            iSword.transform.Rotate(-4.955f, -97.813f, 4.463f);
-            
             swordSpeed = sword.speed;
             swordDmg = sword.dmg;
             swordRange = sword.range;
+            
             
         }
         
@@ -156,6 +163,11 @@ public class Weapon : MonoBehaviour
         {
             SwordAttack();
         }
+        else if (Input.GetButtonUp("Fire1"))
+        {
+            anim.SetBool("Attack", false);
+        }
+        
     }
 
 
@@ -224,24 +236,26 @@ public class Weapon : MonoBehaviour
 
     private void SwordAttack()
     {
+        
+        anim.SetBool("Attack", true);
+        
+        //Vector3 rayOrigin = eyes.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
 
-        Vector3 rayOrigin = eyes.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
-        Debug.Log("Second");
+        //RaycastHit[] hits;
 
-        RaycastHit[] hits;
+        //hits = Physics.RaycastAll(rayOrigin, eyes.transform.forward, swordRange);
 
-        hits = Physics.RaycastAll(rayOrigin, eyes.transform.forward, swordRange);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            Debug.Log("First");
-            RaycastHit hit = hits[i];
-
-            Debug.Log(hit.collider.name);
-        }
-
-
+        //for (int i = 0; i < hits.Length; i++)
+        //{
+        //    RaycastHit hit = hits[i];
+        //    Debug.Log(hit.collider.name);
+        //}
+        
     }
 
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Debug.Log(collision.collider.name);
+    //}
 
 }
