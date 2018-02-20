@@ -35,12 +35,19 @@ public class Weapon : MonoBehaviour
     private bool HasShots { get { return CurrentShots > 0; } }
     private bool CanReload { get { return CurrentShots != shots && CurrentAmmo > 0; } }
 
-
+    public enum WeaponType
+    {
+        sword,
+        gun,
+        laser
+    }
     ///////////////////////////////
     //      Public Fields
     ///////////////////////////////
     public Swords sword;
     public Guns gun;
+    public ScriptableObject MyWeapon;
+    public WeaponType m_IsGun;
     public Transform gunEnd;
     public GameObject bulletTemplate;
     private float weaponRange;
@@ -79,8 +86,24 @@ public class Weapon : MonoBehaviour
     /// </summary>
     void Start()
     {
+        ///////////////
+
+        //var child = new GameObject();
+        //child.AddComponent<BoxCollider>();
+        //var ctc = child.AddComponent<ChildTriggerCollider>();
+
+        //ctc.TriggerOnEnter = (c) => { };
+
+        /////////////////7
+
+
         eyes = Camera.main;
         anim = eyes.transform.GetChild(0).transform.GetComponent<Animator>();
+
+        if (m_IsGun == WeaponType.gun)
+        {
+            Guns myGun = (Guns)MyWeapon;
+        }
 
         if (gun != null)
         {
@@ -259,3 +282,4 @@ public class Weapon : MonoBehaviour
     //}
 
 }
+

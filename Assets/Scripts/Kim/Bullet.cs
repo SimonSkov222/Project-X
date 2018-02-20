@@ -155,9 +155,9 @@ public class Bullet : MonoBehaviour
         bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreCollision);
         endPoint = hitTarget ? hit.point : rayOrigin + PlayerEyes.transform.forward * range;
 
-        var firingVector = transform.forward;
-        var axis = Vector3.Cross(firingVector, Vector3.down);
-        firingVector = Quaternion.AngleAxis(0.05f, axis) * firingVector;
+        //var firingVector = transform.forward;
+        //var axis = Vector3.Cross(firingVector, Vector3.down);
+        //firingVector = Quaternion.AngleAxis(0.05f, axis) * firingVector;
 
         if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
 

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Sword", menuName = "New Sword")]
-public class Swords : ScriptableObject {
+public class Swords : ScriptableObject
+{
+    public string Name { get; set; }
 
     public new string name;
     public GameObject sword;
