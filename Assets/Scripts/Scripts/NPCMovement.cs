@@ -54,7 +54,6 @@ public class NPCMovement : MonoBehaviour {
     private bool notifyHasSetDesination = true;
     private Coroutine cRunningPattern;
     private Coroutine cLookAtTarget;
-    private float stoppingDistance = 0;
 
     #endregion
 
