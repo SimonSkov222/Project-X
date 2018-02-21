@@ -39,9 +39,16 @@ public class Weapon : MonoBehaviour
     ///////////////////////////////
     //      Public Fields
     ///////////////////////////////
+
+    public ScriptableObject scriptable;
+
+    public enum scriptable1  {guns, sword};
+
+    public scriptable1 Weapons;
+
     public Swords sword;
     public Guns gun;
-    public Transform gunEnd;
+    private Transform gunEnd;
     public GameObject bulletTemplate;
     private float weaponRange;
     private int shots;
@@ -82,7 +89,9 @@ public class Weapon : MonoBehaviour
         eyes = Camera.main;
         anim = eyes.transform.GetChild(0).transform.GetComponent<Animator>();
 
-        if (gun != null)
+        
+
+        if (Weapons == scriptable1.guns)
         {
 
             var iGun = Instantiate(gun.gun);
@@ -90,7 +99,7 @@ public class Weapon : MonoBehaviour
             iGun.transform.position = eyes.transform.GetChild(0).transform.position;
             iGun.transform.parent = eyes.transform.GetChild(0).transform;
             iGun.transform.rotation = eyes.transform.GetChild(0).transform.rotation;
-            
+            gunEnd = iGun.transform.GetChild(8).transform;
 
             weaponRange = gun.wWeaponRange;
             shots = gun.wShots;
@@ -101,7 +110,7 @@ public class Weapon : MonoBehaviour
             CurrentShots = shots;
             CurrentAmmo = ammo;
         }
-        else if (sword != null)
+        else if (Weapons == scriptable1.sword)
         {
 
             var iSword = Instantiate(sword.sword);
@@ -113,8 +122,6 @@ public class Weapon : MonoBehaviour
             swordSpeed = sword.speed;
             swordDmg = sword.dmg;
             swordRange = sword.range;
-            
-            
         }
         
         
@@ -148,8 +155,8 @@ public class Weapon : MonoBehaviour
     /// </summary>
     void LateUpdate()
     {
-        Debug.Log("second");
-        Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
+        //Debug.Log("second");
+        //Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
         if (Input.GetButton("Fire1") && !isReloading && Time.time > nextFire && HasShots)
         {
             //Debug.Log("first");

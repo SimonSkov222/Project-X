@@ -20,12 +20,7 @@ public class Guns : ScriptableObject {
     public float bDmg;
     public float bRange;
     public float bSpeed;
-
-
-    public void aa()
-    {
-        Debug.Log("aaaaaaaa");
-    }
+    
     
 
 }

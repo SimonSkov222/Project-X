@@ -73,8 +73,10 @@ public class Bullet : MonoBehaviour
         RaycastHit hit;
         if (lastPosition.HasValue && Physics.Linecast(lastPosition.Value, transform.position, out hit, ~ignoreCollision.value))
         {
+            Debug.Log(hit.collider.name);
             // Gør gameObject usynlig
             gameObject.SetActive(false);
+            
 
             // Hvis hit har Metoden OnGameObjectEnter() på sig i et
             //  script sender vi dette gameObject som parameter
@@ -84,6 +86,9 @@ public class Bullet : MonoBehaviour
         // Flyt skudet/Sæt ny position 
         Vector3 heading = endPoint - startPoint;
         Vector3 direction = heading / heading.magnitude;
+
+        Debug.Log(endPoint);
+
 
         float distanceThisFrame = speed * Time.deltaTime;
         //transform.Translate(direction.normalized * distanceThisFrame, Space.World);
@@ -155,9 +160,9 @@ public class Bullet : MonoBehaviour
         bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreCollision);
         endPoint = hitTarget ? hit.point : rayOrigin + PlayerEyes.transform.forward * range;
 
-        var firingVector = transform.forward;
-        var axis = Vector3.Cross(firingVector, Vector3.down);
-        firingVector = Quaternion.AngleAxis(0.05f, axis) * firingVector;
+        //var firingVector = transform.forward;
+        //var axis = Vector3.Cross(firingVector, Vector3.down);
+        //firingVector = Quaternion.AngleAxis(0.05f, axis) * firingVector;
 
         if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
 
