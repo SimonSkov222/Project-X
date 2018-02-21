@@ -35,20 +35,20 @@ public class Weapon : MonoBehaviour
     private bool HasShots { get { return CurrentShots > 0; } }
     private bool CanReload { get { return CurrentShots != shots && CurrentAmmo > 0; } }
 
-
+    public enum WeaponType
+    {
+        sword,
+        gun,
+        laser
+    }
     ///////////////////////////////
     //      Public Fields
     ///////////////////////////////
-
-    public ScriptableObject scriptable;
-
-    public enum scriptable1  {guns, sword};
-
-    public scriptable1 Weapons;
-
     public Swords sword;
     public Guns gun;
-    private Transform gunEnd;
+    public ScriptableObject MyWeapon;
+    public WeaponType m_IsGun;
+    public Transform gunEnd;
     public GameObject bulletTemplate;
     private float weaponRange;
     private int shots;
@@ -86,12 +86,26 @@ public class Weapon : MonoBehaviour
     /// </summary>
     void Start()
     {
+        ///////////////
+
+        //var child = new GameObject();
+        //child.AddComponent<BoxCollider>();
+        //var ctc = child.AddComponent<ChildTriggerCollider>();
+
+        //ctc.TriggerOnEnter = (c) => { };
+
+        /////////////////7
+
+
         eyes = Camera.main;
         anim = eyes.transform.GetChild(0).transform.GetComponent<Animator>();
 
-        
+        if (m_IsGun == WeaponType.gun)
+        {
+            Guns myGun = (Guns)MyWeapon;
+        }
 
-        if (Weapons == scriptable1.guns)
+        if (gun != null)
         {
 
             var iGun = Instantiate(gun.gun);
@@ -99,7 +113,7 @@ public class Weapon : MonoBehaviour
             iGun.transform.position = eyes.transform.GetChild(0).transform.position;
             iGun.transform.parent = eyes.transform.GetChild(0).transform;
             iGun.transform.rotation = eyes.transform.GetChild(0).transform.rotation;
-            gunEnd = iGun.transform.GetChild(8).transform;
+            
 
             weaponRange = gun.wWeaponRange;
             shots = gun.wShots;
@@ -110,7 +124,7 @@ public class Weapon : MonoBehaviour
             CurrentShots = shots;
             CurrentAmmo = ammo;
         }
-        else if (Weapons == scriptable1.sword)
+        else if (sword != null)
         {
 
             var iSword = Instantiate(sword.sword);
@@ -122,6 +136,8 @@ public class Weapon : MonoBehaviour
             swordSpeed = sword.speed;
             swordDmg = sword.dmg;
             swordRange = sword.range;
+            
+            
         }
         
         
@@ -155,8 +171,8 @@ public class Weapon : MonoBehaviour
     /// </summary>
     void LateUpdate()
     {
-        //Debug.Log("second");
-        //Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
+        Debug.Log("second");
+        Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
         if (Input.GetButton("Fire1") && !isReloading && Time.time > nextFire && HasShots)
         {
             //Debug.Log("first");
@@ -266,3 +282,4 @@ public class Weapon : MonoBehaviour
     //}
 
 }
+
