@@ -38,25 +38,23 @@ public class Weapon : MonoBehaviour
     public enum WeaponType
     {
         sword,
-        gun,
-        laser
+        gun
     }
     ///////////////////////////////
     //      Public Fields
-    ///////////////////////////////
-    public Swords sword;
-    public Guns gun;
+    /////////////////////////////////
+    //public Swords sword;
+    //public Guns gun;
     public ScriptableObject MyWeapon;
-    public WeaponType m_IsGun;
-    public Transform gunEnd;
-    public GameObject bulletTemplate;
+    public WeaponType weaponType;
+    private Transform gunEnd;
+    private GameObject bulletTemplate;
     private float weaponRange;
     private int shots;
     private int ammo;
     private float reloadSpeed;
     private float fireRate;
-
-
+    
     private float swordSpeed;
     private float swordDmg;
     private float swordRange;
@@ -98,36 +96,40 @@ public class Weapon : MonoBehaviour
 
 
         eyes = Camera.main;
-        anim = eyes.transform.GetChild(0).transform.GetComponent<Animator>();
+        
 
-        if (m_IsGun == WeaponType.gun)
+        if (weaponType == WeaponType.gun)
         {
-            Guns myGun = (Guns)MyWeapon;
+            Guns gun = (Guns)MyWeapon;
+
+            if (gun != null)
+            {
+
+                var iGun = Instantiate(gun.gun);
+
+                iGun.transform.position = eyes.transform.GetChild(0).transform.position;
+                iGun.transform.parent = eyes.transform.GetChild(0).transform;
+                iGun.transform.rotation = eyes.transform.GetChild(0).transform.rotation;
+                gunEnd = iGun.transform.Find("GunEnd").transform;
+                bulletTemplate = iGun.transform.Find("R_Bullet").gameObject; ;
+
+                weaponRange = gun.wWeaponRange;
+                shots = gun.wShots;
+                ammo = gun.wAmmo;
+                reloadSpeed = gun.wReloadSpeed;
+                fireRate = gun.wFireRate;
+                //Debug.Log("weapon range: " + weaponRange + " shots: " + shots + " ammo: " + ammo + " reload speed: " + reloadSpeed + " firerate: " + fireRate);
+                CurrentShots = shots;
+                CurrentAmmo = ammo;
+            }
         }
-
-        if (gun != null)
+        else if (weaponType == WeaponType.sword)
         {
-
-            var iGun = Instantiate(gun.gun);
-            
-            iGun.transform.position = eyes.transform.GetChild(0).transform.position;
-            iGun.transform.parent = eyes.transform.GetChild(0).transform;
-            iGun.transform.rotation = eyes.transform.GetChild(0).transform.rotation;
-            
-
-            weaponRange = gun.wWeaponRange;
-            shots = gun.wShots;
-            ammo = gun.wAmmo;
-            reloadSpeed = gun.wReloadSpeed;
-            fireRate = gun.wFireRate;
-            //Debug.Log("weapon range: " + weaponRange + " shots: " + shots + " ammo: " + ammo + " reload speed: " + reloadSpeed + " firerate: " + fireRate);
-            CurrentShots = shots;
-            CurrentAmmo = ammo;
-        }
-        else if (sword != null)
-        {
+            Swords sword = (Swords)MyWeapon;
 
             var iSword = Instantiate(sword.sword);
+
+            anim = eyes.transform.GetChild(0).transform.GetComponent<Animator>();
 
             iSword.transform.position = eyes.transform.GetChild(0).transform.position;
             iSword.transform.parent = eyes.transform.GetChild(0).transform;
@@ -136,8 +138,6 @@ public class Weapon : MonoBehaviour
             swordSpeed = sword.speed;
             swordDmg = sword.dmg;
             swordRange = sword.range;
-            
-            
         }
         
         
@@ -171,26 +171,33 @@ public class Weapon : MonoBehaviour
     /// </summary>
     void LateUpdate()
     {
-        Debug.Log("second");
-        Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
-        if (Input.GetButton("Fire1") && !isReloading && Time.time > nextFire && HasShots)
+
+        if (weaponType == WeaponType.gun)
         {
-            //Debug.Log("first");
-            // Laver en begrænsning for hvornår man kan skyde igen
-            nextFire = Time.time + fireRate;
-            GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
-            CurrentShots--;
+            //Debug.Log("second");
+            //Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
+            if (Input.GetButton("Fire1") && !isReloading && Time.time > nextFire && HasShots)
+            {
+                //Debug.Log("first");
+                // Laver en begrænsning for hvornår man kan skyde igen
+                nextFire = Time.time + fireRate;
+                GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
+                CurrentShots--;
+            }
         }
+        else if (weaponType == WeaponType.sword)
+        {
 
-        //if (Input.GetButtonDown("Fire1"))
-        //{
-        //    SwordAttack();
-        //}
-        //else if (Input.GetButtonUp("Fire1"))
-        //{
-        //    anim.SetBool("Attack", false);
-        //}
+            if (Input.GetButtonDown("Fire1"))
+            {
+                SwordAttack();
+            }
+            else if (Input.GetButtonUp("Fire1"))
+            {
+                anim.SetBool("Attack", false);
+            }
 
+        }
     }
 
 
