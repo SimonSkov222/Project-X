@@ -47,7 +47,7 @@ public class Weapon : MonoBehaviour
     //public Guns gun;
     public ScriptableObject MyWeapon;
     public WeaponType weaponType;
-    private Transform gunEnd;
+    public Transform gunEnd { get; private set; }
     private GameObject bulletTemplate;
     private float weaponRange;
     private int shots;
@@ -104,9 +104,9 @@ public class Weapon : MonoBehaviour
 
             if (gun != null)
             {
-
                 var iGun = Instantiate(gun.gun);
 
+                
                 iGun.transform.position = eyes.transform.GetChild(0).transform.position;
                 iGun.transform.parent = eyes.transform.GetChild(0).transform;
                 iGun.transform.rotation = eyes.transform.GetChild(0).transform.rotation;
@@ -178,10 +178,20 @@ public class Weapon : MonoBehaviour
             //Debug.Log("Currentshots: " + CurrentShots + " shots: " + shots + " has shots: " + HasShots);
             if (Input.GetButton("Fire1") && !isReloading && Time.time > nextFire && HasShots)
             {
+
+
                 //Debug.Log("first");
                 // Laver en begrænsning for hvornår man kan skyde igen
                 nextFire = Time.time + fireRate;
+                
                 GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
+
+                //Vector3 rayOrigin = eyes.ViewportToWorldPoint(new Vector3(0.5f, 0.5f));
+                //Vector3 endPoint;
+                //Vector3 startPoint = gunEnd.position;
+                //endPoint = /*hitTarget ? hit.point :*/ rayOrigin + (eyes.transform.forward * 500);
+                //Debug.DrawLine(startPoint, endPoint, Color.red, 10);
+                
                 CurrentShots--;
             }
         }

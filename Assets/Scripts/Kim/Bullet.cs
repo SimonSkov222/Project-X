@@ -34,7 +34,7 @@ public class Bullet : MonoBehaviour
     //      Private Fields
     ///////////////////////////////
     private Vector3 startPoint;
-    private Vector3 endPoint;
+    public Vector3 endPoint { get; private set; }
     private LayerMask ignoreMask;
     private Vector3? lastPosition;
 
@@ -44,12 +44,14 @@ public class Bullet : MonoBehaviour
     //      Unity Event
     ///////////////////////////////
 
-
     void Start()
     {
+        
         range = weapons.bRange;
         speed = weapons.bSpeed;
         dmg = weapons.bDmg;
+
+        transform.rotation = PlayerEyes.transform.rotation;
     }
 
     /// <summary>
@@ -70,36 +72,38 @@ public class Bullet : MonoBehaviour
         // Da vores gameobject kan "teleport"(hvis den har meget speed) bliver vi nød til 
         //  at tjekke om vi ville have ramt noget i mellem den gamle
         //  position til den nye position
-        //RaycastHit hit;
-        //if (lastPosition.HasValue && Physics.Linecast(lastPosition.Value, transform.position, out hit, ~ignoreCollision.value))
-        //{
-        //    Debug.Log(hit.collider.name);
-        //    // Gør gameObject usynlig
-        //    gameObject.SetActive(false);
+        RaycastHit hit;
+        if (lastPosition.HasValue && Physics.Linecast(lastPosition.Value, transform.position, out hit, ~ignoreCollision.value))
+        {
+            Debug.Log(hit.collider.name);
+            // Gør gameObject usynlig
+            gameObject.SetActive(false);
 
 
-        //    // Hvis hit har Metoden OnGameObjectEnter() på sig i et
-        //    //  script sender vi dette gameObject som parameter
-        //    hit.collider.SendMessage("OnGameObjectEnter", gameObject, SendMessageOptions.DontRequireReceiver);
-        //}
+            // Hvis hit har Metoden OnGameObjectEnter() på sig i et
+            //  script sender vi dette gameObject som parameter
+            hit.collider.SendMessage("OnGameObjectEnter", gameObject, SendMessageOptions.DontRequireReceiver);
+        }
+
+        var firingVector = transform.forward;
+        var axis = Vector3.Cross(firingVector, Vector3.down);
+        //firingVector = Quaternion.AngleAxis(0.5f, axis) * firingVector;
 
         // Flyt skudet/Sæt ny position 
-        //Vector3 heading = endPoint - startPoint;
-        //Vector3 direction = heading / heading.magnitude;
-
-        ////Debug.Log(heading);
+        Vector3 heading = endPoint - startPoint;
+        Vector3 direction = heading / heading.magnitude;
         
+        float distanceThisFrame = speed * Time.deltaTime;
+        transform.Translate(Quaternion.AngleAxis(0.5f, axis) * direction.normalized * distanceThisFrame, Space.World);
+        transform.position += direction * speed * Time.deltaTime;
         
-        //float distanceThisFrame = speed * Time.deltaTime;
-        ////transform.Translate(direction.normalized * distanceThisFrame, Space.World);
-        //transform.position += direction * speed * Time.deltaTime;
 
-        //// Gør gameObject usynlig hvis den er ude af range
-        //if (Vector3.Distance(startPoint, transform.position) > range)
-        //    gameObject.SetActive(false);
+        // Gør gameObject usynlig hvis den er ude af range
+        if (Vector3.Distance(startPoint, transform.position) > range)
+            gameObject.SetActive(false);
 
-        //// Opdater position
-        //lastPosition = transform.position;
+        // Opdater position
+        lastPosition = transform.position;
 
 
     }
@@ -110,28 +114,28 @@ public class Bullet : MonoBehaviour
     /// gameobjectet usynlig bagefter
     /// </summary> 
     /// <param name="collision">Det object vores gameobject ramte</param>
-    //void OnTriggerEnter(Collider collision)
-    //{
-    //    // Vores gameobject skal være synlig så vi ikke kan kalde den dobbelt. (Kan kaldes fra Update())
-    //    if (gameObject.activeSelf && (ignoreCollision.value & (1 << collision.gameObject.layer)) != (1 << collision.gameObject.layer))
-    //    {
-    //        collision.gameObject.SendMessage("OnGameObjectEnter", gameObject, SendMessageOptions.DontRequireReceiver);
-    //        gameObject.SetActive(false);
-    //    }
-    //}
+    void OnTriggerEnter(Collider collision)
+    {
+        // Vores gameobject skal være synlig så vi ikke kan kalde den dobbelt. (Kan kaldes fra Update())
+        if (gameObject.activeSelf && (ignoreCollision.value & (1 << collision.gameObject.layer)) != (1 << collision.gameObject.layer))
+        {
+            collision.gameObject.SendMessage("OnGameObjectEnter", gameObject, SendMessageOptions.DontRequireReceiver);
+            gameObject.SetActive(false);
+        }
+    }
 
     /// <summary>
     /// Vi nulstiller bullet/gameobject når det bliver aktiveret.
     /// 
     /// 
     /// </summary>
-    //void OnEnable()
-    //{
-    //    //startPoint = transform.position;
-    //    lastPosition = startPoint;
-    //    hasHitTarget = false;
+    void OnEnable()
+    {
+        //startPoint = transform.position;
+        lastPosition = startPoint;
+        hasHitTarget = false;
 
-    //}
+    }
 
 
     ///////////////////////////////
@@ -147,8 +151,8 @@ public class Bullet : MonoBehaviour
     {
         
         //Sæt start position
-        //startPoint = startPos;
-        //transform.position = startPoint;
+        startPoint = startPos;
+        transform.position = startPoint;
         
         // Henter kameraes position ud fra "verden" og 
         // Vector3 variablen gør at den tager fra midten af skærmen
@@ -157,41 +161,20 @@ public class Bullet : MonoBehaviour
         
         // Tjekker om der er et object foran vores skyd, hvis ja får vi af vide hvad, hvis nej flyver skydet bare lige ud
         RaycastHit hit;
+        bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range, ~ignoreCollision);
+        //endPoint = /*hitTarget ? hit.point :*/ rayOrigin + (PlayerEyes.transform.forward * range);
 
-        //// Check if our raycast has hit anything
-        //if (Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, 500))
-        //{
-        //    // Set the end position for our laser line
-        //    laserLine.SetPosition(1, hit.point);
-
-        //    // Check if the object we hit has a rigidbody attached
-        //    if (hit.rigidbody != null)
-        //    {
-        //        // Add force to the rigidbody we hit, in the direction from which it was hit
-        //        hit.rigidbody.AddForce(-hit.normal * hitForce);
-        //    }
-        //}
-        //else
-        //{
-        //    // If we did not hit anything, set the end of the line to a position directly in front of the camera at the distance of weaponRange
-        //    laserLine.SetPosition(1, rayOrigin + (PlayerEyes.transform.forward * 500));
-        //}
-
-        //bool hitTarget = Physics.Raycast(rayOrigin, PlayerEyes.transform.forward, out hit, range/*, ~ignoreCollision*/);
-        endPoint = /*hitTarget ? hit.point :*/ rayOrigin + (PlayerEyes.transform.forward * range);
-
+        //Debug.DrawLine(startPoint, endPoint, Color.red, 10);
+        
+        endPoint = hitTarget ? hit.point : rayOrigin + (PlayerEyes.transform.forward * 100);
         Debug.DrawLine(startPoint, endPoint, Color.red, 10);
 
 
-        //var firingVector = transform.forward;
-        //var axis = Vector3.Cross(firingVector, Vector3.down);
-        //firingVector = Quaternion.AngleAxis(0.05f, axis) * firingVector;
 
-        //if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
+        if (hitTarget) { Debug.Log("Hit T: " + hit.collider.name); }
 
         //Gør synlig
         gameObject.SetActive(true);
-
-
+        
     }
 }

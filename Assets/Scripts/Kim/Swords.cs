@@ -6,8 +6,6 @@ using UnityEngine;
 public class Swords : ScriptableObject
 {
     public string Name { get; set; }
-
-    public new string name;
     public GameObject sword;
     public string description;
     public Sprite swordPicture;
