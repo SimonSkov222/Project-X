@@ -11,8 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c914f10a228a34f858c0501928f1d8, type: 3}
   m_Name: Sword mile
   m_EditorClassIdentifier: 
-  name: Excalibur
-  sword: {fileID: 1172334430614880, guid: 47789a18d29fe784d8e0611763b3d7d4, type: 2}
+  sword: {fileID: 1601623889914000, guid: 01cbde2271cdee44e871701d41e992e2, type: 2}
   description: Fastest man alive
   swordPicture: {fileID: 0}
   speed: 0
