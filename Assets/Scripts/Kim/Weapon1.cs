@@ -17,7 +17,7 @@ using UnityEngine;
 //  
 //////////////////////////////////////////////////////
 
-public class Weapon : MonoBehaviour
+public class Weapon1 : MonoBehaviour
 {
 
     Animator anim;

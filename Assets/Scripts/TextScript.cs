@@ -25,7 +25,7 @@ public class TextScript : MonoBehaviour {
     //      Private Fields
     ///////////////////////////////
     private Health health;
-    private Weapon ammo;
+    private Weapon1 ammo;
 
     ///////////////////////////////
     //      Unity Events
@@ -37,7 +37,7 @@ public class TextScript : MonoBehaviour {
     void Start ()
     {
         health = GetComponentInParent<Health>();
-        ammo = GetComponentInParent<Weapon>();
+        ammo = GetComponentInParent<Weapon1>();
         
     }
 	
