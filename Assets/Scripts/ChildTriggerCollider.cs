@@ -35,4 +35,6 @@ void OnTriggerEnter(Collider collider)  { if (TriggerOnEnter != null)   TriggerO
 void OnTriggerStay(Collider collider)   { if (TriggerOnStay != null)    TriggerOnStay(collider);    }
 void OnTriggerExit(Collider collider)   { if (TriggerOnExit != null)    TriggerOnExit(collider);    }
 
+
+
 }
