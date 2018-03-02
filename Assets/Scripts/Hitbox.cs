@@ -69,7 +69,6 @@ public class Hitbox : MonoBehaviour
                 OnTakeDamge(Mathf.RoundToInt(bullet.dmg * percent));
             }
         }
-
     }
 
 

@@ -30,6 +30,7 @@ public class TextScript : MonoBehaviour {
     ///////////////////////////////
     //      Unity Events
     ///////////////////////////////
+    
 
     /// <summary>
     /// Henter Health og Weapon components fra parent, så vi ved hvor meget HP eller ammo vi har.
@@ -40,11 +41,11 @@ public class TextScript : MonoBehaviour {
         ammo = GetComponentInParent<Weapon>();
         
     }
-	
-	/// <summary>
+
+    /// <summary>
     /// laver 2 strings som vi så udskriver i en canvas
     /// </summary>
-	void Update ()
+    void Update ()
     {
         return;
         string allHealth = health.currentHP.ToString() + "/" + health.maxHP.ToString();
