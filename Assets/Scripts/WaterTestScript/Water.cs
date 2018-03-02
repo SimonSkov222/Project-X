@@ -36,6 +36,7 @@ public class Water : MonoBehaviour {
         if (other.gameObject.layer == water)
         {
             isInTheWater = true;
+            
             waterGameObject = other.gameObject;
         }
     }
@@ -65,11 +66,11 @@ public class Water : MonoBehaviour {
     private void InTheWater()
     {
         Debug.Log("inthewater");
-        if (Input.GetButton("Jump"))
+        if (Input.GetButton("Jump") && transform.position.y < waterGameObject.transform.position.y - (movement.maxHeight / 2))
         {
             upOrDown = 8;
         }
-        else if (Input.GetKey(KeyCode.X))
+        else if (Input.GetKey(KeyCode.X) || transform.position.y > waterGameObject.transform.position.y - (movement.maxHeight / 2))
         {
             upOrDown = -8;
         }
