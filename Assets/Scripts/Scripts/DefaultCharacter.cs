@@ -69,30 +69,30 @@ public class DefaultCharacter : MonoBehaviour, IHealth {
 	void Update () {
 
 
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            IButton button = GetButton(i);
+        //for (int i = 0; i < buttons.Length; i++)
+        //{
+        //    IButton button = GetButton(i);
 
-            if (Input.GetButtonDown(buttons[i]))
-            {
-                timeButtonDown[i] = Time.time;
-                button.OnButtonDown(gameObject, null);
-            }
-            if (Input.GetButton(buttons[i]))
-            {
-                button.OnButtonHold(gameObject, null);
-            }
-            if (Input.GetButtonUp(buttons[i]))
-            {
-                float pressTime = Time.time - timeButtonDown[i];
-                button.OnButtonUp(gameObject, null);
+        //    if (Input.GetButtonDown(buttons[i]))
+        //    {
+        //        timeButtonDown[i] = Time.time;
+        //        button.OnButtonDown(gameObject, null);
+        //    }
+        //    if (Input.GetButton(buttons[i]))
+        //    {
+        //        button.OnButtonHold(gameObject, null);
+        //    }
+        //    if (Input.GetButtonUp(buttons[i]))
+        //    {
+        //        float pressTime = Time.time - timeButtonDown[i];
+        //        button.OnButtonUp(gameObject, null);
 
-                if (pressTime <= ClickTime)
-                {
-                    button.OnButtonClick(gameObject, null);
-                }
-            }
-        }
+        //        if (pressTime <= ClickTime)
+        //        {
+        //            button.OnButtonClick(gameObject, null);
+        //        }
+        //    }
+        //}
 
 	}
 

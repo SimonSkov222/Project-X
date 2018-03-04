@@ -15,7 +15,7 @@ namespace FreakLibEditor.SelectParent
 	/// Editor class for enabling the Select Parent function
 	/// </summary>
 	[InitializeOnLoad]
-    [CustomEditor(typeof(GameObject))]
+    //[CustomEditor(typeof(GameObject))]
     public class SelectParent : Editor
 	{
 		/// <summary>

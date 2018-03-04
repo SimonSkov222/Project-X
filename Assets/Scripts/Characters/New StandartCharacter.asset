@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce0711d269555c46b9ad41a6e78f727, type: 3}
+  m_Name: New StandartCharacter
+  m_EditorClassIdentifier: 
+  playerModel: {fileID: 0}
+  healthMax: 100
+  armorMax: 0
+  shieldMax: 0
+  walkSpeed: 0
+  runSpeed: 20
+  jumpHeight: 0
+  weapon: {fileID: 11400000, guid: 9ec596fd09189c44dba9132a3edbbf74, type: 2}
+  ultimate: {fileID: 0}
+  ability1: {fileID: 0}
+  ability2: {fileID: 0}
+  ability3: {fileID: 11400000, guid: fd63643cb2efaa440850c47aab70f994, type: 2}

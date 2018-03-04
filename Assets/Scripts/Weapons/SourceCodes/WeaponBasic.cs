@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponBasic : ScriptableObject, IButton
+public abstract class WeaponBasic : ScriptableObject
 {
     [SerializeField]
     protected GameObject model;
@@ -20,40 +20,91 @@ public class WeaponBasic : ScriptableObject, IButton
     protected float fireRate;
 
     public int Ammo { get; set; }
+
     public bool IsInfinityAmmo { get { return ammoMax == 0; } }
+    public bool IsReloading { get { return reloadCoroutine != null; } }
+    public float FireRate { get { return fireRate; } }
+
+    private float timeFire = 0;
+
+    protected GameObject player;
+
+    private Coroutine reloadCoroutine;
 
 
-    public virtual void OnReloadStart(GameObject player, object weapon)
+    public void OnFire_Click()
     {
-        throw new System.NotImplementedException();
+        OnFire_Activate(ButtonCall.Click);
     }
 
-    public virtual void OnReloadEnd(GameObject player, object weapon)
+    public void OnFire_Down()
     {
-        throw new System.NotImplementedException();
-    }
-    public virtual void OnReloadCancel(GameObject player, object weapon)
-    {
-        throw new System.NotImplementedException();
+        OnFire_Activate(ButtonCall.Down);
     }
 
-    public virtual void OnButtonClick(GameObject player, object weapon)
+    public void OnFire_Hold()
     {
-        throw new System.NotImplementedException();
+        OnFire_Activate(ButtonCall.Hold);
     }
 
-    public virtual void OnButtonDown(GameObject player, object weapon)
+    public void OnFire_Up()
     {
-        throw new System.NotImplementedException();
+        OnFire_Activate(ButtonCall.Up);
     }
 
-    public virtual void OnButtonHold(GameObject player, object weapon)
+
+    public void OnReload_Down()
     {
-        throw new System.NotImplementedException();
+        if (reloadCoroutine == null)
+        {
+            reloadCoroutine = player.GetComponent<PlayerController>().StartCoroutine(ReloadWeapon());
+        }
     }
 
-    public virtual void OnButtonUp(GameObject player, object weapon)
+    public void CancelReload()
     {
-        throw new System.NotImplementedException();
+        player.GetComponent<PlayerController>().StopCoroutine(reloadCoroutine);
+        reloadCoroutine = null;
+        OnReloadCancel();
     }
+
+    public virtual void OnFire_Activate(ButtonCall arg1)
+    {
+        if (arg1 == ButtonCall.Hold)
+        {
+            if (Time.time - timeFire  >= FireRate)
+            { 
+                timeFire = Time.time;
+                OnFire();
+            }
+        }
+    }
+
+
+
+    protected IEnumerator ReloadWeapon()
+    {
+        OnReloadStart();
+        yield return new WaitForSeconds(reloadTime);
+        OnReloadEnd();
+        reloadCoroutine = null;
+    }
+
+    protected virtual void OnReloadStart()
+    {
+    }
+
+    protected virtual void OnReloadEnd()
+    {
+    }
+    protected virtual void OnReloadCancel()
+    {
+    }
+
+    public virtual void OnLoaded(GameObject characterGo)
+    {
+        player = characterGo;
+        timeFire = Time.time;
+    }
+    public abstract void OnFire();
 }

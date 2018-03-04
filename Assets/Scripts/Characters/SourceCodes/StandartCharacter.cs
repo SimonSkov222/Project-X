@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StandartCharater : ScriptableObject, IHealth {
-    const float ClickTime = 0.4f;
+
+
+[CreateAssetMenu(fileName = "New StandartCharacter", menuName = "Characters/New StandartCharacter")]
+public class StandartCharacter : ScriptableObject, IHealth {
 
     ///////////////////////////////
     //      Private Fields
@@ -41,7 +43,7 @@ public class StandartCharater : ScriptableObject, IHealth {
     protected int runSpeed = 0;
     [SerializeField]
     [Range(0, 100)]
-    protected int jumpName = 0;
+    protected float jumpHeight = 0;
 
     [Header("Attack Settings")]
     [SerializeField]
@@ -64,6 +66,7 @@ public class StandartCharater : ScriptableObject, IHealth {
     public AbilityBasic Ability1 { get { return ability1; } }
     public AbilityBasic Ability2 { get { return ability2; } }
     public AbilityBasic Ability3 { get { return ability3; } }
+    public GameObject PlayerModel { get { return playerModel; } }
 
 
     public int HealthMax { get { return healthMax; } }
@@ -74,6 +77,11 @@ public class StandartCharater : ScriptableObject, IHealth {
     public int Armor { get; set; }
     public int Shield { get; set; }
     public int HealthBonus { get; set; }
+
+    
+    public float JumpHeight { get { return JumpHeight; }  }
+    public float Speed { get { return runSpeed; } }
+    public Camera Eyes { get { return Camera.main; } }
 
     public float WeaknessMultiplier { get; set; }
 
@@ -117,12 +125,17 @@ public class StandartCharater : ScriptableObject, IHealth {
     //{
     //    return null;
     //}
+    
 
-
-    //protected virtual void OnWeapon_Hold(GameObject player, object weapon) { Debug.Log("OnWeapon_Hold"); }
-    //protected virtual void OnWeapon_Down(GameObject player, object weapon) { Debug.Log("OnWeapon_Down"); }
-    //protected virtual void OnWeapon_Up(GameObject player, object weapon) { Debug.Log("OnWeapon_Up"); }
-    //protected virtual void OnWeapon_Click(GameObject player, object weapon) { Debug.Log("OnWeapon_Click"); }
+    protected virtual void OnJump_Hold(GameObject player, object weapon) { Debug.Log("OnWeapon_Hold"); }
+    protected virtual void OnJump_Down(GameObject player, object weapon) { Debug.Log("OnWeapon_Down"); }
+    protected virtual void OnJump_Up(GameObject player, object weapon) { Debug.Log("OnWeapon_Up"); }
+    protected virtual void OnJump_Click(GameObject player, object weapon) { Debug.Log("OnWeapon_Click"); }
+    
+    //protected virtual void OnJump_Hold(GameObject player, object weapon) { Debug.Log("OnWeapon_Hold"); }
+    //protected virtual void OnJump_Down(GameObject player, object weapon) { Debug.Log("OnWeapon_Down"); }
+    //protected virtual void OnJump_Up(GameObject player, object weapon) { Debug.Log("OnWeapon_Up"); }
+    //protected virtual void OnJump_Click(GameObject player, object weapon) { Debug.Log("OnWeapon_Click"); }
 
     //protected virtual void OnUltimate_Hold(GameObject player, object weapon)       { Debug.Log("OnUltimate_Hold"); }
     //protected virtual void OnUltimate_Down(GameObject player, object weapon)        { Debug.Log("OnUltimate_Down"); }
