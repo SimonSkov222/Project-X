@@ -16,3 +16,10 @@ MonoBehaviour:
   colddown: 0
   useButton: 1
   IsReloadingStack: 0
+  bulletModel: {fileID: 1815250605587956, guid: fc6276e1f8cb6a44c87c64db03385952,
+    type: 2}
+  gunEndLocation: Eyes/Weapons/MainGun/GunEnd
+  radius: 8
+  range: 10
+  bulletSpeed: 10
+  explodingSpeed: 100

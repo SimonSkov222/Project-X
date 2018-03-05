@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine;
+
 ////////////////////////////////////////////////////////////////////
 //      Beskrivelse
 //
@@ -24,4 +25,6 @@ public interface IHealth
     /// Bliver kaldt når objecet dør via helper class
     /// </summary>
     void OnDeath(object sender);
+
+    void OnTakeDmg(GameObject sender, int dmg);
 }

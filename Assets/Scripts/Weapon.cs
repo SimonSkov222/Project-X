@@ -101,7 +101,7 @@ public class Weapon : MonoBehaviour
         {
             // Laver en begrænsning for hvornår man kan skyde igen
             nextFire = Time.time + fireRate;
-            GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
+            //GetBullet().GetComponent<Bullet>().Fire(gunEnd.position);
             CurrentShots--;
         }
     }
@@ -128,7 +128,7 @@ public class Weapon : MonoBehaviour
 
 
         var newBullet = Instantiate(bulletTemplate);
-        newBullet.GetComponent<Bullet>().PlayerEyes = eyes;
+        //newBullet.GetComponent<Bullet>().PlayerEyes = eyes;
         // Sørger for at collideren på vores bullet og våben ikke kan ramme ind i hinanden
         Physics.IgnoreCollision(newBullet.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         bullets.Add(newBullet);

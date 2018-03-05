@@ -2,12 +2,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//
+//  Dette script giver gameobjecetet liv og at man kan 
+//  flytte/styre det.
+//
+//  Den styre også hvordan WeaponBasic,UltimateBasic og AbilityBasic
+//  metoder bliver kaldt
+//  
+//////////////////////////////////////////////////////
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class PlayerController : MonoBehaviour, IHealth
 {
+    
+    ///////////////////////////////
+    //      Public Fields
+    ///////////////////////////////
+    #region
     public delegate void OnEvent();
     public event OnEvent OnHitGround;
 
+    public float sensitivity = 2.0f;
+    public float gravity = 20.0f;
+    public float smoothing = 2.0f;
+    #endregion
+
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    #region
+    private Vector2 mouseLock;
+    private Vector2 smoothV;
+    private CharacterController player;
+    private Vector3 movement = Vector3.zero;
+    private float crouchR = 1f;
+    private float moveFB;
+    private float moveLR;
+    private bool hasCallGroundEvent = false;
+    
+    private WeaponBasic m_weapon;
+    private UltimateBasic m_ultimate;
+    private AbilityBasic m_ability1;
+    private AbilityBasic m_ability2;
+    private AbilityBasic m_ability3;
+    #endregion
+
+    ///////////////////////////////
+    //      Protected Fields
+    ///////////////////////////////
+    #region
+    [Header("Height Settings")]
+    [SerializeField]
+    protected float maxHeight = 1.6f;
+    [SerializeField]
+    protected float minHeight = 1.3f;
+    [SerializeField]
+    protected float heightSmooth = 5f;
 
     [Header("Health Settings")]
     [SerializeField]
@@ -35,33 +87,6 @@ public class PlayerController : MonoBehaviour, IHealth
     protected float jumpHeight = 1;
 
 
-    ///////////////////////////////
-    //      Public Fields
-    ///////////////////////////////
-    public float sensitivity = 2.0f;
-    public float gravity = 20.0f;
-    //public float maxHeight = 1.6f;
-    //public float minHeight = 1.3f;
-    //public float heightSmooth = 5f;
-    public float smoothing = 2.0f;
-
-
-    ///////////////////////////////
-    //      Private Fields
-    ///////////////////////////////
-    private Vector2 mouseLock;
-    private Vector2 smoothV;
-    private CharacterController player;
-    private Vector3 movement = Vector3.zero;
-    private float crouchR = 1f;
-    private float moveFB;
-    private float moveLR;
-    private bool hasCallGroundEvent = false;
-    //private float rotX;
-    //private float rotY;
-    //private bool crouch;
-
-
     [Header("Attack Settings")]
     [SerializeField]
     protected WeaponBasic weapon;
@@ -73,21 +98,12 @@ public class PlayerController : MonoBehaviour, IHealth
     protected AbilityBasic ability2;
     [SerializeField]
     protected AbilityBasic ability3;
-
-    
-    private WeaponBasic m_weapon;
-    private UltimateBasic m_ultimate;
-    private AbilityBasic m_ability1;
-    private AbilityBasic m_ability2;
-    private AbilityBasic m_ability3;
-
-
+    #endregion
 
     ///////////////////////////////
     //      Public Properties
     ///////////////////////////////
-    public static PlayerController Instance { get; private set; }
-
+    #region
     public WeaponBasic Weapon { get { if (weapon != null && m_weapon == null) m_weapon = Instantiate(weapon); return m_weapon; } }
     public UltimateBasic Ultimate { get { if (ultimate != null && m_ultimate == null) m_ultimate = Instantiate(ultimate); return m_ultimate; } }
     public AbilityBasic Ability1 { get { if (ability1 != null && m_ability1 == null) m_ability1 = Instantiate(ability1); return m_ability1; } }
@@ -95,8 +111,7 @@ public class PlayerController : MonoBehaviour, IHealth
     public AbilityBasic Ability3 { get { if (ability3 != null && m_ability3 == null) m_ability3 = Instantiate(ability3); return m_ability3; } }
 
 
-
-
+    public float WeaknessMultiplier { get; set; }
     public int HealthMax { get { return healthMax; } }
     public int ArmorMax { get { return armorMax; } }
     public int ShieldMax { get { return shieldMax; } }
@@ -105,26 +120,22 @@ public class PlayerController : MonoBehaviour, IHealth
     public int Armor { get; set; }
     public int Shield { get; set; }
     public int HealthBonus { get; set; }
-
-
+    
     public float JumpHeight { get { return jumpHeight; } }
     public float Speed { get { return runSpeed; } }
     public Camera Eyes { get { return Camera.main; } }
-
-    public float WeaknessMultiplier
-    {
-        get; set;
+    #endregion
 
 
-    }
 
-    void Awake()
-    {
-        Instance = this;
-    }
+    ///////////////////////////////
+    //      Unity Events
+    ///////////////////////////////
+    #region
 
+        
     /// <summary>
-    /// Vi gemmer nogle components og kameraet på gameobjectet.
+    /// Vi gemmer nogle components loader våben og evner
     /// </summary>
     void Start()
     {
@@ -140,6 +151,7 @@ public class PlayerController : MonoBehaviour, IHealth
 
     /// <summary>
     /// Her er hvordan kontrol over gameobjectet bliver udført.
+    /// hvilken taster der flytter gameobjecetet og aktiver våben/evner
     /// </summary>
     void Update()
     {
@@ -147,22 +159,10 @@ public class PlayerController : MonoBehaviour, IHealth
         CalculateMovement();
 
         ButtonHelper.InvokeButtonEvents(this, "Jump", "OnJump");
-
-        //if (Time.time - timeWeapon >= character.Weapon.FireRate)
-        //{
-        //    if (ButtonHelper.InvokeButtonEvents(character.Weapon, "Fire1", "OnButton"))
-        //    {
-        //        timeWeapon = Time.time;
-        //    }
-        //}
+        ButtonHelper.InvokeButtonEvents(this, "Crouch", "OnCrouch");
         ButtonHelper.InvokeButtonEvents(weapon, "Fire1", "OnFire");
         ButtonHelper.InvokeButtonEvents(weapon, "Reload", "OnReload");
-
-
         ButtonHelper.InvokeButtonEvents(this, "Reload", "OnReload");
-
-
-
         ButtonHelper.InvokeButtonEvents(this, "Ultimate", "OnUltimate");
 
         AbilityUpdate(Ability1, "Ability1");
@@ -172,7 +172,68 @@ public class PlayerController : MonoBehaviour, IHealth
         ApplyGravity();
         player.Move(movement * Time.deltaTime);
     }
+    #endregion
 
+    ///////////////////////////////
+    //      Public Methods
+    ///////////////////////////////
+    #region
+
+
+    public void OnDeath(object sender)
+    {
+        throw new System.NotImplementedException();
+    }
+    
+    public void OnTakeDmg(GameObject sender, int dmg)
+    {
+        Debug.Log("Damge By: " + sender.name);
+    }
+
+    /// <summary>
+    /// Får spiller til at hoppe
+    /// </summary>
+    public void OnJump_Down()
+    {
+        if (player.isGrounded)
+        {
+            MakePlayerJump(JumpHeight);
+        }
+    }
+
+    /// <summary>
+    /// Gør at vi kan dukke os når vi trykker på ctrl
+    /// </summary>
+    public void OnCrouch_Hold()
+    {
+        StartCoroutine(StopCrouching());
+    }
+
+    /// <summary>
+    /// Gør at vi stopper med at dukke, når vi giver slip på ’ctrl’
+    /// </summary>
+    public void OnCrouch_Up()
+    {
+        StartCoroutine(StopCrouching());
+    }
+
+    #endregion
+
+    ///////////////////////////////
+    //      Private Methods
+    ///////////////////////////////
+    #region
+    /// <summary>
+    /// Kan få gameobjecet til at hoppe med en bestem højde
+    /// </summary>
+    public void MakePlayerJump(float height)
+    {
+        movement.y = height;
+    }
+
+    /// <summary>
+    /// Bruges til at kunne aktivere en evne script
+    /// </summary>
     private void AbilityUpdate(AbilityBasic a, string button)
     {
         if (a == null)
@@ -189,43 +250,7 @@ public class PlayerController : MonoBehaviour, IHealth
             a.OnActivate();
         }
     }
-
-    public void OnJump_Click()
-    {
-        if (player.isGrounded)
-        {
-            MakePlayerJump(JumpHeight);
-        }
-    }
-
-    public void MakePlayerJump(float height)
-    {
-        movement.y = height;
-    }
-
-    private void ApplyGravity()
-    {
-        if (!player.isGrounded)
-        {
-            hasCallGroundEvent = false;
-            movement.y -= gravity * Time.deltaTime;
-        }
-        else if (player.isGrounded && !hasCallGroundEvent)
-        {
-            hasCallGroundEvent = true;
-            if (OnHitGround != null)
-            {
-                OnHitGround();
-            }
-            
-        }
-    }
-
-
-    ///////////////////////////////
-    //      Private Method
-    ///////////////////////////////
-
+    
     /// <summary>
     /// Får character til at bevæge sig den retning man vil
     /// </summary>
@@ -264,11 +289,26 @@ public class PlayerController : MonoBehaviour, IHealth
 
     }
 
-    public void OnDeath(object sender)
+    /// <summary>
+    /// Giver tyngdekraft til gameobjecetet
+    /// </summary>
+    private void ApplyGravity()
     {
-        throw new System.NotImplementedException();
-    }
+        if (!player.isGrounded)
+        {
+            hasCallGroundEvent = false;
+            movement.y -= gravity * Time.deltaTime;
+        }
+        else if (player.isGrounded && !hasCallGroundEvent)
+        {
+            hasCallGroundEvent = true;
+            if (OnHitGround != null)
+            {
+                OnHitGround();
+            }
 
+        }
+    }
 
     /// <summary>
     /// Her kan vi køre musen synlig eller usynlig.
@@ -276,8 +316,104 @@ public class PlayerController : MonoBehaviour, IHealth
     /// <param name="val"></param>
     private void IsMouseLocked(bool val)
     {
-
         Cursor.visible = !val;
         Cursor.lockState = val ? CursorLockMode.Locked : CursorLockMode.None;
     }
+
+
+    /// <summary>
+    /// Gør at vi kan dukke os
+    /// </summary>
+    private IEnumerator StartCrouching()
+    {
+        while (player.height != minHeight)
+        {
+            var value = heightSmooth * Time.deltaTime;
+            var center = player.center;
+            crouchR = 0.6f;
+
+            // her sørger vi får at det tager tid for at dykke sig
+            if (player.height > minHeight)
+            {
+                player.height -= value;
+                center.y += value / 2;
+            }
+
+            // Her sætter vi character controllerns mide og højte så den passer til character
+            if (player.height < minHeight)
+            {
+
+                center.y -= (minHeight - player.height) / 2;
+                player.height = minHeight;
+            }
+            player.center = center;
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+    /// <summary>
+    /// Gør at vi stopper med at dukke
+    /// </summary>
+    private IEnumerator StopCrouching()
+    {
+        while (player.height != maxHeight)
+        {
+            var value = heightSmooth * Time.deltaTime;
+            var center = player.center;
+            crouchR = 1f;
+
+            // her sørger vi får at det tager tid for at rejse sig
+            if (player.height < maxHeight)
+            {
+                player.height += value;
+                center.y -= value / 2;
+            }
+            // Her sætter vi character controllerns mide og højte så den passer til character
+            if (player.height > maxHeight)
+            {
+                center.y += (player.height - maxHeight) / 2;
+                player.height = maxHeight;
+            }
+
+            player.center = center;
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+
+    /// <summary>
+    /// Sørger for at vi kun kan rejse os op når der ikke er noget oven over os.
+    /// Vi laver max 4 raycast som tjekker hvert hjørne af 
+    /// character controller om der er noget over den
+    /// </summary>
+    /// <returns>Returner true eller false, kommer an på om der er noget over os</returns>
+    private bool CanStand()
+    {
+        float move = player.radius - 0.1f;
+        for (int i = 0; i < 4; i++)
+        {
+            var posTop = transform.position;
+            posTop.y += maxHeight - 0.1f;
+
+            // Tjekker max 4 raycast om der er noget over dem, hvis det er noget over dem kan vi ikke rejse os
+            switch (i)
+            {
+                case 0: posTop.x += move; break;
+                case 1: posTop.x -= move; break;
+                case 2: posTop.z += move; break;
+                case 3: posTop.z -= move; break;
+            }
+            // Her tjekker vi på om nogen af dem er false
+            if (Physics.Raycast(posTop, Vector3.up, maxHeight - player.height))
+                return false;
+        }
+        return true;
+    }
+
+    #endregion
+
+    
+    
+    
+
 }

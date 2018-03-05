@@ -52,6 +52,11 @@ public class HealthExample : MonoBehaviour, IHealth {
         Debug.Log("You are dead. :(");
     }
 
+    public void OnTakeDmg(GameObject sender, int dmg)
+    {
+        throw new System.NotImplementedException();
+    }
+
 
     ///////////////////////////////
     //      Unity Metods
@@ -75,7 +80,7 @@ public class HealthExample : MonoBehaviour, IHealth {
     {
         if (Input.GetKeyUp(KeyCode.P))
         {
-            HealthHelper.GiveDamage(this, 75);
+            HealthHelper.GiveDamage(null, gameObject, 75);
             HealthHelper.PrintHealthInformation(this);
         }
 

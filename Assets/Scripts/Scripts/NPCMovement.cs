@@ -281,7 +281,7 @@ public class NPCMovement : MonoBehaviour {
             if (!CanSeePlayer(target, 360f, m_DetectRadius) || dis < m_FollowStopDistanceMin || dis >= m_FollowStopDistanceMax)
             {
                 CancelRunningCoroutine();
-                SetDestinationWithDistance(agent, targetPosition, m_FollowStopDistanceMin);
+                SetDestinationWithDistance(agent, targetPosition, m_FollowStopDistanceMax);
                 cLookAtTarget = StartCoroutine(LookAtTarget(target));
             }
         }
@@ -293,14 +293,14 @@ public class NPCMovement : MonoBehaviour {
             lockOnTarget = true;
             if (dis < m_FollowStopDistanceMin || dis >= m_FollowStopDistanceMax)
             {
-                SetDestinationWithDistance(agent, targetPosition, m_FollowStopDistanceMin);
+                SetDestinationWithDistance(agent, targetPosition, m_FollowStopDistanceMax);
             }
             
         }
         //Forsæt med at løbe hent til target når target er blevet set.
         else if (lockOnTarget && CanSeePlayer(target, 360f, m_DetectRadius))
         {
-            SetDestinationWithDistance(agent, targetPosition, m_FollowStopDistanceMin);
+            SetDestinationWithDistance(agent, targetPosition, m_FollowStopDistanceMax);
 
         }
         //Stop med at løbe.

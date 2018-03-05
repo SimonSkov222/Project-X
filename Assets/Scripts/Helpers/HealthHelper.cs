@@ -51,12 +51,15 @@ public static class HealthHelper {
     /// 
     /// Når objecet ikke har mere liv tilbage vil denne metode også kalde IHealth.OnDeath();
     /// </summary>
-    public static void GiveDamage(IHealth obj, int damage)
+    public static void GiveDamage(GameObject sender, GameObject target, int damage)
     {
+        IHealth obj = (IHealth)target.GetComponent(typeof(IHealth));
+        
         //Hvis object har en magic over sig selv der gør at den tager mere skade
         int dmgExtra = Mathf.RoundToInt(damage * obj.WeaknessMultiplier);
         damage += dmgExtra;
         
+        obj.OnTakeDmg(sender, damage);
 
         //Giv objectet skade
         if (obj.HealthBonus > 0)
@@ -75,7 +78,7 @@ public static class HealthHelper {
         }
 
         obj.Health = GetValueAfterDamageIsDone(obj.Health, damage, 0, out damage);
-        
+
 
 
         //Object er død kald død metoden

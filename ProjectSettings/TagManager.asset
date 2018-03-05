@@ -15,10 +15,10 @@ TagManager:
   - 
   - 
   - Main Player
+  - Teammate
+  - TeamShield
   - Enemy
-  - Bullet
-  - Trigger
-  - 
+  - EnemyShield
   - 
   - 
   - 

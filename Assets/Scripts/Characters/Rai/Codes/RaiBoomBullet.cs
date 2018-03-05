@@ -1,10 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  Affyre et skud der bliver større når det rammer noget 
+//  eller når det har fløjet langt nok væk.
+//  Giver skade til det den rammer.
+//
+//////////////////////////////////////////////////////
 [CreateAssetMenu(fileName = "RaiBoomBullet", menuName = "Abilities/Rai/BoomBullet")]
 public class RaiBoomBullet : AbilityBasic
 {
+    ///////////////////////////////
+    //      Protected Fields
+    ///////////////////////////////
+    #region
     [SerializeField]
     protected GameObject bulletModel;
     [SerializeField]
@@ -23,15 +34,34 @@ public class RaiBoomBullet : AbilityBasic
     [Range(50, 500)]
     protected float explodingSpeed = 100;
 
+    #endregion
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    #region
+
     private GameObject player;
     private Transform gunEnd;
     private GameObject bullet;
-    private Vector3 bulletPosition;
     private bool isExploding = false;
-    private List<GameObject> targets = new List<GameObject>();
+    private Dictionary<int,GameObject> targets = new Dictionary<int, GameObject>();
+    private bool debug_pause = false;
+    #endregion
 
+    ///////////////////////////////
+    //      Public Properties
+    ///////////////////////////////
+    #region
     public override string Name { get { return ""; } }
-
+    #endregion
+    ///////////////////////////////
+    //      Public Methods
+    ///////////////////////////////
+    #region
+    /// <summary>
+    /// Gør klar til at bruge evnen.
+    /// Opretter skud/bullet
+    /// </summary>
     public override void OnLoaded(GameObject characterGo)
     {
         base.OnLoaded(characterGo);
@@ -41,60 +71,60 @@ public class RaiBoomBullet : AbilityBasic
         bullet = Instantiate<GameObject>(bulletModel);
         bullet.SetActive(false);
         UnityEvents ue = bullet.AddComponent<UnityEvents>();
-
         ue.EventOnUpdate += Bullet_OnUpdate;
-        ue.EventOnTriggerEnter += Bullet_OnTriggerEnter;
-        ue.EventOnDisable += Ue_EventOnDisable;
+        ue.EventOnTriggerEnter += (b,c) => BulletHelper.CallMethodOnBulletHitObject(b,c, OnBulletHitCollider);
+        ue.EventOnDisable += Bullet_OnDisable;
     }
 
-    private void Ue_EventOnDisable(GameObject sender)
+    /// <summary>
+    /// Affyre skudet/evnen
+    /// </summary>
+    public override void OnActivate()
+    {
+        bullet.transform.position = gunEnd.position;
+        bullet.transform.rotation = gunEnd.rotation;
+        bullet.transform.localScale = bulletModel.transform.localScale;
+        BulletHelper.UpdateBulletStartPosition(bullet);
+
+        bullet.SetActive(true);
+    }
+    #endregion
+
+    ///////////////////////////////
+    //      Private Methods
+    ///////////////////////////////
+    #region
+
+    /// <summary>
+    /// Giver skade til alle fjender der blev ramt af skudet
+    /// </summary>
+    private void Bullet_OnDisable(GameObject sender)
     {
         isExploding = false;
-
         targets.Clear();
     }
 
-    private void Bullet_OnTriggerEnter(GameObject sender, Collider col)
+    /// <summary>
+    /// Gemmer de enemies der bliver ramt af skudet
+    /// </summary>
+    private void OnBulletHitCollider(GameObject sender, GameObject target, TargetType type)
     {
-        if (col.gameObject.layer == LayerMask.NameToLayer("Teammate"))
-        {
-            OnBulletHitCollider(col.gameObject, TargetType.Teammate);
-        }
-        else if (col.gameObject.layer == LayerMask.NameToLayer("TeamShield"))
-        {
-            OnBulletHitCollider(col.gameObject, TargetType.TeamShield);
-        }
-        else if (col.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            OnBulletHitCollider(col.gameObject, TargetType.Enemy);
-        }
-        else if (col.gameObject.layer == LayerMask.NameToLayer("EnemyShield"))
-        {
-            OnBulletHitCollider(col.gameObject, TargetType.EnemyShield);
-        }
-        else
-        {
-            OnBulletHitCollider(col.gameObject, TargetType.None);
-        }
-    }
-
-    private void OnBulletHitCollider(GameObject target, TargetType type)
-    {
-
-        Debug.Log("Hit");
-        if (type == TargetType.Teammate || type == TargetType.TeamShield)
+        if (target.GetInstanceID() == player.GetInstanceID() || type == TargetType.Teammate || type == TargetType.TeamShield)
         {
             return;
         }
 
         isExploding = true;
-        if (type == TargetType.Enemy || type == TargetType.EnemyShield)
+        if ((type == TargetType.Enemy || type == TargetType.EnemyShield) && !targets.ContainsKey(target.GetInstanceID()))
         {
-            targets.Add(target);
+            targets.Add(target.GetInstanceID(), target);
         }
 
     }
-    private bool debug_pause = false;
+
+    /// <summary>
+    /// Flytter skudet og gøre det større
+    /// </summary>
     private void Bullet_OnUpdate(GameObject sender)
     {
         if (debug_pause) return;
@@ -102,11 +132,11 @@ public class RaiBoomBullet : AbilityBasic
         {
             if (!isExploding)
             {
-                sender.transform.position += sender.transform.forward * bulletSpeed * Time.deltaTime;
+                BulletHelper.MoveBulletOnUpdate(sender, bulletSpeed);
             }
             
 
-            if (Vector3.Distance(bulletPosition, sender.transform.position) > range || isExploding)
+            if (BulletHelper.IsBulletOutOfRange(sender, range) || isExploding)
             {
                 sender.transform.localScale += (new Vector3(0.1f, 0.1f, 0.1f) * explodingSpeed * Time.deltaTime);
             }
@@ -116,14 +146,5 @@ public class RaiBoomBullet : AbilityBasic
             }
         }
     }
-
-    public override void OnActivate()
-    {
-        bullet.transform.position = gunEnd.position;
-        bullet.transform.rotation = gunEnd.rotation;
-        bullet.transform.localScale = bulletModel.transform.localScale;
-        bulletPosition = bullet.transform.position;
-
-        bullet.SetActive(true);
-    }
+    #endregion
 }

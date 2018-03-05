@@ -1,7 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  Gør at vi kan tilføj metoder til de forskellige
+//  unity events f.eks. Update().
+//
+//  Dette kan være nyttig, når du laver et nyt gameobject
+//  i et script og at dette gameobjecet, skal udføre noget i Update(),
+//  i stedet for at lavet et nye script og tilføje dette nye script 
+//  til gameobjecetet, kan man bare tildele en metode til EventOnUpdate
+//  via. UnityEvents
+//
+//////////////////////////////////////////////////////
 public class UnityEvents : MonoBehaviour {
 
     public delegate void OnEvent(GameObject sender);
@@ -20,7 +31,13 @@ public class UnityEvents : MonoBehaviour {
     public event OnTrigger EventOnTriggerExit;
     public event OnTrigger EventOnTriggerStay;
 
-    
+    public object[] tags;
+
+
+    ///////////////////////////////
+    //      Unity Events
+    ///////////////////////////////
+    #region
     void Update ()      { if (EventOnUpdate != null) EventOnUpdate(gameObject); }
     void LateUpdate()   { if (EventOnLateUpdate != null) EventOnLateUpdate(gameObject); }
     void FixedUpdate()  { if (EventOnFixelUpdate != null) EventOnFixelUpdate(gameObject); }
@@ -35,4 +52,5 @@ public class UnityEvents : MonoBehaviour {
     void OnTriggerEnter(Collider col)       { if (EventOnTriggerEnter != null) EventOnTriggerEnter(gameObject, col); }
     void OnTriggerExit(Collider col)        { if (EventOnTriggerExit != null) EventOnTriggerExit(gameObject, col); }
     void OnTriggerStay(Collider col)        { if (EventOnTriggerStay != null) EventOnTriggerStay(gameObject, col); }
+    #endregion
 }

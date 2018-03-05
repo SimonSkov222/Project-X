@@ -1,11 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+//////////////////////////////////////////////////////
+//      Beskrivelse
+//  
+//  Spawner et skjold som man kan gemme sig bag ved
+//
+//////////////////////////////////////////////////////
 [CreateAssetMenu(fileName = "RaiShield", menuName = "Abilities/Rai/Shield")]
 public class RaiShield : AbilityBasic
 {
+
+    ///////////////////////////////
+    //      Private Fields
+    ///////////////////////////////
+    #region
     [SerializeField]
     private GameObject shieldModel;
 
@@ -17,9 +27,23 @@ public class RaiShield : AbilityBasic
 
     private List<GameObject> shieldPool = new List<GameObject>();
     private GameObject player;
+    #endregion
 
+    ///////////////////////////////
+    //      Public Properties
+    ///////////////////////////////
+    #region
     public override string Name { get { return "Rai Shield"; } }
+    #endregion
 
+    ///////////////////////////////
+    //      Public Methods
+    ///////////////////////////////
+    #region
+    /// <summary>
+    /// Gør klar til at bruge evenen.
+    /// Laver array af shields
+    /// </summary>
     public override void OnLoaded(GameObject characterGo)
     {
         base.OnLoaded(characterGo);
@@ -32,12 +56,12 @@ public class RaiShield : AbilityBasic
             shieldPool.Add(shield);
         }
     }
-    
 
+    /// <summary>
+    /// Spawner et nyt shield
+    /// </summary>
     public override void OnActivate()
     {
-        Debug.Log("Spawn Shield");
-
         var shield = GetInactiveShield() ?? GetFirstSpawnedShield();
         if (shield != null)
         {
@@ -49,16 +73,36 @@ public class RaiShield : AbilityBasic
 
     }
 
+    #endregion
 
+    ///////////////////////////////
+    //      Private Methods
+    ///////////////////////////////
+    #region
 
+    /// <summary>
+    /// Henter et deaktiveret shield
+    /// </summary>
     private GameObject GetInactiveShield()
     {
         var shield = shieldPool.FirstOrDefault(m => m != null && !m.activeSelf);
         return shield;
     }
 
+    /// <summary>
+    /// Henter det første shield.
+    /// TODO Gør at den tager efter tid.
+    /// </summary>
     private GameObject GetFirstSpawnedShield()
     {
         return shieldPool[0];
     }
+    #endregion
+
+
+
+
+
+
+
 }

@@ -59,16 +59,16 @@ public class Hitbox : MonoBehaviour
     void OnGameObjectEnter(GameObject gb)
     {
         //Debug.Log("Hit: " + gb.layer);
-        if ((CanGiveDamge.value & (1 << gb.layer)) == (1 << gb.layer))
-        {
-            //Debug.Log("Hit: " + gb.activeSelf);
-            var bullet = gb.GetComponent<Bullet>();
-            if (!bullet.hasHitTarget || true)
-            {
-                bullet.hasHitTarget = true;
-                OnTakeDamge(Mathf.RoundToInt(bullet.dmg * percent));
-            }
-        }
+        //if ((CanGiveDamge.value & (1 << gb.layer)) == (1 << gb.layer))
+        //{
+        //    //Debug.Log("Hit: " + gb.activeSelf);
+        //    var bullet = gb.GetComponent<Bullet>();
+        //    if (!bullet.hasHitTarget || true)
+        //    {
+        //        bullet.hasHitTarget = true;
+        //        OnTakeDamge(Mathf.RoundToInt(bullet.dmg * percent));
+        //    }
+        //}
 
     }
 

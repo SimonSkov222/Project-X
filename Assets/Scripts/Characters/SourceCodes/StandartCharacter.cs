@@ -166,4 +166,8 @@ public class StandartCharacter : ScriptableObject, IHealth {
     {
     }
 
+    public void OnTakeDmg(GameObject sender, int dmg)
+    {
+        throw new System.NotImplementedException();
+    }
 }
