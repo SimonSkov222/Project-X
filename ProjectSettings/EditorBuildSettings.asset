@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Kim/MenuScenes/MenuScene1.unity
+    guid: 2fe174a2f27cf1a40ada322e9d9e1c83
+  - enabled: 1
+    path: Assets/Scenes/Kim/MenuScenes/MenuScene2.unity
+    guid: cf2d9be7c67b50747a71571e1ad03aa3
