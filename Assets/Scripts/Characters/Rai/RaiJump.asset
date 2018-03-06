@@ -15,6 +15,6 @@ MonoBehaviour:
   stackMax: 1
   colddown: 0
   useButton: 1
-  IsReloadingStack: 0
   junpHeight: 10
-  dmgOnLand: 50
+  dmgOnLand: 134
+  dmgRadius: 5

@@ -20,9 +20,16 @@ public class RaiJump : AbilityBasic
     protected float junpHeight = 10f;
 
     [SerializeField]
-    protected float dmgOnLand = 50f;
+    [Range(1, 250)]
+    protected int dmgOnLand = 50;
+
+    [SerializeField]
+    [Range(1, 15)]
+    protected float dmgRadius = 5;
 
     protected bool isHitGroundActivated = false;
+    protected GameObject player;
+
     #endregion
     
     ///////////////////////////////
@@ -43,6 +50,7 @@ public class RaiJump : AbilityBasic
     public override void OnLoaded(GameObject characterGo)
     {
         base.OnLoaded(characterGo);
+        player = characterGo;
         playerController.OnHitGround += RaiJump_OnHitGround;
     }
 
@@ -69,8 +77,16 @@ public class RaiJump : AbilityBasic
     {
         if (isHitGroundActivated)
         {
+            Collider[] cols = Physics.OverlapSphere(player.transform.position, dmgRadius);
+            foreach (var item in cols)
+            {
+                if (item.gameObject.layer == LayerMask.NameToLayer("Enemy") || item.gameObject.layer == LayerMask.NameToLayer("EnemyShield"))
+                {
+                    HealthHelper.GiveDamage(player, item.gameObject, dmgOnLand);
+                }
+            }
+
             isHitGroundActivated = false;
-            Debug.Log("Hit ground");
         }
         
     }

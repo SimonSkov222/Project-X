@@ -33,6 +33,9 @@ public class RaiBoomBullet : AbilityBasic
     [SerializeField]
     [Range(50, 500)]
     protected float explodingSpeed = 100;
+    [SerializeField]
+    [Range(0, 250)]
+    protected int damage = 10;
 
     #endregion
     ///////////////////////////////
@@ -72,7 +75,7 @@ public class RaiBoomBullet : AbilityBasic
         bullet.SetActive(false);
         UnityEvents ue = bullet.AddComponent<UnityEvents>();
         ue.EventOnUpdate += Bullet_OnUpdate;
-        ue.EventOnTriggerEnter += (b,c) => BulletHelper.CallMethodOnBulletHitObject(b,c, OnBulletHitCollider);
+        ue.EventOnTriggerStay += (b,c) => BulletHelper.CallMethodOnBulletHitObject(b,c, OnBulletHitCollider);
         ue.EventOnDisable += Bullet_OnDisable;
     }
 
@@ -100,6 +103,11 @@ public class RaiBoomBullet : AbilityBasic
     /// </summary>
     private void Bullet_OnDisable(GameObject sender)
     {
+        foreach (var item in targets)
+        {
+            HealthHelper.GiveDamage(player, item.Value, damage);
+        }
+
         isExploding = false;
         targets.Clear();
     }
@@ -109,6 +117,8 @@ public class RaiBoomBullet : AbilityBasic
     /// </summary>
     private void OnBulletHitCollider(GameObject sender, GameObject target, TargetType type)
     {
+
+
         if (target.GetInstanceID() == player.GetInstanceID() || type == TargetType.Teammate || type == TargetType.TeamShield)
         {
             return;

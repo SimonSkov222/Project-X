@@ -155,11 +155,17 @@ public class EnemyController : MonoBehaviour, IHealth
 
     public void OnDeath(object sender)
     {
+        Debug.Log("Enemy: Dead");
         gameObject.SetActive(false);
     }
 
+    public void OnGiveDmg(GameObject target, int dmg)
+    {
+        Debug.Log("Enemy: Give Damge");
+    }
     public void OnTakeDmg(GameObject sender, int dmg)
     {
+        Debug.Log("Enemy: Taken Damge");
     }
     #endregion
 
@@ -261,9 +267,10 @@ public class EnemyController : MonoBehaviour, IHealth
             yield return new WaitForSeconds(fireRate);
         }
     }
+    
 
     #endregion
-    
+
 
 
 

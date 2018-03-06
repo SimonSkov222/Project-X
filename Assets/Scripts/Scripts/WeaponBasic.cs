@@ -26,6 +26,10 @@ public abstract class WeaponBasic : ScriptableObject
     [Range(0, 100)]
     protected float fireRate;
 
+    [SerializeField]
+    [Range(1, 100)]
+    protected int damage;
+
     protected GameObject player;
     #endregion
 

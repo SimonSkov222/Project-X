@@ -47,11 +47,14 @@ public class RaiShield : AbilityBasic
     public override void OnLoaded(GameObject characterGo)
     {
         base.OnLoaded(characterGo);
-
         player = characterGo;
         for (int i = 0; i < stackMax; i++)
         {
             GameObject shield = Instantiate<GameObject>(shieldModel);
+            SimpleHealth health = shield.AddComponent<SimpleHealth>();
+            health.HealthMax = this.health;
+            health.EventOnEnable += (s) => HealthHelper.Initialize(s);
+            health.EventOnDeath += (s,o) => s.SetActive(false);
             shield.SetActive(false);
             shieldPool.Add(shield);
         }
@@ -95,7 +98,12 @@ public class RaiShield : AbilityBasic
     /// </summary>
     private GameObject GetFirstSpawnedShield()
     {
-        return shieldPool[0];
+        if (shieldPool.Count > 0)
+        {
+            return shieldPool[0];
+        }
+        return null;
+        
     }
     #endregion
 

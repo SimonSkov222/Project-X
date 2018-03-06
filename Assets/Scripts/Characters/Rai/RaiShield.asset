@@ -15,8 +15,7 @@ MonoBehaviour:
   stackMax: 3
   colddown: 5
   useButton: 1
-  IsReloadingStack: 0
-  shieldModel: {fileID: 1043885581792028, guid: fe17bc1e273ce7947a5a45aa71abf3a9,
+  shieldModel: {fileID: 1860476353852230, guid: fe17bc1e273ce7947a5a45aa71abf3a9,
     type: 2}
-  health: 0
+  health: 500
   upTime: 0

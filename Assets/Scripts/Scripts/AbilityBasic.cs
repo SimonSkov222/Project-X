@@ -59,6 +59,7 @@ public abstract class AbilityBasic : ScriptableObject, IButton
     /// </summary>
     public virtual void OnLoaded(GameObject characterGo)
     {
+        
         playerController = characterGo.GetComponent<PlayerController>();
         StartReloadStack();
     }
@@ -149,8 +150,8 @@ public abstract class AbilityBasic : ScriptableObject, IButton
         if (stack < stackMax && !IsReloadingStack)
         {
             IsReloadingStack = true;
-            playerController.StartCoroutine(ReloadStack());
             
+            playerController.StartCoroutine(ReloadStack());
         }
 
     }

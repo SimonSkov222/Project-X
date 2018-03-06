@@ -33,10 +33,15 @@ public static class HealthHelper {
         Debug.Log(string.Format("Health: {0}, Armor: {1}, Shield: {2}, Bonus: {4}, All: {3}", obj.Health, obj.Armor, obj.Shield, all, obj.HealthBonus));
     }
 
-    /// <summary>
-    /// Giver objectet fuld liv. også i de andre typer liv(armor, shield)
-    /// </summary>
-    public static void Initialize (IHealth obj)
+    public static void Initialize(GameObject obj)
+    {
+        IHealth obj2 = (IHealth)obj.GetComponent(typeof(IHealth));
+        Initialize(obj2);
+    }
+        /// <summary>
+        /// Giver objectet fuld liv. også i de andre typer liv(armor, shield)
+        /// </summary>
+        public static void Initialize (IHealth obj)
     {
         obj.Health  = obj.HealthMax;
         obj.Armor   = obj.ArmorMax;
@@ -53,8 +58,10 @@ public static class HealthHelper {
     /// </summary>
     public static void GiveDamage(GameObject sender, GameObject target, int damage)
     {
+
         IHealth obj = (IHealth)target.GetComponent(typeof(IHealth));
-        
+        if (obj == null) return;
+
         //Hvis object har en magic over sig selv der gør at den tager mere skade
         int dmgExtra = Mathf.RoundToInt(damage * obj.WeaknessMultiplier);
         damage += dmgExtra;

@@ -11,10 +11,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47da86082671a184db7e63b1518b3385, type: 3}
   m_Name: RaiMainWeapon
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
   ammoMax: 10
   reloadTime: 4
   fireRate: 0.5
+  damage: 100
+  speed: 24.3
+  range: 250
   bulletModel: {fileID: 1815250605587956, guid: fc6276e1f8cb6a44c87c64db03385952,
     type: 2}
   bulletPoolSize: 26

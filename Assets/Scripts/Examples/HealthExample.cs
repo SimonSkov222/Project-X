@@ -10,19 +10,19 @@ public class HealthExample : MonoBehaviour, IHealth {
 
 
     ///////////////////////////////
-    //      Private Fields
+    //      Public Fields
     ///////////////////////////////
     [SerializeField]
     [Range(0, 1000)]
-    private int m_HealthMax = 250;
+    public int m_HealthMax = 250;
 
     [SerializeField]
     [Range(0, 1000)]
-    private int m_ArmorMax = 75;
+    public int m_ArmorMax = 75;
 
     [SerializeField]
     [Range(0, 1000)]
-    private int m_ShieldMax = 75;
+    public int m_ShieldMax = 75;
 
 
     ///////////////////////////////
@@ -50,6 +50,11 @@ public class HealthExample : MonoBehaviour, IHealth {
     public void OnDeath(object sender)
     {
         Debug.Log("You are dead. :(");
+    }
+
+    public void OnGiveDmg(GameObject target, int dmg)
+    {
+        throw new System.NotImplementedException();
     }
 
     public void OnTakeDmg(GameObject sender, int dmg)

@@ -9,6 +9,7 @@
 public interface IHealth
 {
 
+
     int HealthMax { get; }
     int ArmorMax { get; }
     int ShieldMax { get; }
@@ -26,5 +27,13 @@ public interface IHealth
     /// </summary>
     void OnDeath(object sender);
 
+    /// <summary>
+    /// Bliver kaldt når objecet targer skade
+    /// </summary>
     void OnTakeDmg(GameObject sender, int dmg);
+
+    /// <summary>
+    /// Bliver kaldt når objecet giver skade
+    /// </summary>
+    void OnGiveDmg(GameObject target, int dmg);
 }

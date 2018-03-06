@@ -141,8 +141,8 @@ public class PlayerController : MonoBehaviour, IHealth
     {
         player = GetComponent<CharacterController>();
         ButtonHelper.TryCallMethod(weapon, "OnLoaded", gameObject);
+        ButtonHelper.TryCallMethod(Ability1, "OnLoaded", gameObject);
         ButtonHelper.TryCallMethod(Ability2, "OnLoaded", gameObject);
-        ButtonHelper.TryCallMethod(Ability3, "OnLoaded", gameObject);
         ButtonHelper.TryCallMethod(Ability3, "OnLoaded", gameObject);
 
         IsMouseLocked(true);
@@ -182,12 +182,16 @@ public class PlayerController : MonoBehaviour, IHealth
 
     public void OnDeath(object sender)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Player: Dead");
     }
-    
+
+    public void OnGiveDmg(GameObject target, int dmg)
+    {
+        Debug.Log("Player: Give Damge");
+    }
     public void OnTakeDmg(GameObject sender, int dmg)
     {
-        Debug.Log("Damge By: " + sender.name);
+        Debug.Log("Player: Taken Damge");
     }
 
     /// <summary>
@@ -230,6 +234,7 @@ public class PlayerController : MonoBehaviour, IHealth
     {
         movement.y = height;
     }
+    
 
     /// <summary>
     /// Bruges til at kunne aktivere en evne script
@@ -409,11 +414,12 @@ public class PlayerController : MonoBehaviour, IHealth
         }
         return true;
     }
+    
 
     #endregion
 
-    
-    
-    
+
+
+
 
 }
