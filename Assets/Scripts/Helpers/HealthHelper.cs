@@ -59,39 +59,41 @@ public static class HealthHelper {
     public static void GiveDamage(GameObject sender, GameObject target, int damage)
     {
 
-        IHealth obj = (IHealth)target.GetComponent(typeof(IHealth));
-        if (obj == null) return;
+        IHealth objTarget = (IHealth)target.GetComponent(typeof(IHealth));
+        IHealth objSender = (IHealth)sender.GetComponent(typeof(IHealth));
+        if (objTarget == null) return;
 
         //Hvis object har en magic over sig selv der gør at den tager mere skade
-        int dmgExtra = Mathf.RoundToInt(damage * obj.WeaknessMultiplier);
+        int dmgExtra = Mathf.RoundToInt(damage * objTarget.WeaknessMultiplier);
         damage += dmgExtra;
-        
-        obj.OnTakeDmg(sender, damage);
+
+        objTarget.OnTakeDmg(sender, damage);
 
         //Giv objectet skade
-        if (obj.HealthBonus > 0)
+        if (objTarget.HealthBonus > 0)
         {
-            obj.HealthBonus = GetValueAfterDamageIsDone(obj.HealthBonus, damage, 0, out damage);
+            objTarget.HealthBonus = GetValueAfterDamageIsDone(objTarget.HealthBonus, damage, 0, out damage);
         }
 
-        if (obj.Shield > 0)
+        if (objTarget.Shield > 0)
         {
-            obj.Shield = GetValueAfterDamageIsDone(obj.Shield, damage, shieldReduction, out damage);
+            objTarget.Shield = GetValueAfterDamageIsDone(objTarget.Shield, damage, shieldReduction, out damage);
         }
 
-        if (obj.Armor > 0)
+        if (objTarget.Armor > 0)
         {
-            obj.Armor = GetValueAfterDamageIsDone(obj.Armor, damage, armorReduction, out damage);
+            objTarget.Armor = GetValueAfterDamageIsDone(objTarget.Armor, damage, armorReduction, out damage);
         }
 
-        obj.Health = GetValueAfterDamageIsDone(obj.Health, damage, 0, out damage);
+        objTarget.Health = GetValueAfterDamageIsDone(objTarget.Health, damage, 0, out damage);
 
 
 
         //Object er død kald død metoden
-        if (obj.Health == 0)
+        if (objTarget.Health == 0)
         {
-            obj.OnDeath(obj);
+            objTarget.OnDeath(objTarget);
+            objSender.OnGiveDmg(target, damage);
         }
     }
 

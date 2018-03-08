@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 //////////////////////////////////////////////////////
@@ -53,6 +54,18 @@ public abstract class WeaponBasic : ScriptableObject
     public bool IsReloading { get { return reloadCoroutine != null; } }
     public float FireRate { get { return fireRate; } }
     #endregion
+
+    public Dictionary<int, OpgraderingsSten> opgraderingsSten = new Dictionary<int, OpgraderingsSten>();
+    int i = 0;
+    public void addOpgraderingsSten(OpgraderingsSten sten)
+    {
+        
+        if (i == 0)
+        {
+            i++;
+            opgraderingsSten.Add(i, sten);
+        }
+    }
 
     ///////////////////////////////
     //      Public Methods
