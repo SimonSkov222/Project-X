@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //////////////////////////////////////////////////////
 //      Beskrivelse
@@ -14,19 +17,23 @@ using UnityEngine;
 //////////////////////////////////////////////////////
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(CapsuleCollider))]
-public class PlayerController : MonoBehaviour, IHealth
+public class PlayerController : NetworkBehaviour, IHealth
 {
-    
+
     ///////////////////////////////
     //      Public Fields
     ///////////////////////////////
     #region
     public delegate void OnEvent();
     public event OnEvent OnHitGround;
+    public event SimpleHealth.OnDeathDelegate EventOnDeath;
+    public event SimpleHealth.OnDamageDelegate EventOnGiveDamage;
+    public event SimpleHealth.OnDamageDelegate EventOnTakeDamage;
 
     public float sensitivity = 2.0f;
     public float gravity = 20.0f;
     public float smoothing = 2.0f;
+    public Camera eyes;
     #endregion
 
     ///////////////////////////////
@@ -41,7 +48,7 @@ public class PlayerController : MonoBehaviour, IHealth
     private float moveFB;
     private float moveLR;
     private bool hasCallGroundEvent = false;
-    
+
     private WeaponBasic m_weapon;
     private UltimateBasic m_ultimate;
     private AbilityBasic m_ability1;
@@ -120,10 +127,10 @@ public class PlayerController : MonoBehaviour, IHealth
     public int Armor { get; set; }
     public int Shield { get; set; }
     public int HealthBonus { get; set; }
-    
+
     public float JumpHeight { get { return jumpHeight; } }
     public float Speed { get { return runSpeed; } }
-    public Camera Eyes { get { return Camera.main; } }
+    public Camera Eyes { get { return eyes; } }
     #endregion
 
 
@@ -133,14 +140,17 @@ public class PlayerController : MonoBehaviour, IHealth
     ///////////////////////////////
     #region
 
-        
+    public void InvokeStart() { Start(); }
+
     /// <summary>
     /// Vi gemmer nogle components loader våben og evner
     /// </summary>
     void Start()
     {
+        HealthHelper.Initialize(GetComponent<NetworkIdentity>().netId.Value, gameObject);
         player = GetComponent<CharacterController>();
-        ButtonHelper.TryCallMethod(weapon, "OnLoaded", gameObject);
+        //OnLoaded();
+        ButtonHelper.TryCallMethod(Weapon, "OnLoaded", gameObject);
         ButtonHelper.TryCallMethod(Ability1, "OnLoaded", gameObject);
         ButtonHelper.TryCallMethod(Ability2, "OnLoaded", gameObject);
         ButtonHelper.TryCallMethod(Ability3, "OnLoaded", gameObject);
@@ -155,23 +165,96 @@ public class PlayerController : MonoBehaviour, IHealth
     /// </summary>
     void Update()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
         RotateView();
         CalculateMovement();
 
+        //ButtonHelper.InvokeButtonEvent(this, "Test", OnFire3);
+
+        ButtonHelper.InvokeButtonEvent(this, "Fire1", OnButtonPress, "Fire");
+        ButtonHelper.InvokeButtonEvent(this, "Reload", OnButtonPress, "Reload");
+        ButtonHelper.InvokeButtonEvent(this, "Crouch", OnButtonPress, "Crouch");
+        //ButtonHelper.InvokeButtonEvent(this, "Test", OnFire3);
+        //ButtonHelper.InvokeButtonEvent(this, "Test", OnFire3);
+
         ButtonHelper.InvokeButtonEvents(this, "Jump", "OnJump");
-        ButtonHelper.InvokeButtonEvents(this, "Crouch", "OnCrouch");
-        ButtonHelper.InvokeButtonEvents(weapon, "Fire1", "OnFire");
-        ButtonHelper.InvokeButtonEvents(weapon, "Reload", "OnReload");
-        ButtonHelper.InvokeButtonEvents(this, "Reload", "OnReload");
-        ButtonHelper.InvokeButtonEvents(this, "Ultimate", "OnUltimate");
+        //ButtonHelper.InvokeButtonEvents(this, "Crouch", "OnCrouch");
+        //ButtonHelper.InvokeButtonEvents(weapon, "Fire1", "OnFire");
+        //ButtonHelper.InvokeButtonEvents(weapon, "Reload", "OnReload");
+        //ButtonHelper.InvokeButtonEvents(this, "Reload", "OnReload");
+        //ButtonHelper.InvokeButtonEvents(this, "Ultimate", "OnUltimate");
 
         AbilityUpdate(Ability1, "Ability1");
         AbilityUpdate(Ability2, "Ability2");
         AbilityUpdate(Ability3, "Ability3");
 
+
         ApplyGravity();
         player.Move(movement * Time.deltaTime);
     }
+
+    [Client]
+    public void OnButtonPress(object sender, ButtonCall clickType, params object[] args)
+    {
+        CmdOnButtonPress(gameObject.name, clickType, (string)args[0]);
+    }
+
+    
+    [Command]
+    public void CmdOnButtonPress(string _ID, ButtonCall clickType, string code)
+    {
+        RpcOnButtonPress(_ID, clickType, code);
+    }
+
+    [ClientRpc]
+    public void RpcOnButtonPress(string _ID, ButtonCall clickType, string code)
+    {
+        PlayerController pc = GameObject.Find(_ID).GetComponent<PlayerController>();
+        string method = "";
+        object sender = null;
+        object[] parameters = { };
+
+        switch (code)
+        {
+            case "Fire": method = "OnFire"; sender = pc.Weapon; break;
+            case "Reload": method = "OnReload"; sender = pc.Weapon; break;
+            case "Crouch": method = "OnCrouch"; sender = pc; break;
+            case "Ability1": method = "OnButton"; sender = pc.Ability1; parameters = new object[]{ 0 }; break;
+            case "Ability2": method = "OnButton"; sender = pc.Ability2; parameters = new object[] { 0 }; break;
+            case "Ability3": method = "OnButton"; sender = pc.Ability3; parameters = new object[] { 0 }; break;
+        }
+
+        TryInvokeMethod(sender, method, clickType, parameters);
+    }
+
+    private bool TryInvokeMethod(object sender, string method, ButtonCall clickType, params object[] parameters)
+    {
+        if (sender == null)
+        {
+            return false;
+        }
+        string prefix = "";
+
+        switch (clickType)
+        {
+            case ButtonCall.Down: prefix = "_Down";  break;
+            case ButtonCall.Up: prefix = "_Up"; break;
+            case ButtonCall.Hold: prefix = "_Hold"; break;
+            case ButtonCall.Click: prefix = "_Click"; break;
+        }
+        Type senderType = sender.GetType();
+        MethodInfo methodInfo = senderType.GetMethod(method+ prefix);
+        if (methodInfo != null)
+        {
+            methodInfo.Invoke(sender, parameters);
+            return true;
+        }
+        return false;
+    }
+
     #endregion
 
     ///////////////////////////////
@@ -187,11 +270,16 @@ public class PlayerController : MonoBehaviour, IHealth
 
     public void OnGiveDmg(GameObject target, int dmg)
     {
-        Debug.Log("Player: Give Damge");
+       // Debug.Log("Player: Give Damge");
     }
     public void OnTakeDmg(GameObject sender, int dmg)
     {
-        Debug.Log("Player: Taken Damge");
+        //Debug.Log("Player: Taken Damge");
+
+        if (EventOnTakeDamage != null)
+        {
+            EventOnTakeDamage(sender, gameObject, dmg);
+        }
     }
 
     /// <summary>
@@ -248,17 +336,19 @@ public class PlayerController : MonoBehaviour, IHealth
 
         if (a.UseButton)
         {
-            ButtonHelper.InvokeButtonEvents(a, button, "OnButton", 0f);
+            ButtonHelper.InvokeButtonEvent(this, button, OnButtonPress, button);
         }
         else
         {
             a.OnActivate();
         }
     }
-    
+
     /// <summary>
     /// Får character til at bevæge sig den retning man vil
     /// </summary>
+    /// 
+    [Client]
     private void CalculateMovement()
     {
         moveFB = Input.GetAxis("Vertical") * Speed * crouchR;
@@ -273,6 +363,8 @@ public class PlayerController : MonoBehaviour, IHealth
     /// <summary>
     /// Bevæger kameraet med musen
     /// </summary>
+    /// 
+    [Client]
     private void RotateView()
     {
         var md = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));

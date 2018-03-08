@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //////////////////////////////////////////////////////
 //      Beskrivelse
@@ -51,9 +52,13 @@ public class RaiShield : AbilityBasic
         for (int i = 0; i < stackMax; i++)
         {
             GameObject shield = Instantiate<GameObject>(shieldModel);
+            NetworkIdentity ni = shield.AddComponent<NetworkIdentity>();
             SimpleHealth health = shield.AddComponent<SimpleHealth>();
+
+            ni.localPlayerAuthority = true;
+
             health.HealthMax = this.health;
-            health.EventOnEnable += (s) => HealthHelper.Initialize(s);
+            health.EventOnEnable += (s) => HealthHelper.Initialize(ni.netId.Value, s);
             health.EventOnDeath += (s,o) => s.SetActive(false);
             shield.SetActive(false);
             shieldPool.Add(shield);

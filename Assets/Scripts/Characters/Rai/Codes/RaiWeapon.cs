@@ -33,6 +33,7 @@ public class RaiWeapon : WeaponBasic
     protected Transform gunEnd;
 
     protected List<GameObject> bulletPool = new List<GameObject>();
+    protected GameObject bulletParant;
     #endregion
 
     ///////////////////////////////
@@ -49,9 +50,9 @@ public class RaiWeapon : WeaponBasic
         base.OnLoaded(characterGo);
 
         Ammo = ammoMax;
-
+        
         gunEnd = player.transform.Find(gunEndLocation);
-
+        bulletParant = new GameObject(characterGo.name + "_RaiBulletPool");
         for (int i = 0; i < bulletPoolSize; i++)
         {
             CreateNewBullet();
@@ -94,6 +95,7 @@ public class RaiWeapon : WeaponBasic
     private GameObject CreateNewBullet()
     {
         GameObject bullet = Instantiate<GameObject>(bulletModel);
+        bullet.transform.SetParent(bulletParant.transform);
         UnityEvents ue = bullet.AddComponent<UnityEvents>();
         ue.EventOnUpdate += Bullet_OnUpdate;
         ue.EventOnTriggerEnter += (b,c) => BulletHelper.CallMethodOnBulletHitObject(b,c, OnBulletHitObject);

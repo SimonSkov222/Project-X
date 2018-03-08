@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //////////////////////////////////////////////////////
 //      Beskrivelse
@@ -62,6 +63,10 @@ public class EnemyController : MonoBehaviour, IHealth
     [SerializeField]
     protected GameObject gunEnd;
 
+    public event SimpleHealth.OnDeathDelegate EventOnDeath;
+    public event SimpleHealth.OnDamageDelegate EventOnGiveDamage;
+    public event SimpleHealth.OnDamageDelegate EventOnTakeDamage;
+
     #endregion
 
 
@@ -96,7 +101,7 @@ public class EnemyController : MonoBehaviour, IHealth
     void Start()
     {
         agent = GetComponent<NPCMovement>();
-        HealthHelper.Initialize(this);
+        HealthHelper.Initialize(GetComponent<NetworkIdentity>().netId.Value, gameObject);
         timeAttack = Time.time;
     }
     /// <summary>
@@ -155,17 +160,18 @@ public class EnemyController : MonoBehaviour, IHealth
 
     public void OnDeath(object sender)
     {
-        Debug.Log("Enemy: Dead");
         gameObject.SetActive(false);
     }
 
     public void OnGiveDmg(GameObject target, int dmg)
     {
-        Debug.Log("Enemy: Give Damge");
     }
     public void OnTakeDmg(GameObject sender, int dmg)
     {
-        Debug.Log("Enemy: Taken Damge");
+        if (EventOnTakeDamage != null)
+        {
+            EventOnTakeDamage(sender, gameObject, dmg);
+        }
     }
     #endregion
 

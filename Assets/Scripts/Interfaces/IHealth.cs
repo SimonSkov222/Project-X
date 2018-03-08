@@ -8,7 +8,9 @@
 ////////////////////////////////////////////////////////////////////
 public interface IHealth
 {
-
+    event SimpleHealth.OnDeathDelegate EventOnDeath;
+    event SimpleHealth.OnDamageDelegate EventOnGiveDamage;
+    event SimpleHealth.OnDamageDelegate EventOnTakeDamage;
 
     int HealthMax { get; }
     int ArmorMax { get; }

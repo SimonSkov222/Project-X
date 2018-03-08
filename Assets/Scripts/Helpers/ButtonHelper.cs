@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public static class ButtonHelper {
 
     const float ClickTime = 0.4f;
+
+    public delegate void OnButtonEvent(object sender, ButtonCall clickType, params object[] parameters);
 
     private static Dictionary<string, float> timeButtonDown = new Dictionary<string, float>();
 
@@ -26,7 +29,42 @@ public static class ButtonHelper {
         return false;
     }
 
-    public static bool InvokeButtonEvents(object sender,string buttonName, string prefix, params object[] parameters)
+    public static void InvokeButtonEvent(object sender, string buttonName, OnButtonEvent method, params object[] parameters)
+    {
+        if (sender == null)
+        {
+            return;
+        }
+
+        if (!timeButtonDown.ContainsKey(buttonName))
+        {
+            timeButtonDown.Add(buttonName, 0);
+        }
+        
+        if (Input.GetButtonDown(buttonName))
+        {
+            timeButtonDown[buttonName] = Time.time;
+            method(sender, ButtonCall.Down, parameters);
+        }
+        if (Input.GetButton(buttonName))
+        {
+            method(sender, ButtonCall.Hold, parameters);
+        }
+        if (Input.GetButtonUp(buttonName))
+        {
+            float pressTime = Time.time - timeButtonDown[buttonName];
+
+            method(sender, ButtonCall.Up, parameters);
+
+            if (pressTime <= ClickTime)
+            {
+                method(sender, ButtonCall.Click, parameters);
+            }
+        }
+    }
+
+
+        public static bool InvokeButtonEvents(object sender,string buttonName, string prefix, params object[] parameters)
     {
         if (sender == null)
         {

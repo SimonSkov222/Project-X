@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
 
 ////////////////////////////////////////////////////////////////////
 //      Beskrivelse
@@ -16,7 +18,8 @@ public static class HealthHelper {
     ///////////////////////////////
     private static float armorReduction = 0.05f;
     private static float shieldReduction = 0.1f;
-
+    private static Dictionary<uint, IHealth> healthObjects = new Dictionary<uint, IHealth>();
+    private static Dictionary<uint, GameObject> healthGameObjects = new Dictionary<uint, GameObject>();
 
     ///////////////////////////////
     //      Public Static Methods
@@ -33,19 +36,24 @@ public static class HealthHelper {
         Debug.Log(string.Format("Health: {0}, Armor: {1}, Shield: {2}, Bonus: {4}, All: {3}", obj.Health, obj.Armor, obj.Shield, all, obj.HealthBonus));
     }
 
-    public static void Initialize(GameObject obj)
+     /// <summary>
+    /// Giver objectet fuld liv. også i de andre typer liv(armor, shield)
+    /// </summary>
+    public static void Initialize(uint netID, GameObject obj)
     {
+        Debug.Log("Added: " + obj.name + ", ID: " + netID);
+
         IHealth obj2 = (IHealth)obj.GetComponent(typeof(IHealth));
-        Initialize(obj2);
-    }
-        /// <summary>
-        /// Giver objectet fuld liv. også i de andre typer liv(armor, shield)
-        /// </summary>
-        public static void Initialize (IHealth obj)
-    {
-        obj.Health  = obj.HealthMax;
-        obj.Armor   = obj.ArmorMax;
-        obj.Shield  = obj.ShieldMax;
+
+        if (!healthObjects.ContainsKey(netID))
+        {
+            healthObjects.Add(netID, obj2);
+            healthGameObjects.Add(netID, obj);
+        }
+
+        obj2.Health = obj2.HealthMax;
+        obj2.Armor = obj2.ArmorMax;
+        obj2.Shield = obj2.ShieldMax;
     }
 
     /// <summary>
@@ -56,43 +64,57 @@ public static class HealthHelper {
     /// 
     /// Når objecet ikke har mere liv tilbage vil denne metode også kalde IHealth.OnDeath();
     /// </summary>
+
     public static void GiveDamage(GameObject sender, GameObject target, int damage)
     {
+        uint senderID = sender.GetComponent<NetworkIdentity>().netId.Value;
+        uint targetID = target.GetComponent<NetworkIdentity>().netId.Value;
 
-        IHealth obj = (IHealth)target.GetComponent(typeof(IHealth));
-        if (obj == null) return;
+        GiveDamage(senderID, targetID, damage);
+    }
 
-        //Hvis object har en magic over sig selv der gør at den tager mere skade
-        int dmgExtra = Mathf.RoundToInt(damage * obj.WeaknessMultiplier);
-        damage += dmgExtra;
-        
-        obj.OnTakeDmg(sender, damage);
+    public static void GiveDamageExecute(uint senderNetID, uint targetNetID, int damage)
+    {
+        IHealth objTarget = healthObjects[targetNetID];
 
         //Giv objectet skade
-        if (obj.HealthBonus > 0)
+        if (objTarget.HealthBonus > 0)
         {
-            obj.HealthBonus = GetValueAfterDamageIsDone(obj.HealthBonus, damage, 0, out damage);
+            objTarget.HealthBonus = GetValueAfterDamageIsDone(objTarget.HealthBonus, damage, 0, out damage);
         }
 
-        if (obj.Shield > 0)
+        if (objTarget.Shield > 0)
         {
-            obj.Shield = GetValueAfterDamageIsDone(obj.Shield, damage, shieldReduction, out damage);
+            objTarget.Shield = GetValueAfterDamageIsDone(objTarget.Shield, damage, shieldReduction, out damage);
         }
 
-        if (obj.Armor > 0)
+        if (objTarget.Armor > 0)
         {
-            obj.Armor = GetValueAfterDamageIsDone(obj.Armor, damage, armorReduction, out damage);
+            objTarget.Armor = GetValueAfterDamageIsDone(objTarget.Armor, damage, armorReduction, out damage);
         }
 
-        obj.Health = GetValueAfterDamageIsDone(obj.Health, damage, 0, out damage);
+        objTarget.Health = GetValueAfterDamageIsDone(objTarget.Health, damage, 0, out damage);
 
 
 
         //Object er død kald død metoden
-        if (obj.Health == 0)
+        if (objTarget.Health == 0)
         {
-            obj.OnDeath(obj);
+            objTarget.OnDeath(objTarget);
         }
+    }
+    public static void GiveDamage(uint senderNetID, uint targetNetID, int damage)
+    {
+        IHealth objTarget = healthObjects[targetNetID];
+        IHealth objSender = healthObjects[senderNetID];
+        if (objTarget == null) return;
+
+        //Hvis object har en magic over sig selv der gør at den tager mere skade
+        int dmgExtra = Mathf.RoundToInt(damage * objTarget.WeaknessMultiplier);
+        damage += dmgExtra;
+        
+        objTarget.OnTakeDmg(healthGameObjects[senderNetID], damage);
+        objSender.OnGiveDmg(healthGameObjects[targetNetID], damage);
     }
 
     /// <summary>
@@ -152,8 +174,7 @@ public static class HealthHelper {
     {
         int reduction = Mathf.RoundToInt(damage * reductionPercent);
         damage -= reduction;
-
-        Debug.Log("reduction: " + reduction);
+        
 
         // Må ikke blive mindre end 0 så vi ikke ender med at heale
         if (damage < 0)

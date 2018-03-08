@@ -1,7 +1,8 @@
 using UnityEngine;
+#if UNITY_EDITOR 
 using UnityEditor;
 
-
+#endif
 ////////////////////////////////////////////////////////////////////
 //                  Beskrivelse
 //
@@ -11,7 +12,7 @@ using UnityEditor;
 ////////////////////////////////////////////////////////////////////
 namespace Assets.Plugins.PrefabChanger.Scripts
 {
-
+#if UNITY_EDITOR
     public class PrefabOption
     {
         ///////////////////////////////
@@ -96,4 +97,5 @@ namespace Assets.Plugins.PrefabChanger.Scripts
 
         #endregion
     }
+#endif
 }

@@ -39,6 +39,10 @@ public class HealthExample : MonoBehaviour, IHealth {
 
     public float WeaknessMultiplier { get; set; }
 
+    public event SimpleHealth.OnDeathDelegate EventOnDeath;
+    public event SimpleHealth.OnDamageDelegate EventOnGiveDamage;
+    public event SimpleHealth.OnDamageDelegate EventOnTakeDamage;
+
 
     ///////////////////////////////
     //      Public Methods
@@ -71,7 +75,7 @@ public class HealthExample : MonoBehaviour, IHealth {
     /// Giver objecet fuld liv og udskriver det i console
     /// </summary>
     void Start () {
-        HealthHelper.Initialize(this);
+       // HealthHelper.Initialize(this);
         HealthHelper.PrintHealthInformation(this);
         WeaknessMultiplier = 0.1f;
     }
