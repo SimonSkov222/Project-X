@@ -1,27 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GuiPlayer : MonoBehaviour {
 
     public TextMeshProUGUI textAmmo;
+    public TextMeshProUGUI textHealth;
 
-    public GameObject player;
+    public Image ultimate;
+    public Image ability1;
+    public Image ability2;
+    public Image ability3;
 
-    public Weapon weapon;
+    public Image buff1;
+    public Image buff2;
+    public Image buff3;
+
+    private WeaponBasic weaponBasic;
+    private PlayerController health;
 
 
     // Use this for initialization
     void Start () {
+        
+        health = GetComponent<PlayerController>();
+        
 
-        weapon = player.GetComponent<Weapon>();
-
-        Debug.Log(weapon.CurrentAmmo);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        //textAmmo.text = weapon.CurrentAmmo.ToString();
+
+        //textAmmo.text = weaponBasic.Ammo.ToString();
+        textHealth.text = health.Health.ToString();
+            
+        
 	}
 }
