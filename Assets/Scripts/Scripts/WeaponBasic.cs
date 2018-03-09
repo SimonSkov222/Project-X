@@ -56,15 +56,11 @@ public abstract class WeaponBasic : ScriptableObject
     #endregion
 
     public Dictionary<int, OpgraderingsSten> opgraderingsSten = new Dictionary<int, OpgraderingsSten>();
-    int i = 0;
     public void addOpgraderingsSten(OpgraderingsSten sten)
     {
-        
-        if (i == 0)
-        {
-            i++;
-            opgraderingsSten.Add(i, sten);
-        }
+
+        Debug.Log("add sten");
+        opgraderingsSten.Add(0, sten);
     }
 
     ///////////////////////////////

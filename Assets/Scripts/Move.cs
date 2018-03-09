@@ -47,6 +47,7 @@ public class Move : MonoBehaviour
     private float rotY;
     private bool crouch;
 
+    WeaponBasic m_weapon;
 
     ///////////////////////////////
     //      Unity Events
@@ -69,6 +70,11 @@ public class Move : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+
+        }
+
         RotateView();
         CalculateMovement();
 

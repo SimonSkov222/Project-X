@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour, IHealth
 
     public void OnGiveDmg(GameObject target, int dmg)
     {
-        Debug.Log("Player: Give Damge");
+        Debug.Log("Player: Give Damge" /*+ m_weapon.opgraderingsSten[0].weaponDmg*/);
     }
     public void OnTakeDmg(GameObject sender, int dmg)
     {
