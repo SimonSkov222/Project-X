@@ -6,5 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Simon/Multiplayer.unity
-    guid: 8e6b0422d1a532246ba29153452250f8
+    path: Assets/Scenes/CompleteGameV1/Menu.unity
+    guid: f523edb6e1de1914f89ae91f3086cd2a
+  - enabled: 1
+    path: Assets/Scenes/CompleteGameV1/City.unity
+    guid: 472ee3ca92afd3a429b7254c6a129f1f

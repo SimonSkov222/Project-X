@@ -140,7 +140,7 @@ public class PlayerController : NetworkBehaviour, IHealth
     ///////////////////////////////
     #region
 
-    public void InvokeStart() { Start(); }
+    //public void InvokeStart() { Start(); }
 
     /// <summary>
     /// Vi gemmer nogle components loader våben og evner
@@ -156,6 +156,11 @@ public class PlayerController : NetworkBehaviour, IHealth
         ButtonHelper.TryCallMethod(Ability3, "OnLoaded", gameObject);
 
         IsMouseLocked(true);
+
+        if (isLocalPlayer)
+        {
+            GuiPlayer.Singleton.Player = gameObject;
+        }
     }
 
 

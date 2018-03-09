@@ -9,14 +9,14 @@ public class MainMenu : MonoBehaviour {
 
 	public void Play()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Debug.Log("Play");
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void ExitGame()
     {
         Application.Quit();
     }
-
-
+    
 
 }

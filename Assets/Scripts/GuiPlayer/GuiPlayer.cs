@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class GuiPlayer : MonoBehaviour {
 
+    public float minmapHeight = 10;
+    public Camera minmap;
     public TextMeshProUGUI textAmmo;
     public TextMeshProUGUI textHealth;
 
@@ -17,25 +19,52 @@ public class GuiPlayer : MonoBehaviour {
     public Image buff1;
     public Image buff2;
     public Image buff3;
+    
+    public static GuiPlayer Singleton;
 
-    private WeaponBasic weaponBasic;
-    private PlayerController health;
+    private GameObject player;
+    
+    public bool ComponentsLoaded { get; set; }
+    public GameObject Player { get { return player; } set { player = value; ComponentsLoaded = false; } }
+
+    private Canvas canvas;
+    private PlayerController pc;
+
+    void Awake()
+    {
+        Singleton = this;
+    }
+
+    private void Start()
+    {
+        canvas = GetComponent<Canvas>();
+    }
+
+    void Update()
+    {
+        if (Player == null)
+        {
+            canvas.enabled = false;
+            return;
+        }
+
+        if (!ComponentsLoaded)
+        {
+            GetComponents();
+        }
+
+        canvas.enabled = true;
+        textAmmo.text = pc.Weapon.Ammo.ToString();
+        textHealth.text = pc.Health.ToString();
+        minmap.transform.position = player.transform.position + (Vector3.up * minmapHeight);
 
 
-    // Use this for initialization
-    void Start () {
+    }
+
+    private void GetComponents()
+    {
         
-        health = GetComponent<PlayerController>();
-        
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-        //textAmmo.text = weaponBasic.Ammo.ToString();
-        textHealth.text = health.Health.ToString();
-            
-        
-	}
+        pc = Player.GetComponent<PlayerController>();
+        ComponentsLoaded = true;
+    }
 }

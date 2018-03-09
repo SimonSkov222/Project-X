@@ -11,7 +11,7 @@ public class MultiplayerSetup : NetworkBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-
+        
         if (!isLocalPlayer)
         {
             foreach (var comp in disableComponents)
