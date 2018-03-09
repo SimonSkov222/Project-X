@@ -13,7 +13,8 @@ public abstract class AbilityBasic : ScriptableObject, IButton
 
     ///////////////////////////////
     //      Protected Fields
-    ///////////////////////////////
+    //////////////////////////
+    /////
     #region
     protected float timeColddown = 0;
     protected PlayerController playerController;
