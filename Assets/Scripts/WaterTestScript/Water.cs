@@ -31,7 +31,6 @@ public class Water : NetworkBehaviour {
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
-            Debug.Log("Enter");
             Transform waterTop = other.gameObject.transform.Find("WaterTop");
             pc.runSpeed = 4f;
             pc.gravity = 2f;
