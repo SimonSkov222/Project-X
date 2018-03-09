@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4041279faa81a9142a8682feb3069f9b, type: 3}
   m_Name: 1
   m_EditorClassIdentifier: 
-  weaponDmg: 0
+  weaponDmg: 10
   armor: 0
   health: 0
