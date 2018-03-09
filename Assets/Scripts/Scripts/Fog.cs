@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Fog : MonoBehaviour {
-    
 
-
-    // Use this for initialization
-    void Start () {}
     void OnEnable()
     {
         RenderSettings.fog = true;
-        RenderSettings.fogColor = Color.blue;
+        RenderSettings.fogColor = Color.HSVToRGB(0.5556f, 0.7021f, 0.9216f);
         RenderSettings.fogDensity = 0.2f;
     }
     void OnDisable()
@@ -19,13 +15,7 @@ public class Fog : MonoBehaviour {
         RenderSettings.fog = false;
     }
     
-
-    private void BlueFog()
-    {
-        RenderSettings.fog = true;
-        RenderSettings.fogColor = Color.blue;
-        RenderSettings.fogDensity = 0.2f;
-    }
+    
 
 
 }
