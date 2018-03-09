@@ -24,6 +24,21 @@ public class PlayerController : NetworkBehaviour, IHealth
     //      Public Fields
     ///////////////////////////////
     #region
+
+    [Header("Height Settings")]
+    public float maxHeight = 1.6f;
+    public float minHeight = 1.3f;
+    public float heightSmooth = 5f;
+
+    [Header("Movement Settings")]
+    [Range(1, 100)]
+    public float walkSpeed = 1;
+    [Range(1, 100)]
+    public float runSpeed = 1;
+    [Range(1, 100)]
+    public float jumpHeight = 1;
+
+
     public delegate void OnEvent();
     public event OnEvent OnHitGround;
     public event SimpleHealth.OnDeathDelegate EventOnDeath;
@@ -43,7 +58,7 @@ public class PlayerController : NetworkBehaviour, IHealth
     private Vector2 mouseLock;
     private Vector2 smoothV;
     private CharacterController player;
-    private Vector3 movement = Vector3.zero;
+    public Vector3 movement = Vector3.zero;
     private float crouchR = 1f;
     private float moveFB;
     private float moveLR;
@@ -60,13 +75,6 @@ public class PlayerController : NetworkBehaviour, IHealth
     //      Protected Fields
     ///////////////////////////////
     #region
-    [Header("Height Settings")]
-    [SerializeField]
-    protected float maxHeight = 1.6f;
-    [SerializeField]
-    protected float minHeight = 1.3f;
-    [SerializeField]
-    protected float heightSmooth = 5f;
 
     [Header("Health Settings")]
     [SerializeField]
@@ -81,17 +89,7 @@ public class PlayerController : NetworkBehaviour, IHealth
     [Range(0, 1000)]
     protected int shieldMax = 0;
 
-
-    [Header("Movement Settings")]
-    [SerializeField]
-    [Range(1, 100)]
-    protected int walkSpeed = 1;
-    [SerializeField]
-    [Range(1, 100)]
-    protected int runSpeed = 1;
-    [SerializeField]
-    [Range(1, 100)]
-    protected float jumpHeight = 1;
+    
 
 
     [Header("Attack Settings")]

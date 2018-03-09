@@ -42,7 +42,6 @@ public class SpawnPointEnemies : NetworkBehaviour
     [Server]
     void Start()
     {
-        Debug.Log("Start");
 
         poolNormals = new List<GameObject>[normals.Length];
         poolElites = new List<GameObject>[elites.Length];
@@ -130,7 +129,7 @@ public class SpawnPointEnemies : NetworkBehaviour
     [Server]
     private GameObject CreateEnemy(int category, int model)
     {
-        Debug.Log("CreateEnemy: " + category + " -- " + model);
+     //   Debug.Log("CreateEnemy: " + category + " -- " + model);
         //Hent kategori og pool
         GameObject[] enemies = null;
         List<GameObject>[] pool = null;

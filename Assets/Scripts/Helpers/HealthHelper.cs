@@ -41,7 +41,7 @@ public static class HealthHelper {
     /// </summary>
     public static void Initialize(uint netID, GameObject obj)
     {
-        Debug.Log("Added: " + obj.name + ", ID: " + netID);
+       // Debug.Log("Added: " + obj.name + ", ID: " + netID);
 
         IHealth obj2 = (IHealth)obj.GetComponent(typeof(IHealth));
 

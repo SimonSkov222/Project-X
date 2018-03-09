@@ -4,83 +4,97 @@ using UnityEngine;
 
 public class Water : MonoBehaviour {
 
-
-    public bool isUnderWater = false;
-    private bool isInTheWater = false;
-    private bool isOnLand = true;
-
-    private PlayerMovement movement;
+    private Transform eyes;
+    private PlayerController pc;
+    private Fog fog;
     private float oldGravity;
+    private float oldRunSpeed;
 
-    private float upOrDown = 1;
-    LayerMask water = 12;
-    GameObject waterGameObject;
-
-	// Use this for initialization
-	void Start () {
-        movement = GetComponent<PlayerMovement>();
-        oldGravity = movement.gravity;
-    }
-	
-	// Update is called once per frame
-	void Update () {
-
-        if (isInTheWater == true || isUnderWater == true)
-        {
-            InTheWater();
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
+    //// Use this for initialization
+    void Start()
     {
-        if (other.gameObject.layer == water)
+        eyes = transform.Find("Eyes");
+        pc = GetComponent<PlayerController>();
+        fog = GetComponentInChildren<Fog>();
+        oldGravity = pc.gravity;
+        oldRunSpeed = pc.runSpeed;
+        fog.enabled = false;
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
-            isInTheWater = true;
-            
-            waterGameObject = other.gameObject;
+            Transform waterTop = other.gameObject.transform.Find("WaterTop");
+            pc.runSpeed = 4f;
+            pc.gravity = 2f;
+
+            if (waterTop.position.y > eyes.position.y)
+            {
+                fog.enabled = true;
+            }
+            else
+            {
+                fog.enabled = false;
+                
+            }
+            if (Input.GetButton("Jump"))
+            {
+                pc.MakePlayerJump(2f);
+            }
         }
     }
-    
+
     void OnTriggerExit(Collider other)
     {
-        Debug.Log("a");
-        movement.gravity = oldGravity;
-        isInTheWater = false;
-    }
-    
-    private void UnderWater()
-    {
-        if (isInTheWater == true && transform.position.y < waterGameObject.transform.position.y - movement.maxHeight)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
-            
-            isUnderWater = true;
+            pc.runSpeed = oldRunSpeed;
+            pc.gravity = oldGravity;
+        }
 
-        }
-        else if (isInTheWater == true && transform.position.y > waterGameObject.transform.position.y - movement.maxHeight)
-        {
-            isUnderWater = false;
-        }
-        Debug.Log(isUnderWater);
     }
 
-    private void InTheWater()
-    {
-        Debug.Log("inthewater");
-        if (Input.GetButton("Jump") && transform.position.y < waterGameObject.transform.position.y - (movement.maxHeight / 2))
-        {
-            upOrDown = 8;
-        }
-        else if (Input.GetKey(KeyCode.X) || transform.position.y > waterGameObject.transform.position.y - (movement.maxHeight / 2))
-        {
-            upOrDown = -8;
-        }
-        else
-        {
-            upOrDown = 0;
-        }
-        UnderWater();
-        movement.gravity = 0;
-        movement.movement.y = upOrDown;
-    }
-    
+    //void OnTriggerExit(Collider other)
+    //{
+    //    Debug.Log("a");
+    //    pc.gravity = oldGravity;
+    //    isInTheWater = false;
+    //}
+
+    //private void UnderWater()
+    //{
+    //    if (isInTheWater == true && transform.position.y < waterGameObject.transform.position.y - pc.maxHeight)
+    //    {
+
+    //        isUnderWater = true;
+
+    //    }
+    //    else if (isInTheWater == true && transform.position.y > waterGameObject.transform.position.y - pc.maxHeight)
+    //    {
+    //        isUnderWater = false;
+    //    }
+    //    Debug.Log(isUnderWater);
+    //}
+
+    //private void InTheWater()
+    //{
+    //    Debug.Log("inthewater");
+    //    if (Input.GetButton("Jump") && transform.position.y < waterGameObject.transform.position.y - (pc.maxHeight / 2))
+    //    {
+    //        upOrDown = 8;
+    //    }
+    //    else if (Input.GetKey(KeyCode.X) || transform.position.y > waterGameObject.transform.position.y - (pc.maxHeight / 2))
+    //    {
+    //        upOrDown = -8;
+    //    }
+    //    else
+    //    {
+    //        upOrDown = 0;
+    //    }
+    //    UnderWater();
+    //    pc.gravity = 0;
+    //    pc.movement.y = upOrDown;
+    //}
+
 }
