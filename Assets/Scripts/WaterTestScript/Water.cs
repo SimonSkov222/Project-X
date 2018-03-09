@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Water : MonoBehaviour {
+public class Water : NetworkBehaviour {
 
     private Transform eyes;
     private PlayerController pc;
@@ -23,8 +24,14 @@ public class Water : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
+            Debug.Log("Enter");
             Transform waterTop = other.gameObject.transform.Find("WaterTop");
             pc.runSpeed = 4f;
             pc.gravity = 2f;
