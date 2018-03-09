@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
     public float minHeight = 1.3f;
     public float heightSmooth = 5f;
     public float smoothing = 2.0f;
-
+    public Vector3 movement = Vector3.zero;
 
     ///////////////////////////////
     //      Private Fields
@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour {
     private Vector2 smoothV;
     private CharacterController player;
     private Camera eyes;
-    private Vector3 movement = Vector3.zero;
+    //private Vector3 movement = Vector3.zero;
     private float crouchR = 1f;
     private float moveFB;
     private float moveLR;
@@ -46,6 +46,9 @@ public class PlayerMovement : MonoBehaviour {
     private float rotY;
     private bool crouch;
 
+
+
+    
 
     ///////////////////////////////
     //      Unity Events
@@ -59,6 +62,8 @@ public class PlayerMovement : MonoBehaviour {
     {
         player = GetComponent<CharacterController>();
         eyes = Camera.main;
+
+
 
         IsMouseLocked(true);
     }
@@ -125,6 +130,7 @@ public class PlayerMovement : MonoBehaviour {
         movement = new Vector3(moveLR, movement.y, moveFB);
         // Gør at tasterne passer iforhold til hvor vi kigger
         movement = transform.rotation * movement;
+        
     }
 
     /// <summary>
